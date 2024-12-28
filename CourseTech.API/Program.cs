@@ -7,8 +7,10 @@ using CourseTech.Repository.Repositories;
 using CourseTech.Repository.Seeds;
 using CourseTech.Service.Mapping;
 using CourseTech.Service.Services;
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 using System.Text.Json.Serialization;
 
 namespace CourseTech.API
@@ -26,6 +28,8 @@ namespace CourseTech.API
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
 
+            builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
             #region DbContext Configuration
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
@@ -35,6 +39,7 @@ namespace CourseTech.API
             #region Service Extensions
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddAutoMapper(typeof(MapProfile));
 
