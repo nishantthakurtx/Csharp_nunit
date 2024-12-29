@@ -13,8 +13,8 @@ namespace CourseTech.Core.Models
         public CourseLanguage Language { get; set; }
         public decimal Price { get; set; }
         public TimeSpan Duration { get; set; }
-        public bool IsPublished { get; set; }
-        public DateTime? PublishedAt { get; set; }
+        public bool IsPublished { get; private set; }
+        public DateTime? PublishedAt { get; private set; }
 
         // Relationships
         public Guid InstructorId { get; set; } = default!;

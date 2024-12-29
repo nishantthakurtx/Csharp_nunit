@@ -9,8 +9,7 @@ namespace CourseTech.Core.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
-        public DateTime? DeletedAt { get; set; }
-        public bool IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; private set; } = false;
 
         public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
         public ICollection<Course> CreatedCourses { get; set; } = new List<Course>();
@@ -18,7 +17,6 @@ namespace CourseTech.Core.Models
         public void MarkAsDeleted()
         {
             IsDeleted = true;
-            DeletedAt = DateTime.UtcNow;
             Update();
         }
 

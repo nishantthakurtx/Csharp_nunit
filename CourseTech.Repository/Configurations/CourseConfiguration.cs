@@ -8,6 +8,9 @@ namespace CourseTech.Repository.Configurations
     {
         public void Configure(EntityTypeBuilder<Course> builder)
         {
+            builder.HasIndex(c => c.InstructorId);
+            builder.HasIndex(c => c.CategoryId);
+
             builder.Property(x => x.Title)
                 .HasMaxLength(100)
                 .IsRequired();
@@ -32,6 +35,9 @@ namespace CourseTech.Repository.Configurations
             builder.Property(x => x.VideoUrl)
                 .HasMaxLength(500);
 
+            builder.Property(x => x.IsPublished)
+                .HasDefaultValue(false);
+
 
             // Instructor - Course (One-to-Many)
             builder.HasOne(c => c.Instructor)
@@ -42,7 +48,8 @@ namespace CourseTech.Repository.Configurations
             // Course - Enrollment (Many-to-Many)
             builder.HasMany(c => c.Enrollments)
                    .WithOne(e => e.Course)
-                   .HasForeignKey(e => e.CourseId);
+                   .HasForeignKey(e => e.CourseId)
+                   .OnDelete(DeleteBehavior.Cascade);
 
             // Course - Category (Many-to-One)
             builder.HasOne(c => c.Category)

@@ -11,11 +11,12 @@ namespace CourseTech.Service.Services
 {
     public class UserService(UserManager<AppUser> userManager, IMapper mapper) : IUserService
     {
-        public async Task<ServiceResult<AppUserDto>> CreateAsync(AppUserDto createUserDto, string role)
+        public async Task<ServiceResult<AppUserDTO>> CreateAsync(AppUserDTO createUserDto, string role)
         {
             var user = new AppUser
             {
-                FirstName = createUserDto.Name,
+                FirstName = createUserDto.FirstName,
+                LastName = createUserDto.LastName,
                 Email = createUserDto.Email,
                 PhoneNumber = createUserDto.PhoneNumber,
                 UserName = createUserDto.Email
@@ -23,14 +24,14 @@ namespace CourseTech.Service.Services
 
             var createResult = await userManager.CreateAsync(user, createUserDto.Password);
             if (!createResult.Succeeded)
-                return ServiceResult<AppUserDto>.Fail(createResult.Errors.Select(e => e.Description).ToList());
+                return ServiceResult<AppUserDTO>.Fail(createResult.Errors.Select(e => e.Description).ToList());
 
             var roleResult = await userManager.AddToRoleAsync(user, role);
             if (!roleResult.Succeeded)
-                return ServiceResult<AppUserDto>.Fail(roleResult.Errors.Select(e => e.Description).ToList());
+                return ServiceResult<AppUserDTO>.Fail(roleResult.Errors.Select(e => e.Description).ToList());
 
-            var userDto = mapper.Map<AppUserDto>(user);
-            return ServiceResult<AppUserDto>.Success(userDto);
+            var userDto = mapper.Map<AppUserDTO>(user);
+            return ServiceResult<AppUserDTO>.Success(userDto);
         }
 
         public async Task<ServiceResult> DeleteAsync(Guid id)
@@ -47,20 +48,20 @@ namespace CourseTech.Service.Services
             return ServiceResult.Success();
         }
 
-        public async Task<ServiceResult<IEnumerable<AppUserDto>>> GetAllAsync()
+        public async Task<ServiceResult<IEnumerable<AppUserDTO>>> GetAllAsync()
         {
             var users = await userManager.Users.ToListAsync();
-            var userDtos = mapper.Map<IEnumerable<AppUserDto>>(users);
-            return ServiceResult<IEnumerable<AppUserDto>>.Success(userDtos);
+            var userDtos = mapper.Map<IEnumerable<AppUserDTO>>(users);
+            return ServiceResult<IEnumerable<AppUserDTO>>.Success(userDtos);
         }
 
-        public async Task<ServiceResult<AppUserDto>> GetByIdAsync(Guid id)
+        public async Task<ServiceResult<AppUserDTO>> GetByIdAsync(Guid id)
         {
             var user = await userManager.FindByIdAsync(id.ToString());
             if (user == null)
-                return ServiceResult<AppUserDto>.Fail($"User ({id}) not found.");
+                return ServiceResult<AppUserDTO>.Fail($"User ({id}) not found.");
 
-            return ServiceResult<AppUserDto>.Success(mapper.Map<AppUserDto>(user));
+            return ServiceResult<AppUserDTO>.Success(mapper.Map<AppUserDTO>(user));
         }
 
         public async Task<ServiceResult<IEnumerable<string>>> GetRolesAsync(Guid userId)
@@ -73,7 +74,7 @@ namespace CourseTech.Service.Services
             return ServiceResult<IEnumerable<string>>.Success(roles);
         }
 
-        public async Task<ServiceResult> UpdateAsync(AppUserDto updateUserDto, Guid id)
+        public async Task<ServiceResult> UpdateAsync(AppUserDTO updateUserDto, Guid id)
         {
             var user = await userManager.FindByIdAsync(id.ToString());
             if (user == null)
@@ -88,14 +89,14 @@ namespace CourseTech.Service.Services
             return ServiceResult.Success();
         }
 
-        public async Task<ServiceResult<IEnumerable<AppUserDto>>> Where(Expression<Func<AppUser, bool>> predicate)
+        public async Task<ServiceResult<IEnumerable<AppUserDTO>>> Where(Expression<Func<AppUser, bool>> predicate)
         {
             var users = await userManager.Users.Where(predicate).ToListAsync();
             if (users == null)
-                return ServiceResult<IEnumerable<AppUserDto>>.Success(Enumerable.Empty<AppUserDto>());
+                return ServiceResult<IEnumerable<AppUserDTO>>.Success(Enumerable.Empty<AppUserDTO>());
 
-            var userDtos = mapper.Map<IEnumerable<AppUserDto>>(users);
-            return ServiceResult<IEnumerable<AppUserDto>>.Success(userDtos);
+            var userDtos = mapper.Map<IEnumerable<AppUserDTO>>(users);
+            return ServiceResult<IEnumerable<AppUserDTO>>.Success(userDtos);
         }
     }
 }

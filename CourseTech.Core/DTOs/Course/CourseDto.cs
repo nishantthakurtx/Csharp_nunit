@@ -2,5 +2,5 @@
 
 namespace CourseTech.Core.DTOs.Course
 {
-    public record CourseDto(Guid Id, string Title, string? Description, string ImageUrl, string VideoUrl, CourseLanguage Language, decimal Price, CourseLevel Level, TimeSpan Duration, string Instructor, bool isPublished);
+    public record CourseDTO(Guid Id, string Title, string? Description, string ImageUrl, CourseLevel Level, CourseLanguage Language, decimal Price, TimeSpan Duration, DateTime? PublishedAt, string InstructorName, string CategoryName);
 }

@@ -8,18 +8,22 @@ namespace CourseTech.Repository.Configurations
     {
         public void Configure(EntityTypeBuilder<Enrollment> builder)
         {
-            builder.HasKey(e => new { e.AppUserId, e.CourseId });
+            builder.HasKey(e => e.Id);
 
             // AppUser(Student) - Enrollment(Many-to-Many)
             builder.HasOne(e => e.AppUser)
                 .WithMany(a => a.Enrollments)
-                .HasForeignKey(e => e.AppUserId);
+                .HasForeignKey(e => e.AppUserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Course - Enrollment(Many-to-Many)
             builder.HasOne(e => e.Course)
                 .WithMany(c => c.Enrollments)
-                .HasForeignKey(e => e.CourseId);
+                .HasForeignKey(e => e.CourseId)
+                .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Property(e => e.EnrolledAt)
+            .IsRequired();
         }
     }
 }

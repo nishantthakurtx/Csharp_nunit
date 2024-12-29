@@ -1,3 +1,4 @@
+using AutoMapper;
 using CourseTech.Core.Models;
 using CourseTech.Core.Repositories;
 using CourseTech.Core.Services;
@@ -28,7 +29,8 @@ namespace CourseTech.API
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
 
-            builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            // hatali
+            builder.Services.AddValidatorsFromAssembly(typeof(AbstractValidator<>).Assembly);
 
             #region DbContext Configuration
             builder.Services.AddDbContext<AppDbContext>(options =>
@@ -40,8 +42,9 @@ namespace CourseTech.API
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<ICourseService, CourseService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddAutoMapper(typeof(MapProfile));
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             #endregion
             #region Identity Configuration

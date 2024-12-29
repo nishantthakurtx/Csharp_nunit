@@ -8,11 +8,15 @@ namespace CourseTech.Repository
     {
         private readonly AppDbContext _context;
         public ICategoryRepository Category { get; private set; }
+        public ICourseRepository Course { get; private set; }
+        public IEnrollmentRepository Enrollment { get; private set; }
 
         public UnitOfWork(AppDbContext context)
         {
             _context = context;
             Category = new CategoryRepository(context);
+            Course = new CourseRepository(context);
+            Enrollment = new EnrollmentRepository(context);
         }
 
         public async Task SaveChangesAsync()

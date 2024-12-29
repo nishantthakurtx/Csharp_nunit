@@ -27,13 +27,13 @@ namespace CourseTech.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(AppUserDto createUserDto, string role)
+        public async Task<IActionResult> Create(AppUserDTO createUserDto, string role)
         {
             return CreateActionResult(await userService.CreateAsync(createUserDto, role));
         }
 
         [HttpPut("{id:Guid}")]
-        public async Task<IActionResult> Update(Guid id, AppUserDto updateUserDto)
+        public async Task<IActionResult> Update(Guid id, AppUserDTO updateUserDto)
         {
             return CreateActionResult(await userService.UpdateAsync(updateUserDto, id));
         }

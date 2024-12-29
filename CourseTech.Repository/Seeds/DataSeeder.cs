@@ -97,8 +97,7 @@ namespace CourseTech.Repository.Seeds
                             Language = CourseLanguage.English,
                             Price = 50,
                             Duration = TimeSpan.FromHours(5),
-                            InstructorId = instructor!.Id,
-                            IsPublished = true
+                            InstructorId = instructor!.Id
                         },
                         new Course
                         {
@@ -112,8 +111,7 @@ namespace CourseTech.Repository.Seeds
                             Language = CourseLanguage.English,
                             Price = 100,
                             Duration = TimeSpan.FromHours(7),
-                            InstructorId = instructor.Id,
-                            IsPublished = true
+                            InstructorId = instructor.Id
                         },
                         new Course
                         {
@@ -127,8 +125,7 @@ namespace CourseTech.Repository.Seeds
                             Language = CourseLanguage.English,
                             Price = 200,
                             Duration = TimeSpan.FromHours(10),
-                            InstructorId = instructor.Id,
-                            IsPublished = true
+                            InstructorId = instructor.Id
                         }
                 };
 
