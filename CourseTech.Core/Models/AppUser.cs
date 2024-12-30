@@ -13,6 +13,7 @@ namespace CourseTech.Core.Models
 
         public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
         public ICollection<Course> CreatedCourses { get; set; } = new List<Course>();
+        public ICollection<Basket> Baskets { get; set; } = new List<Basket>();
 
         public void MarkAsDeleted()
         {

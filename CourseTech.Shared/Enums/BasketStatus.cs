@@ -1,6 +1,6 @@
 ﻿namespace CourseTech.Shared.Enums
 {
-    public enum ShoppingCartStatus
+    public enum BasketStatus
     {
         Active,
         Pasive,

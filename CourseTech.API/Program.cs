@@ -6,7 +6,6 @@ using CourseTech.Core.UnitOfWorks;
 using CourseTech.Repository;
 using CourseTech.Repository.Repositories;
 using CourseTech.Repository.Seeds;
-using CourseTech.Service.Mapping;
 using CourseTech.Service.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
@@ -43,8 +42,9 @@ namespace CourseTech.API
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<ICourseService, CourseService>();
+            builder.Services.AddScoped<IBasketService, BasketService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(Profile)));
 
             #endregion
             #region Identity Configuration

@@ -7,6 +7,7 @@ namespace CourseTech.Core.UnitOfWorks
         ICategoryRepository Category { get; }
         ICourseRepository Course { get; }
         IEnrollmentRepository Enrollment { get; }
+        IBasketRepository Basket { get; }
         Task SaveChangesAsync();
         void SaveChanges();
     }

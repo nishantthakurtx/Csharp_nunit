@@ -10,6 +10,7 @@ namespace CourseTech.Repository
         public ICategoryRepository Category { get; private set; }
         public ICourseRepository Course { get; private set; }
         public IEnrollmentRepository Enrollment { get; private set; }
+        public IBasketRepository Basket { get; private set; }
 
         public UnitOfWork(AppDbContext context)
         {
@@ -17,6 +18,7 @@ namespace CourseTech.Repository
             Category = new CategoryRepository(context);
             Course = new CourseRepository(context);
             Enrollment = new EnrollmentRepository(context);
+            Basket = new BasketRepository(context);
         }
 
         public async Task SaveChangesAsync()

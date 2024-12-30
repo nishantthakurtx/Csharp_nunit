@@ -8,5 +8,4 @@ namespace CourseTech.Core.Repositories
         Task<IEnumerable<Enrollment>> GetEnrollmentsByCourseAsync(Guid courseId);
         Task<Enrollment?> GetEnrollmentAsync(Guid userId, Guid courseId);
     }
-
 }
