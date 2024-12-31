@@ -1,4 +1,5 @@
 ﻿using CourseTech.Core.Repositories;
+using CourseTech.Core.Services;
 using CourseTech.Core.UnitOfWorks;
 using CourseTech.Repository.Repositories;
 
@@ -11,6 +12,7 @@ namespace CourseTech.Repository
         public ICourseRepository Course { get; private set; }
         public IEnrollmentRepository Enrollment { get; private set; }
         public IBasketRepository Basket { get; private set; }
+        public IAppUserRefreshTokenRepository AppUserRefreshToken { get; private set; }
 
         public UnitOfWork(AppDbContext context)
         {
@@ -19,6 +21,7 @@ namespace CourseTech.Repository
             Course = new CourseRepository(context);
             Enrollment = new EnrollmentRepository(context);
             Basket = new BasketRepository(context);
+            AppUserRefreshToken = new AppUserRefreshTokenRepository(context);
         }
 
         public async Task SaveChangesAsync()

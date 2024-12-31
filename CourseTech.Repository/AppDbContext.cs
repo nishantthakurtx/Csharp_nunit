@@ -1,7 +1,7 @@
 ﻿using CourseTech.Core.Models;
+using CourseTech.Core.Models.Authentication;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 
 namespace CourseTech.Repository
 {
@@ -14,10 +14,13 @@ namespace CourseTech.Repository
         public DbSet<Course> Courses { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Basket> Baskets { get; set; }
+      
+        public DbSet<AppUserRefreshToken> AppUserRefreshToken { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
             base.OnModelCreating(builder);
         }
     }

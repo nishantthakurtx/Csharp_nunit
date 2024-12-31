@@ -8,6 +8,10 @@
         public Guid CourseId { get; private set; }
         public Course Course { get; private set; } = null!;
 
+        public BasketItem()
+        {
+        }
+
         public BasketItem(Course course)
         {
             CourseId = course.Id;

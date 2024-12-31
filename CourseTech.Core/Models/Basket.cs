@@ -11,8 +11,17 @@ namespace CourseTech.Core.Models
 
         public ICollection<BasketItem> BasketItems { get; private set; } = new List<BasketItem>();
 
-        public decimal TotalPrice => BasketItems.Sum(item => item.Price);
+        private decimal _totalPrice;
+        public decimal TotalPrice
+        {
+            get => _totalPrice;
+            private set => _totalPrice = value;
+        }
 
+        public void CalculateTotalPrice()
+        {
+            _totalPrice = BasketItems.Sum(x => x.Price);
+        }
 
         public void AddCourse(Course course)
         {

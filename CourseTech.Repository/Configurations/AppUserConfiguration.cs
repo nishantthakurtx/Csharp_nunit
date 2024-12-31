@@ -16,6 +16,10 @@ namespace CourseTech.Repository.Configurations
                 .HasMaxLength(50)
                 .IsRequired();
 
+            builder.Property(x => x.Email)
+                .HasMaxLength(50)
+                .IsRequired();
+
             // AppUser - Enrollment (One-to-Many)
             builder.HasMany(a => a.Enrollments)
                    .WithOne(e => e.AppUser)
@@ -26,6 +30,12 @@ namespace CourseTech.Repository.Configurations
             builder.HasMany(a => a.CreatedCourses)
                    .WithOne(c => c.Instructor)
                    .HasForeignKey(c => c.InstructorId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            // AppUser - Baskets (One-to-Many)
+            builder.HasMany(a => a.Baskets)
+                   .WithOne(b => b.AppUser)
+                   .HasForeignKey(b => b.UserId)
                    .OnDelete(DeleteBehavior.Restrict);
         }
     }

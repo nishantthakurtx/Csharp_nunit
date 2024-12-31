@@ -1,4 +1,5 @@
 ﻿using CourseTech.Core.Repositories;
+using CourseTech.Core.Services;
 
 namespace CourseTech.Core.UnitOfWorks
 {
@@ -8,6 +9,7 @@ namespace CourseTech.Core.UnitOfWorks
         ICourseRepository Course { get; }
         IEnrollmentRepository Enrollment { get; }
         IBasketRepository Basket { get; }
+        IAppUserRefreshTokenRepository AppUserRefreshToken { get; }
         Task SaveChangesAsync();
         void SaveChanges();
     }

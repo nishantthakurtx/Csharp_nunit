@@ -11,37 +11,36 @@ namespace CourseTech.API.Controllers
         [HttpGet("{id:Guid}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            return CreateActionResult(await userService.GetByIdAsync(id));
+            var result = await userService.GetByIdAsync(id);
+            return CreateActionResult(result);
         }
 
         [HttpGet("all")]
         public async Task<IActionResult> GetAll()
         {
-            return CreateActionResult(await userService.GetAllAsync());
-        }
-
-        [HttpGet("filter")]
-        public async Task<IActionResult> Where([FromQuery] string emailContains)
-        {
-            return CreateActionResult(await userService.Where(user => user.Email!.Contains(emailContains)));
+            var result = await userService.GetAllAsync();
+            return CreateActionResult(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(AppUserDTO createUserDto, string role)
+        public async Task<IActionResult> Create(AppUserCreateDTO createUserDto)
         {
-            return CreateActionResult(await userService.CreateAsync(createUserDto, role));
+            var result = await userService.CreateAsync(createUserDto);
+            return CreateActionResult(result);
         }
 
         [HttpPut("{id:Guid}")]
-        public async Task<IActionResult> Update(Guid id, AppUserDTO updateUserDto)
+        public async Task<IActionResult> Update(AppUserDTO updateUserDto)
         {
-            return CreateActionResult(await userService.UpdateAsync(updateUserDto, id));
+            var result = await userService.UpdateAsync(updateUserDto);
+            return CreateActionResult(result);
         }
 
         [HttpDelete("{id:Guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            return CreateActionResult(await userService.DeleteAsync(id));
+            var result = await userService.SoftDeleteAsync(id);
+            return CreateActionResult(result);
         }
     }
 }
