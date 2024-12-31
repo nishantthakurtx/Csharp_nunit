@@ -1,0 +1,316 @@
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: var(--bg-secondary);
+}
+
+.register-box {
+  background-color: var(--card-bg);
+  padding: 2.5rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px var(--shadow-color);
+  width: 100%;
+  max-width: 900px;
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  gap: 2.5rem;
+}
+
+.register-left {
+  padding-right: 1rem;
+}
+
+.register-right {
+  padding-left: 1rem;
+}
+
+.vertical-divider {
+  width: 1px;
+  background-color: var(--border-color);
+  height: 100%;
+}
+
+.welcome-text {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.welcome-text h2 {
+  color: var(--text-primary);
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.welcome-text p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.social-login {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 0.8rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.social-btn i {
+  font-size: 1.2rem;
+}
+
+.social-btn.google i {
+  color: #DB4437;
+}
+
+.social-btn.microsoft i {
+  color: #00A4EF;
+}
+
+.social-btn:hover {
+  background: var(--bg-secondary);
+}
+
+.social-btn.google:hover {
+  background-color: #DB4437;
+  color: white;
+  border-color: #DB4437;
+}
+
+.social-btn.microsoft:hover {
+  background-color: #00A4EF;
+  color: white;
+  border-color: #00A4EF;
+}
+
+.social-btn:hover i {
+  color: white;
+}
+
+.divider {
+  position: relative;
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: calc(50% - 30px);
+  height: 1px;
+  background-color: var(--border-color);
+}
+
+.divider::before {
+  left: 0;
+}
+
+.divider::after {
+  right: 0;
+}
+
+.divider span {
+  background-color: var(--card-bg);
+  padding: 0 1rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px var(--accent-color);
+}
+
+.password-hint {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 0.2rem;
+  cursor: pointer;
+}
+
+.checkbox-group label {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.terms-link {
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.terms-link:hover {
+  color: var(--accent-hover);
+}
+
+.register-btn {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+  text-decoration: none;
+  text-align: center;
+  display: inline-block;
+}
+
+.register-btn:hover:not(:disabled) {
+  background-color: var(--accent-hover);
+}
+
+.register-btn:disabled {
+  background-color: var(--border-color);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: var(--text-primary);
+}
+
+.login-link a {
+  color: var(--accent-color);
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.login-link a:hover {
+  color: var(--accent-hover);
+}
+
+.features-list {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0;
+}
+
+.features-list li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.features-list li i {
+  color: var(--accent-color);
+  font-size: 1.2rem;
+}
+
+/* Tablet Responsive */
+@media (max-width: 992px) {
+  .register-box {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+  }
+
+  .vertical-divider {
+    display: none;
+  }
+
+  .register-left, .register-right {
+    padding: 0;
+  }
+
+  .register-right {
+    display: none;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  .register-container {
+    padding: 1rem;
+  }
+
+  .register-box {
+    padding: 1.5rem;
+  }
+
+  .welcome-text h2 {
+    font-size: 1.6rem;
+  }
+
+  .welcome-text p {
+    font-size: 1rem;
+  }
+
+  .social-btn {
+    font-size: 0.9rem;
+    padding: 0.7rem;
+  }
+
+  .checkbox-group {
+    gap: 0.5rem;
+  }
+
+  .checkbox-group label {
+    font-size: 0.85rem;
+  }
+} 

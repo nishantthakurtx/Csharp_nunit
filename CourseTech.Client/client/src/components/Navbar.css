@@ -1,0 +1,288 @@
+.navbar {
+  background-color: var(--bg-primary);
+  box-shadow: 0 2px 4px var(--shadow-color);
+  padding: 0.5rem 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.navbar-container {
+  max-width: 1340px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  min-width: 280px;
+}
+
+.navbar-logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--text-primary);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.3s ease;
+}
+
+.navbar-logo:hover {
+  color: var(--accent-color);
+}
+
+.categories-btn {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+}
+
+.categories-btn:hover {
+  background-color: var(--bg-secondary);
+  color: var(--accent-color);
+}
+
+.navbar-search {
+  flex: 1;
+  max-width: 600px;
+  position: relative;
+}
+
+.search-box {
+  width: 100%;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 0.8rem 2.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 9999px;
+  font-size: 0.95rem;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+  background-color: var(--bg-primary);
+  border-color: var(--accent-color);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent-color);
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 0.5rem;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  border-radius: 50%;
+}
+
+.theme-toggle:hover {
+  background-color: var(--bg-secondary);
+  color: var(--accent-color);
+}
+
+.nav-link {
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.nav-link:hover {
+  background-color: var(--bg-secondary);
+  color: var(--accent-color);
+}
+
+.register-btn {
+  background-color: var(--accent-color);
+  color: white !important;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  border: none;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.register-btn:hover {
+  background-color: var(--accent-hover);
+}
+
+.nav-profile {
+  position: relative;
+}
+
+.profile-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.profile-btn:hover {
+  background-color: var(--bg-secondary);
+}
+
+.profile-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border-color);
+  transition: border-color 0.3s ease;
+}
+
+/* Tablet Responsive */
+@media (max-width: 1024px) {
+  .navbar-container {
+    padding: 0 1.5rem;
+  }
+
+  .navbar-left {
+    min-width: auto;
+  }
+
+  .navbar-search {
+    max-width: 400px;
+  }
+
+  .nav-link {
+    padding: 0.6rem;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .navbar {
+    height: 64px;
+  }
+
+  .navbar-container {
+    padding: 0 1rem;
+    gap: 0.8rem;
+  }
+
+  .navbar-logo {
+    font-size: 1.5rem;
+  }
+
+  .navbar-search, .categories-btn {
+    display: none;
+  }
+
+  .nav-link {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
+
+  .nav-link i {
+    font-size: 1.1rem;
+  }
+
+  .nav-link:not(.register-btn) span {
+    display: none;
+  }
+
+  .register-btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .theme-toggle {
+    font-size: 1rem;
+  }
+
+  .navbar-right {
+    gap: 0.5rem;
+  }
+}
+
+/* Küçük Mobil Cihazlar */
+@media (max-width: 480px) {
+  .navbar {
+    height: 56px;
+  }
+
+  .navbar-container {
+    padding: 0 0.8rem;
+    gap: 0.4rem;
+  }
+
+  .navbar-logo {
+    font-size: 1.3rem;
+  }
+
+  .nav-link {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .register-btn {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .profile-img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .theme-toggle {
+    padding: 0.4rem;
+  }
+} 

@@ -8,7 +8,7 @@ namespace CourseTech.Repository.Configurations
     {
         public void Configure(EntityTypeBuilder<AppUserRefreshToken> builder)
         {
-            builder.HasKey(x => x.UserId);
+            builder.HasKey(x => x.Id);
             builder.Property(x => x.Token).IsRequired().HasMaxLength(200);
         }
     }

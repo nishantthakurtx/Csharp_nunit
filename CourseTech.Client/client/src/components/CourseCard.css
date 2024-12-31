@@ -1,0 +1,249 @@
+.course-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px var(--shadow-color);
+}
+
+.course-image-container {
+  position: relative;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  overflow: hidden;
+  background-color: var(--bg-secondary);
+}
+
+.course-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.course-card:hover .course-image {
+  transform: scale(1.05);
+}
+
+.course-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  padding: 1rem;
+}
+
+.course-card:hover .course-overlay {
+  opacity: 1;
+}
+
+.course-preview {
+  color: white;
+  padding: 1.5rem;
+  max-width: 100%;
+  overflow-y: auto;
+  max-height: 100%;
+}
+
+.course-preview h4 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.course-preview p {
+  font-size: 0.95rem;
+  margin-bottom: 1.2rem;
+  line-height: 1.5;
+}
+
+.course-preview ul {
+  list-style: none;
+  padding: 0;
+}
+
+.course-preview li {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.8rem;
+  font-size: 0.9rem;
+}
+
+.course-preview li i {
+  color: var(--accent-color);
+  font-size: 1.1rem;
+}
+
+.course-content {
+  padding: 1.2rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.course-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.course-instructor {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.8rem;
+}
+
+.course-rating {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.rating-score {
+  color: #b4690e;
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+.rating-stars {
+  color: #f69c08;
+  display: flex;
+  gap: 2px;
+  font-size: 0.9rem;
+}
+
+.students-count {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.course-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.course-price {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: var(--text-primary);
+}
+
+.details-button {
+  background-color: var(--accent-color);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.details-button:hover {
+  background-color: var(--accent-hover);
+  transform: translateY(-2px);
+}
+
+/* Tablet Responsive */
+@media (max-width: 1024px) {
+  .course-content {
+    padding: 1rem;
+  }
+
+  .course-title {
+    font-size: 1.1rem;
+  }
+
+  .course-preview {
+    padding: 1.2rem;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .course-card {
+    max-width: 100%;
+  }
+
+  .course-preview {
+    padding: 1rem;
+  }
+
+  .course-preview h4 {
+    font-size: 1.1rem;
+  }
+
+  .course-rating {
+    gap: 0.5rem;
+  }
+
+  .course-footer {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .details-button {
+    width: 100%;
+    text-align: center;
+    order: -1;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Küçük Mobil Cihazlar */
+@media (max-width: 480px) {
+  .course-content {
+    padding: 1rem;
+  }
+
+  .course-title {
+    font-size: 1rem;
+  }
+
+  .course-preview h4 {
+    font-size: 1rem;
+  }
+
+  .course-preview p {
+    font-size: 0.9rem;
+  }
+
+  .course-price {
+    font-size: 1.1rem;
+  }
+
+  .rating-stars {
+    font-size: 0.8rem;
+  }
+} 

@@ -27,8 +27,8 @@ namespace CourseTech.Repository.Migrations
                 name: "AppUserRefreshToken",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Token = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     ExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
