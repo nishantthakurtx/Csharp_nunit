@@ -39,13 +39,12 @@ const CourseCard = ({ course }) => {
         <p className="course-instructor">{course.instructor}</p>
         <div className="course-rating">
           <span className="rating-score">{course.rating}</span>
-          <span className="rating-stars">{renderStars(course.rating)}</span>
-          <span className="students-count">({course.students} öğrenci)</span>
+          <span className="students-count">({course.students} students)</span>
         </div>
         <div className="course-footer">
-          <span className="course-price">{course.price} TL</span>
+          <span className="course-price">{course.price} $</span>
           <Link to={`/course/${course.id}`} className="details-button">
-            Kursa Git
+            Go to Course
           </Link>
         </div>
       </div>

@@ -10,6 +10,8 @@ namespace CourseTech.Core.UnitOfWorks
         IEnrollmentRepository Enrollment { get; }
         IBasketRepository Basket { get; }
         IAppUserRefreshTokenRepository AppUserRefreshToken { get; }
+        IPaymentRepository Payment { get; }
+        IOrderRepository Order { get; }
         Task SaveChangesAsync();
         void SaveChanges();
     }

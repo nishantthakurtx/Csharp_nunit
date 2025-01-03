@@ -1,4 +1,6 @@
-﻿namespace CourseTech.Core.Models
+﻿using CourseTech.Shared.Enums;
+
+namespace CourseTech.Core.Models
 {
     public class Order : BaseEntity
     {
@@ -10,21 +12,35 @@
         
         private decimal _totalPrice;
         public decimal TotalPrice => _totalPrice;
-        
+
+        public OrderStatus Status { get; private set; } = OrderStatus.Pending;
+        public Payment? Payment { get; private set; }
+
+        private Order() {}
         public Order(Guid userId, AppUser user)
         {
             UserId = userId;
             AppUser = user;
+            Status = OrderStatus.Pending;
         }
-
         public void AddOrderItem(Course course)
         {
             if (_orderItems.Any(x => x.CourseId == course.Id))
                 throw new InvalidOperationException("Course is already in the order.");
 
-            _orderItems.Add(new OrderItem(course));
+            _orderItems.Add(new OrderItem(this.Id,course));
             RecalculateTotalPrice();
         }
+        public void MarkAsCompleted()
+        {
+            Status = OrderStatus.Completed;
+        }
+
+        public void MarkAsCanceled()
+        {
+            Status = OrderStatus.Canceled;
+        }
+
         private void RecalculateTotalPrice()
         {
             _totalPrice = _orderItems.Sum(x => x.Price);

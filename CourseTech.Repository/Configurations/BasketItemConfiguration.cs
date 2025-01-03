@@ -8,6 +8,8 @@ namespace CourseTech.Repository.Configurations
     {
         public void Configure(EntityTypeBuilder<BasketItem> builder)
         {
+            builder.ToTable("BasketItems");
+
             builder.HasKey(x => new { x.BasketId, x.CourseId });
 
             builder.HasOne(x => x.Basket)

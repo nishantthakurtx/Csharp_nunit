@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CourseTech.Service.Services
 {
-    public class AuthenticationService(IUnitOfWork unitOfWork, ITokenService tokenService, UserManager<AppUser> userManager, IMapper mapper) : IAuthenticationService
+    public class AuthenticationService(IUnitOfWork unitOfWork, IIdentityTokenService tokenService, UserManager<AppUser> userManager, IMapper mapper) : IAuthenticationService
     {
         public async Task<ServiceResult<TokenDTO>> CreateTokenAsync(LoginDTO loginDto)
         {

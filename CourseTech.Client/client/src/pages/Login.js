@@ -1,25 +1,75 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { useAuth } from '../contexts/AuthContext';
 import './Login.css';
 
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .email('Please enter a valid email address')
+    .required('Email is required')
+    .matches(
+      /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+      'Please enter a valid email address'
+    ),
+  password: yup
+    .string()
+    .min(6, 'Password must be at least 6 characters')
+    .matches(
+      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{6,}$/,
+      'Password must contain at least one letter and one number'
+    )
+    .required('Password is required'),
+});
+
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+  const navigate = useNavigate();
+  const { login } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, dirtyFields, isValid },
+    watch,
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: 'onChange',
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
+  const watchedFields = watch();
+
+  const getInputStatus = (fieldName) => {
+    if (!dirtyFields[fieldName]) return '';
+    return errors[fieldName] ? 'error' : 'success';
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Giriş işlemleri burada yapılacak
-    console.log('Giriş yapılıyor:', formData);
+  const onSubmit = async (data) => {
+    if (!isValid) return;
+    
+    setIsLoading(true);
+    setSubmitError('');
+
+    try {
+      await login(data);
+      navigate('/');
+    } catch (error) {
+      if (error.message === 'User not found') {
+        setSubmitError('No account found with this email. Please check your email or register.');
+      } else if (error.message === 'Invalid email or password') {
+        setSubmitError('Invalid email or password combination. Please try again.');
+      } else {
+        setSubmitError(error.message || 'An unexpected error occurred. Please try again later.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -27,88 +77,71 @@ const Login = () => {
       <div className="login-box">
         <div className="login-left">
           <div className="welcome-text">
-            <h2>Tekrar Hoş Geldiniz!</h2>
-            <p>Binlerce kursa erişim için hemen giriş yapın.</p>
+            <h2>Welcome Back!</h2>
+            <p>Please enter your details to sign in</p>
           </div>
-          <div className="social-login">
-            <button className="social-btn google">
-              <i className="fab fa-google"></i>
-              Google ile devam et
-            </button>
-            <button className="social-btn microsoft">
-              <i className="fab fa-microsoft"></i>
-              Microsoft hesabı ile devam et
-            </button>
-          </div>
-          <div className="divider">
-            <span>veya</span>
-          </div>
-          <form onSubmit={handleSubmit}>
+          <form className="login-form" onSubmit={handleSubmit(onSubmit)} noValidate>
+            {submitError && (
+              <div className="submit-error">
+                {submitError}
+              </div>
+            )}
             <div className="form-group">
-              <label htmlFor="email">E-posta</label>
+              <label htmlFor="email">Email</label>
               <input
                 type="email"
                 id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="ornek@email.com"
-                required
+                {...register('email')}
+                className={getInputStatus('email')}
+                placeholder="Enter your email"
+                autoComplete="email"
               />
+              {errors.email && (
+                <div className="error-message">{errors.email.message}</div>
+              )}
             </div>
             <div className="form-group">
-              <label htmlFor="password">Şifre</label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="••••••••"
-                required
-              />
-            </div>
-            <div className="form-footer">
-              <div className="remember-me">
-                <input type="checkbox" id="remember" />
-                <label htmlFor="remember">Beni hatırla</label>
+              <label htmlFor="password">Password</label>
+              <div className="password-input">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  {...register('password')}
+                  className={getInputStatus('password')}
+                  placeholder="Enter your password"
+                  autoComplete="current-password"
+                />
+                <button
+                  type="button"
+                  className="show-password"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
               </div>
-              <Link to="/forgot-password" className="forgot-password">
-                Şifremi unuttum
-              </Link>
+              {errors.password && (
+                <div className="error-message">{errors.password.message}</div>
+              )}
             </div>
-            <button type="submit" className="login-btn">
-              Giriş Yap
+            <button
+              type="submit"
+              className="login-btn"
+              disabled={isLoading || !isValid}
+            >
+              {isLoading ? 'Signing in...' : 'Sign in'}
             </button>
           </form>
         </div>
-
-        <div className="vertical-divider"></div>
-
         <div className="login-right">
-          <div className="welcome-text">
-            <h2>Henüz Üye Değil misiniz?</h2>
-            <p>Hemen üye olun ve yüzlerce kursa anında erişim sağlayın.</p>
-          </div>
-          <img 
-            src="https://via.placeholder.com/400x300?text=Online+Education" 
-            alt="Online Eğitim"
-            style={{
-              width: '100%',
-              height: 'auto',
-              borderRadius: '8px',
-              marginBottom: '2rem'
-            }}
-          />
-          <div className="register-link">
-            <Link to="/register" className="register-btn">
-              Hemen Üye Ol
-            </Link>
-          </div>
+          <h3>New to CourseTech?</h3>
+          <p>Join our community of learners and start your educational journey today!</p>
+          <Link to="/register" className="register-btn">
+            Create Account
+          </Link>
         </div>
       </div>
     </div>
   );
 };
 
-export default Login; 
+export default Login;

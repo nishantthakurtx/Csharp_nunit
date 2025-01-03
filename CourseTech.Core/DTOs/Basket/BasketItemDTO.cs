@@ -1,7 +1,7 @@
 ﻿namespace CourseTech.Core.DTOs.Basket
 {
     public record BasketItemDTO(
-        Guid Id,
+        Guid BasketId,
         Guid CourseId,
         string CourseTitle,
         decimal Price

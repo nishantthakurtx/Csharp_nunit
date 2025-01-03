@@ -15,6 +15,20 @@ namespace CourseTech.API.Controllers
             return CreateActionResult(result);
         }
 
+        [HttpGet("instructors")]
+        public async Task<IActionResult> GetInstructorsAsync()
+        {
+            var result = await userService.GetInstructorsAsync();
+            return CreateActionResult(result);
+        }
+
+        [HttpGet("students")]
+        public async Task<IActionResult> GetStudentsAsync()
+        {
+            var result = await userService.GetStudentsAsync();
+            return CreateActionResult(result);
+        }
+
         [HttpGet("all")]
         public async Task<IActionResult> GetAll()
         {
@@ -22,12 +36,14 @@ namespace CourseTech.API.Controllers
             return CreateActionResult(result);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(AppUserCreateDTO createUserDto)
+        [HttpPost("register")]
+        public async Task<IActionResult> Create(AppUserWithPasswordDTO createUserDto)
         {
             var result = await userService.CreateAsync(createUserDto);
             return CreateActionResult(result);
         }
+
+
 
         [HttpPut("{id:Guid}")]
         public async Task<IActionResult> Update(AppUserDTO updateUserDto)

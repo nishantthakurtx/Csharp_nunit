@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800px" height="600px" viewBox="0 0 800 600" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Welcome Illustration</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#1c1d1f" offset="0%"></stop>
+            <stop stop-color="#6a6f73" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Welcome" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <!-- Background Circle -->
+        <circle id="Background" fill="#f7f9fa" cx="400" cy="300" r="250"></circle>
+        
+        <!-- Book Stack -->
+        <g id="BookStack" transform="translate(250, 200)">
+            <rect id="Book1" fill="#1c1d1f" x="0" y="0" width="300" height="40" rx="4"></rect>
+            <rect id="Book2" fill="#6a6f73" x="20" y="50" width="260" height="40" rx="4"></rect>
+            <rect id="Book3" fill="#d1d7dc" x="40" y="100" width="220" height="40" rx="4"></rect>
+        </g>
+        
+        <!-- Graduation Cap -->
+        <g id="GraduationCap" transform="translate(350, 150)">
+            <path d="M50,0 L100,25 L50,50 L0,25 Z" fill="url(#linearGradient-1)"></path>
+            <rect id="Tassel" fill="#1c1d1f" x="45" y="0" width="10" height="60"></rect>
+        </g>
+        
+        <!-- Pencil -->
+        <g id="Pencil" transform="translate(500, 250) rotate(-45)">
+            <rect id="PencilBody" fill="#f7c32e" x="0" y="0" width="120" height="20" rx="2"></rect>
+            <path d="M120,0 L140,10 L120,20 Z" fill="#1c1d1f"></path>
+        </g>
+        
+        <!-- Decorative Elements -->
+        <circle id="Dot1" fill="#1c1d1f" cx="200" cy="150" r="5"></circle>
+        <circle id="Dot2" fill="#6a6f73" cx="600" cy="450" r="5"></circle>
+        <circle id="Dot3" fill="#d1d7dc" cx="150" cy="400" r="5"></circle>
+        <circle id="Dot4" fill="#1c1d1f" cx="650" cy="200" r="5"></circle>
+    </g>
+</svg> 

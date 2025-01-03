@@ -6,7 +6,7 @@ namespace CourseTech.Core.Models
     {
         // Properties
         public string Title { get; set; } = default!;
-        public string? Description { get; set; }
+        public string Description { get; set; }
         public string ImageUrl { get; set; } = default!;
         public string VideoUrl { get; set; } = default!;
         public CourseLevel Level { get; set; }
@@ -22,8 +22,6 @@ namespace CourseTech.Core.Models
 
         public Guid CategoryId { get; set; } = default!;
         public Category Category { get; set; } = null!;
-
-        public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
 
         public void Publish()
         {

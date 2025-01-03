@@ -7,9 +7,12 @@
         public Guid CourseId { get; private set; }
         public Course Course { get; private set; } = null!;
         public decimal Price { get; private set; }
-
-        public OrderItem(Course course)
+        
+        private OrderItem() { }
+        
+        public OrderItem(Guid orderId,Course course)
         {
+            OrderId = orderId;
             CourseId = course.Id;
             Course = course;
             Price = course.Price;

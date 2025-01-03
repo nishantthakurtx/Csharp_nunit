@@ -8,15 +8,14 @@
         public Guid CourseId { get; private set; }
         public Course Course { get; private set; } = null!;
 
-        public BasketItem()
+        public decimal Price => Course.Price;
+        
+        private BasketItem() { }
+        public BasketItem(Guid basketId,Course course)
         {
-        }
-
-        public BasketItem(Course course)
-        {
+            BasketId = basketId;
             CourseId = course.Id;
             Course = course;
-        }
-        public decimal Price => Course.Price;
+        }   
     }
 }

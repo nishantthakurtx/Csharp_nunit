@@ -43,20 +43,20 @@ namespace CourseTech.Service.Services
             return ServiceResult<IEnumerable<CourseSummaryDTO>>.Success(courseSummaries);
         }
 
-        public async Task<ServiceResult<IEnumerable<CourseDTO>>> GetCoursesByCategoryAsync(Guid categoryId)
+        public async Task<ServiceResult<IEnumerable<CourseSummaryDTO>>> GetCoursesByCategoryAsync(Guid categoryId)
         {
             var entities = await unitOfWork.Course.GetCoursesByCategoryAsync(categoryId);
-            var courseDtos = mapper.Map<IEnumerable<CourseDTO>>(entities);
+            var courseDtos = mapper.Map<IEnumerable<CourseSummaryDTO>>(entities);
 
-            return ServiceResult<IEnumerable<CourseDTO>>.Success(courseDtos);
+            return ServiceResult<IEnumerable<CourseSummaryDTO>>.Success(courseDtos);
         }
 
-        public async Task<ServiceResult<IEnumerable<CourseDTO>>> GetCoursesByInstructorAsync(Guid instructorId)
+        public async Task<ServiceResult<IEnumerable<CourseSummaryDTO>>> GetCoursesByInstructorAsync(Guid instructorId)
         {
             var entities = await unitOfWork.Course.GetCoursesByInstructorAsync(instructorId);
-            var courseDtos = mapper.Map<IEnumerable<CourseDTO>>(entities);
+            var courseDtos = mapper.Map<IEnumerable<CourseSummaryDTO>>(entities);
 
-            return ServiceResult<IEnumerable<CourseDTO>>.Success(courseDtos);
+            return ServiceResult<IEnumerable<CourseSummaryDTO>>.Success(courseDtos);
         }
 
         public async Task<ServiceResult<CourseDTO>> GetCourseWithDetailsAsync(Guid courseId)

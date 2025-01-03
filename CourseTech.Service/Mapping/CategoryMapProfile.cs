@@ -8,11 +8,7 @@ namespace CourseTech.Service.Mapping
     {
         public CategoryMapProfile()
         {
-            CreateMap<Category, CategoryDTO>()
-            .ConstructUsing(src => new CategoryDTO(
-                src.Id,
-                src.Name
-            ));
+            CreateMap<Category, CategoryDTO>();
 
             CreateMap<CategoryCreateDTO, Category>()
                .ForMember(dest => dest.Id, opt => opt.Ignore())

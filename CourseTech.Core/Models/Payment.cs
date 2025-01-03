@@ -1,4 +1,6 @@
-﻿namespace CourseTech.Core.Models
+﻿using CourseTech.Shared.Enums;
+
+namespace CourseTech.Core.Models
 {
     public class Payment
     {
@@ -6,30 +8,41 @@
         public Guid UserId { get; private set; }
         public AppUser AppUser { get; private set; } = null!;
 
+        public Guid OrderId { get; private set; }
+        public Order Order { get; private set; } = null!;
+
         public decimal TotalAmount { get; private set; }
         public string PaymentProvider { get; private set; }
-        public string TransactionId { get; private set; }
-        public bool IsSuccessFull { get; private set; }
+        public string TransactionId { get; private set; } = string.Empty; // Ödeme sağlayıcısından dönen benzersiz işlem numarası
+        public bool IsSuccessful { get; private set; }
         public DateTime PaymentDate { get; private set; } = DateTime.UtcNow;
+        public PaymentStatus Status { get; private set; } = PaymentStatus.Pending;
 
-
-        public Payment(Guid userId, AppUser appUser, decimal totalAmount, string paymentProvider, string transactionId)
+        private Payment() { }
+        public Payment(Guid userId, Guid orderId, Order order, decimal totalAmount, string paymentProvider)
         {
             UserId = userId;
-            AppUser = appUser;
+            OrderId = orderId;
+            Order = order;
             TotalAmount = totalAmount;
             PaymentProvider = paymentProvider;
-            TransactionId = transactionId;
+            TransactionId = string.Empty;
+            IsSuccessful = false;
+            Status = PaymentStatus.Pending;
+            PaymentDate = DateTime.UtcNow;
         }
 
-        public void MarkAsSuccessful()
+        public void MarkAsSuccessful(string transactionId)
         {
-            IsSuccessFull = true;
+            TransactionId = transactionId;
+            Status = PaymentStatus.Success;
+            IsSuccessful = true;
         }
 
         public void MarkAsFailed()
         {
-            IsSuccessFull = false;
+            Status = PaymentStatus.Failed;
+            IsSuccessful = false;
         }
     }
 }

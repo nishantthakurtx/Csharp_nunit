@@ -1,30 +1,42 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { store } from './app/store';
+import { AuthProvider } from './contexts/AuthContext';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import Home from './pages/Home';
 import CourseDetail from './pages/CourseDetail';
-import Cart from './pages/Cart';
+import Basket from './pages/Basket';
 import Login from './pages/Login';
+import Register from './pages/Register';
+import CategoryDetail from './pages/CategoryDetail';
+import InstructorDetail from './pages/InstructorDetail';
+import Categories from './pages/Categories';
+import Courses from './pages/Courses';
+import './App.css';
 
 function App() {
   return (
-    <Provider store={store}>
+    <AuthProvider>
       <Router>
         <div className="app">
           <Navbar />
-          <main>
+          <div className="main-content">
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/course/:id" element={<CourseDetail />} />
-              <Route path="/cart" element={<Cart />} />
+              <Route path="/courses" element={<Courses />} />
+              <Route path="/categories" element={<Categories />} />
+              <Route path="/course/:slug" element={<CourseDetail />} />
+              <Route path="/basket" element={<Basket />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/category/:slug" element={<CategoryDetail />} />
+              <Route path="/instructor/:slug" element={<InstructorDetail />} />
             </Routes>
-          </main>
+          </div>
+          <Footer />
         </div>
       </Router>
-    </Provider>
+    </AuthProvider>
   );
 }
 

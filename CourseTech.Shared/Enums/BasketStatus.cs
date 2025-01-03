@@ -3,7 +3,6 @@
     public enum BasketStatus
     {
         Active,
-        Pasive,
-        Completed
+        Passive
     }
 }

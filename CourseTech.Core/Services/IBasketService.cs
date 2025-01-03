@@ -10,6 +10,6 @@ namespace CourseTech.Core.Services
         Task<ServiceResult> RemoveCourseFromBasketAsync(Guid userId, Guid courseId);
         Task<ServiceResult> ClearBasketAsync(Guid userId);
         Task<ServiceResult> CompleteBasketAsync(Guid userId);
-
+        Task<ServiceResult<BasketDTO>> GetBasketWithItemsAsync(Guid basketId);
     }
 }

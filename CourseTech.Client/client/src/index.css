@@ -1,29 +1,3 @@
-:root {
-  /* Light mode variables */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f7f9fa;
-  --text-primary: #1c1d1f;
-  --text-secondary: #6a6f73;
-  --border-color: #d1d7dc;
-  --accent-color: #5624d0;
-  --accent-hover: #401b9c;
-  --shadow-color: rgba(0, 0, 0, 0.08);
-  --card-bg: #ffffff;
-}
-
-.dark-mode {
-  /* Dark mode variables */
-  --bg-primary: #1c1d1f;
-  --bg-secondary: #2d2f31;
-  --text-primary: #ffffff;
-  --text-secondary: #d1d7dc;
-  --border-color: #3e4143;
-  --accent-color: #a435f0;
-  --accent-hover: #8710d8;
-  --shadow-color: rgba(0, 0, 0, 0.3);
-  --card-bg: #2d2f31;
-}
-
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -33,10 +7,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }

@@ -8,15 +8,15 @@ namespace CourseTech.Service.Mapping
     {
         public CourseMapProfile()
         {
-            //
+
             CreateMap<Course, CourseDTO>()
               .ConstructUsing(src => new CourseDTO(
                   src.Id,
                   src.Title,
                   src.Description,
                   src.ImageUrl,
-                  src.Level,
-                  src.Language,
+                  src.Level.ToString(),
+                  src.Language.ToString(),
                   src.Price,
                   src.Duration,
                   src.PublishedAt,
@@ -29,20 +29,19 @@ namespace CourseTech.Service.Mapping
                     src.Id,
                     src.Title,
                     src.Price,
+                    src.ImageUrl,
                     $"{src.Instructor.FirstName} {src.Instructor.LastName}",
-                    src.ImageUrl
+                    src.Level.ToString()
                 ));
 
             CreateMap<CourseCreateDTO, Course>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.IsPublished, opt => opt.MapFrom(src => false))
-                .ForMember(dest => dest.PublishedAt, opt => opt.Ignore())
-                .ForMember(dest => dest.Enrollments, opt => opt.Ignore());
+                .ForMember(dest => dest.PublishedAt, opt => opt.Ignore());
 
             CreateMap<CourseUpdateDTO, Course>()
-                .ForMember(dest => dest.IsPublished, opt => opt.Ignore()) 
-                .ForMember(dest => dest.PublishedAt, opt => opt.Ignore())
-                .ForMember(dest => dest.Enrollments, opt => opt.Ignore());
+                .ForMember(dest => dest.IsPublished, opt => opt.Ignore())
+                .ForMember(dest => dest.PublishedAt, opt => opt.Ignore());
         }
     }
 }

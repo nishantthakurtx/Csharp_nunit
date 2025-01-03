@@ -12,8 +12,11 @@ namespace CourseTech.Core.Models
         public bool IsDeleted { get; private set; } = false;
 
         public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
-        public ICollection<Course> CreatedCourses { get; set; } = new List<Course>();
+        public ICollection<Course> Courses { get; set; } = new List<Course>();
         public ICollection<Basket> Baskets { get; set; } = new List<Basket>();
+        public ICollection<Payment> Payments { get; set; } = new List<Payment>();
+
+        public string? StripeCustomerId { get; private set; } 
 
         public void MarkAsDeleted()
         {
@@ -24,6 +27,12 @@ namespace CourseTech.Core.Models
         public void Update()
         {
             UpdatedAt = DateTime.UtcNow;
+        }
+
+        public void SetStripeCustomerId(string stripeCustomerId)
+        {
+            StripeCustomerId = stripeCustomerId;
+            Update();
         }
     }
 }

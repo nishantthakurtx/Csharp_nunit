@@ -15,6 +15,8 @@ namespace CourseTech.Repository
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Basket> Baskets { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Payment> Payments { get; set; }
       
         public DbSet<AppUserRefreshToken> AppUserRefreshToken { get; set; }
 

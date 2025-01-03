@@ -30,14 +30,14 @@ namespace CourseTech.API.Controllers
         }
 
         [HttpGet("by-category/{categoryId:Guid}")]
-        public async Task<IActionResult> GetCoursesByCategory([FromQuery] Guid categoryId)
+        public async Task<IActionResult> GetCoursesByCategory(Guid categoryId)
         {
             var result = await service.GetCoursesByCategoryAsync(categoryId);
             return CreateActionResult(result);
         }
 
-        [HttpGet("instructor")]
-        public async Task<IActionResult> GetCoursesByInstructor([FromQuery]Guid instructorId)
+        [HttpGet("by-instructor/{instructorId:Guid}")]
+        public async Task<IActionResult> GetCoursesByInstructor(Guid instructorId)
         {
             var result = await service.GetCoursesByInstructorAsync(instructorId);
             return CreateActionResult(result);

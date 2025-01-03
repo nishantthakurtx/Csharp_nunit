@@ -7,38 +7,45 @@ namespace CourseTech.API.Controllers
     [ApiController]
     public class BasketsController(IBasketService service) : CustomBaseController
     {
-        [HttpGet("{userId}")]
+        [HttpGet("{userId:guid}")]
         public async Task<IActionResult> GetBasket(Guid userId)
         {
             var result = await service.GetActiveBasketAsync(userId);
             return CreateActionResult(result);
         }
 
-        [HttpPost("add-course")]
-        public async Task<IActionResult> AddCourseToBasket([FromQuery] Guid userId, [FromQuery] Guid courseId)
+        [HttpPost("users/{userId}/courses/{courseId}")]
+        public async Task<IActionResult> AddCourseToBasket(Guid userId, Guid courseId)
         {
             var result = await service.AddCourseToBasketAsync(userId, courseId);
             return CreateActionResult(result);
         }
 
-        [HttpDelete("remove-course")]
-        public async Task<IActionResult> RemoveCourseFromBasket([FromQuery] Guid userId, [FromQuery] Guid courseId)
+        [HttpDelete("users/{userId}/courses/{courseId}")]
+        public async Task<IActionResult> RemoveCourseFromBasket(Guid userId, Guid courseId)
         {
             var result = await service.RemoveCourseFromBasketAsync(userId, courseId);
             return CreateActionResult(result);
         }
 
-        [HttpDelete("clear")]
-        public async Task<IActionResult> ClearBasket([FromQuery] Guid userId)
+        [HttpDelete("users/{userId}")]
+        public async Task<IActionResult> ClearBasket(Guid userId)
         {
             var result = await service.ClearBasketAsync(userId);
             return CreateActionResult(result);
         }
 
-        [HttpPatch("complete")]
-        public async Task<IActionResult> CompleteBasket([FromQuery] Guid userId)
+        [HttpPost("users/{userId}/complete")]
+        public async Task<IActionResult> CompleteBasket(Guid userId)
         {
             var result = await service.CompleteBasketAsync(userId);
+            return CreateActionResult(result);
+        }
+
+        [HttpGet("{basketId:guid}/admin")]
+        public async Task<IActionResult> GetBasketWithItems(Guid basketId)
+        {
+            var result = await service.GetBasketWithItemsAsync(basketId);
             return CreateActionResult(result);
         }
     }

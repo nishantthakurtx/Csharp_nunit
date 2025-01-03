@@ -18,6 +18,8 @@ namespace CourseTech.Repository.Configurations
                 .IsRequired()
                 .HasPrecision(18, 2);
 
+            builder.Ignore(b => b.IsDeleted);
+
             // Basket has one AppUser
             builder.HasOne(b => b.AppUser)
                 .WithMany(u => u.Baskets)

@@ -18,7 +18,7 @@ namespace CourseTech.Repository.Configurations
 
             // Course - Enrollment(Many-to-Many)
             builder.HasOne(e => e.Course)
-                .WithMany(c => c.Enrollments)
+                .WithMany()
                 .HasForeignKey(e => e.CourseId)
                 .OnDelete(DeleteBehavior.Cascade);
 

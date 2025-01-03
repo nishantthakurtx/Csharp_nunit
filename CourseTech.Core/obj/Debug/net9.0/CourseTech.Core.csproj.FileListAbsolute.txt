@@ -1,0 +1,16 @@
+D:\websites\backend\CourseTechPlatform\CourseTech.Core\bin\Debug\net9.0\CourseTech.Core.deps.json
+D:\websites\backend\CourseTechPlatform\CourseTech.Core\bin\Debug\net9.0\CourseTech.Core.dll
+D:\websites\backend\CourseTechPlatform\CourseTech.Core\bin\Debug\net9.0\CourseTech.Core.pdb
+D:\websites\backend\CourseTechPlatform\CourseTech.Core\bin\Debug\net9.0\CourseTech.Shared.dll
+D:\websites\backend\CourseTechPlatform\CourseTech.Core\bin\Debug\net9.0\CourseTech.Shared.pdb
+D:\websites\backend\CourseTechPlatform\CourseTech.Core\obj\Debug\net9.0\CourseTech.Core.csproj.AssemblyReference.cache
+D:\websites\backend\CourseTechPlatform\CourseTech.Core\obj\Debug\net9.0\CourseTech.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\websites\backend\CourseTechPlatform\CourseTech.Core\obj\Debug\net9.0\CourseTech.Core.AssemblyInfoInputs.cache
+D:\websites\backend\CourseTechPlatform\CourseTech.Core\obj\Debug\net9.0\CourseTech.Core.AssemblyInfo.cs
+D:\websites\backend\CourseTechPlatform\CourseTech.Core\obj\Debug\net9.0\CourseTech.Core.csproj.CoreCompileInputs.cache
+D:\websites\backend\CourseTechPlatform\CourseTech.Core\obj\Debug\net9.0\CourseTech.Core.sourcelink.json
+D:\websites\backend\CourseTechPlatform\CourseTech.Core\obj\Debug\net9.0\CourseTe.372FE6E5.Up2Date
+D:\websites\backend\CourseTechPlatform\CourseTech.Core\obj\Debug\net9.0\CourseTech.Core.dll
+D:\websites\backend\CourseTechPlatform\CourseTech.Core\obj\Debug\net9.0\refint\CourseTech.Core.dll
+D:\websites\backend\CourseTechPlatform\CourseTech.Core\obj\Debug\net9.0\CourseTech.Core.pdb
+D:\websites\backend\CourseTechPlatform\CourseTech.Core\obj\Debug\net9.0\ref\CourseTech.Core.dll

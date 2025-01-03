@@ -3,6 +3,7 @@ using CourseTech.Core.DTOs.AppUser;
 using CourseTech.Core.Models;
 using CourseTech.Core.Services;
 using CourseTech.Shared;
+using CourseTech.Shared.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,26 @@ namespace CourseTech.Service.Services
             return ServiceResult<AppUserDTO>.Success(mapper.Map<AppUserDTO>(user));
         }
 
+        public async Task<ServiceResult<IEnumerable<AppUserWithNamesDTO>>> GetInstructorsAsync()
+        {
+            var users = await userManager.GetUsersInRoleAsync(Roles.Instructor.ToString());
+            if (!users.Any())
+                return ServiceResult<IEnumerable<AppUserWithNamesDTO>>.Fail("No instructor found.");
+
+            var instructorDtos = mapper.Map<IEnumerable<AppUserWithNamesDTO>>(users);
+            return ServiceResult<IEnumerable<AppUserWithNamesDTO>>.Success(instructorDtos);
+        }
+
+        public async Task<ServiceResult<IEnumerable<AppUserWithNamesDTO>>> GetStudentsAsync()
+        {
+            var users = await userManager.GetUsersInRoleAsync(Roles.Student.ToString());
+            if (!users.Any())
+                return ServiceResult<IEnumerable<AppUserWithNamesDTO>>.Fail("No student found.");
+
+            var studentDtos = mapper.Map<IEnumerable<AppUserWithNamesDTO>>(users);
+            return ServiceResult<IEnumerable<AppUserWithNamesDTO>>.Success(studentDtos);
+        }
+
         public async Task<ServiceResult<IEnumerable<AppUserDTO>>> GetAllAsync()
         {
             var users = await userManager.Users.ToListAsync();
@@ -26,7 +47,7 @@ namespace CourseTech.Service.Services
             return ServiceResult<IEnumerable<AppUserDTO>>.Success(userDtos);
         }
 
-        public async Task<ServiceResult<AppUserDTO>> CreateAsync(AppUserCreateDTO createUserDto)
+        public async Task<ServiceResult<AppUserDTO>> CreateAsync(AppUserWithPasswordDTO createUserDto)
         {
             var user = new AppUser
             {
@@ -40,8 +61,12 @@ namespace CourseTech.Service.Services
             var createResult = await userManager.CreateAsync(user, createUserDto.Password);
             if (!createResult.Succeeded)
                 return ServiceResult<AppUserDTO>.Fail(createResult.Errors.Select(e => e.Description).ToList());
-            var userDto = mapper.Map<AppUserDTO>(user);
 
+            var roleResult = await userManager.AddToRoleAsync(user, Roles.Student.ToString());
+            if (!roleResult.Succeeded)
+                return ServiceResult<AppUserDTO>.Fail(roleResult.Errors.Select(e => e.Description).ToList());
+
+            var userDto = mapper.Map<AppUserDTO>(user);
             return ServiceResult<AppUserDTO>.Success(userDto);
         }
 

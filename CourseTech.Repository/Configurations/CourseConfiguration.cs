@@ -41,15 +41,10 @@ namespace CourseTech.Repository.Configurations
 
             // Instructor - Course (One-to-Many)
             builder.HasOne(c => c.Instructor)
-                   .WithMany(a => a.CreatedCourses)
+                   .WithMany(a => a.Courses)
                    .HasForeignKey(c => c.InstructorId)
                    .OnDelete(DeleteBehavior.Restrict);
 
-            // Course - Enrollment (Many-to-Many)
-            builder.HasMany(c => c.Enrollments)
-                   .WithOne(e => e.Course)
-                   .HasForeignKey(e => e.CourseId)
-                   .OnDelete(DeleteBehavior.Cascade);
 
             // Course - Category (Many-to-One)
             builder.HasOne(c => c.Category)

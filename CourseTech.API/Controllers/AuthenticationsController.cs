@@ -8,8 +8,8 @@ namespace CourseTech.API.Controllers
     [ApiController]
     public class AuthenticationsController(IAuthenticationService service) : CustomBaseController
     {
-        [HttpPost("create-token")]
-        public async Task<IActionResult> CreateToken(LoginDTO loginDto)
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginDTO loginDto)
         {
             var result = await service.CreateTokenAsync(loginDto);
 

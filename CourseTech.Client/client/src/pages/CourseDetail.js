@@ -1,211 +1,223 @@
-import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
-import { useAuth } from '../context/AuthContext';
+import React, { useState, useEffect } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import slugify from 'react-slugify';
+import { courseService } from '../services/courseService';
+import { basketService } from '../services/basketService';
+import { useAuth } from '../contexts/AuthContext';
+import alertify from 'alertifyjs';
+import 'alertifyjs/build/css/alertify.css';
 import './CourseDetail.css';
 
+const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80';
+
 const CourseDetail = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const navigate = useNavigate();
-  const { addToCart, isInCart } = useCart();
-  const { isAuthenticated } = useAuth();
-  const [showLoginModal, setShowLoginModal] = useState(false);
+  const { user, isAuthenticated } = useAuth();
+  const [course, setCourse] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Örnek kurs verisi (normalde API'den gelecek)
-  const course = {
-    id: id,
-    title: 'React ile Modern Web Uygulamaları Geliştirme',
-    instructor: 'Ahmet Yılmaz',
-    description: 'React\'ın temellerinden ileri seviye konulara kadar kapsamlı bir eğitim serisi. Hooks, Context API, Redux ve daha fazlası!',
-    price: 199.99,
-    originalPrice: 499.99,
-    discount: 60,
-    rating: 4.8,
-    students: 1234,
-    lastUpdated: '2024-01',
-    language: 'Türkçe',
-    image: 'https://picsum.photos/800/400',
-    category: 'Web Geliştirme',
-    whatYouWillLearn: [
-      'React\'ın temel kavramlarını ve çalışma prensiplerini',
-      'Modern JavaScript (ES6+) özelliklerini',
-      'React Hooks ve Custom Hook geliştirmeyi',
-      'Context API ile state yönetimini',
-      'Redux ile kompleks state yönetimini',
-      'React Router ile sayfa yönetimini',
-      'REST API entegrasyonunu',
-      'Modern ve responsive tasarım tekniklerini'
-    ],
-    requirements: [
-      'Temel HTML, CSS ve JavaScript bilgisi',
-      'ES6+ JavaScript özelliklerine aşinalık',
-      'Temel web geliştirme kavramlarına hakimiyet'
-    ]
-  };
+  useEffect(() => {
+    const fetchCourse = async () => {
+      try {
+        setLoading(true);
+        const response = await courseService.getAllCourses();
+        if (response?.data) {
+          const foundCourse = response.data.find(
+            course => slugify(course.title) === slug
+          );
+          
+          if (foundCourse) {
+            const detailsResponse = await courseService.getCourseWithDetails(foundCourse.id);
+            if (detailsResponse?.data) {
+              setCourse(detailsResponse.data);
+            } else {
+              setError('Course details not found.');
+            }
+          } else {
+            setError('Course not found.');
+          }
+        } else {
+          setError('Failed to load courses.');
+        }
+      } catch (err) {
+        setError('Failed to load course details.');
+        console.error('Error fetching course:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleAddToCart = () => {
-    if (!isAuthenticated) {
-      setShowLoginModal(true);
+    if (slug) {
+      fetchCourse();
+    } else {
+      setError('Invalid course URL.');
+      setLoading(false);
+    }
+  }, [slug]);
+
+  const handleAddToCart = async () => {
+    if (!isAuthenticated || !user?.id) {
+      navigate('/login');
       return;
     }
-    addToCart(course);
-  };
 
-  const handleLoginRedirect = () => {
-    navigate('/login', { state: { from: `/course/${id}` } });
-  };
-
-  const renderStars = (rating) => {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      if (i <= Math.floor(rating)) {
-        stars.push(<i key={i} className="fas fa-star"></i>);
-      } else if (i - 0.5 <= rating) {
-        stars.push(<i key={i} className="fas fa-star-half-alt"></i>);
+    try {
+      await basketService.addCourseToBasket(user.id, course.id);
+      window.dispatchEvent(new Event('basketUpdated'));
+      
+      alertify.confirm('Course Added to Basket', 
+        'Course has been added to your basket successfully!',
+        function() {
+          navigate('/basket');
+        },
+        function() {
+          // Alışverişe devam et
+        }
+      ).set({
+        'labels': {ok: 'Go to Basket', cancel: 'Continue Shopping'},
+        'defaultFocus': 'cancel',
+        'movable': false,
+        'closable': false
+      });
+    } catch (error) {
+      console.error('Error adding course to basket:', error);
+      if (error.message === 'This course is already in your basket') {
+        alertify.error("You have already added this course to your basket.");
       } else {
-        stars.push(<i key={i} className="far fa-star"></i>);
+        alertify.error("Failed to add course to basket. Please try again.");
       }
     }
-    return stars;
+  };
+
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="loader"></div>
+        <p>Loading course details...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="error-container">
+        <p>{error}</p>
+        <button onClick={() => window.location.reload()} className="btn-primary">
+          Try Again
+        </button>
+      </div>
+    );
+  }
+
+  if (!course) {
+    return (
+      <div className="error-container">
+        <p>Course not found.</p>
+        <Link to="/" className="btn-primary">
+          Return to Home
+        </Link>
+      </div>
+    );
+  }
+
+  // Format duration to hours and minutes
+  const formatDuration = (duration) => {
+    if (!duration) return "0h 0m";
+    
+    // TimeSpan string format: "00:00:00"
+    const [hours, minutes] = duration.split(':');
+    return `${parseInt(hours)}h ${parseInt(minutes)}m`;
   };
 
   return (
     <div className="course-detail">
       <div className="course-header">
         <div className="course-header-content">
+          <div className="course-breadcrumb">
+            <span>Home</span>
+            <i className="fas fa-chevron-right"></i>
+            <span>Categories</span>
+            <i className="fas fa-chevron-right"></i>
+            <span>{course.categoryName}</span>
+          </div>
+          
           <h1>{course.title}</h1>
           <p className="course-description">{course.description}</p>
-          <div className="course-meta">
-            <div className="rating">
-              <span className="rating-score">{course.rating}</span>
-              <span className="rating-stars">{renderStars(course.rating)}</span>
-              <span className="students-count">({course.students} öğrenci)</span>
-            </div>
-            <div className="instructor-info">
-              <i className="fas fa-user"></i>
-              <span>{course.instructor}</span>
-            </div>
-            <div className="course-info-item">
-              <i className="fas fa-folder"></i>
-              <span>{course.category}</span>
-            </div>
-            <div className="course-info-item">
-              <i className="fas fa-clock"></i>
-              <span>Son güncelleme: {course.lastUpdated}</span>
-            </div>
-            <div className="course-info-item">
+          
+          <div className="course-rating">
+            <span className="students">
+              <i className="fas fa-user-graduate"></i>
+              {course.studentCount} students
+            </span>
+          </div>
+
+          <div className="course-creator">
+            <span>Instructor:</span>
+            <Link to={`/instructor/${slugify(course.instructorName)}`}>
+              {course.instructorName}
+            </Link>
+          </div>
+
+          <div className="course-tags">
+            <span>
+              <i className="fas fa-signal"></i>
+              {course.level}
+            </span>
+            <span>
               <i className="fas fa-globe"></i>
-              <span>{course.language}</span>
-            </div>
+              {course.language}
+            </span>
+            <span>
+              <i className="fas fa-calendar-alt"></i>
+              {new Date(course.publishedAt).toLocaleDateString()}
+            </span>
           </div>
         </div>
       </div>
 
       <div className="course-content">
-        <div className="main-content">
-          <section className="what-you-learn">
-            <h2>Bu kursta öğrenecekleriniz</h2>
-            <ul>
-              {course.whatYouWillLearn.map((item, index) => (
-                <li key={index}>
-                  <i className="fas fa-check"></i>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          <section className="requirements">
-            <h2>Ön Koşullar</h2>
-            <ul>
-              {course.requirements.map((req, index) => (
-                <li key={index}>
-                  <i className="fas fa-circle"></i>
-                  <span>{req}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
+        <div className="course-main">
+          <div className="course-section">
+            <h2>About this course</h2>
+            <p>{course.description}</p>
+          </div>
         </div>
 
         <div className="course-sidebar">
-          <div className="course-purchase-card">
-            <img src={course.image} alt={course.title} className="course-preview-image" />
-            <div className="price-container">
-              <span className="current-price">₺{course.price.toFixed(2)}</span>
-              <span className="original-price">₺{course.originalPrice.toFixed(2)}</span>
-              <span className="discount">%{course.discount} indirim</span>
-            </div>
-            <button 
-              className={`add-to-cart-btn ${isInCart(course.id) ? 'in-cart' : ''}`}
-              onClick={handleAddToCart}
-              disabled={isInCart(course.id)}
-            >
-              {isInCart(course.id) ? (
-                <>
-                  <i className="fas fa-check"></i>
-                  Sepete Eklendi
-                </>
-              ) : (
-                <>
-                  <i className="fas fa-shopping-cart"></i>
-                  Sepete Ekle
-                </>
-              )}
-            </button>
-            <div className="guarantee-text">
-              <i className="fas fa-medal"></i>
-              30 Gün Para İade Garantisi
-            </div>
-            <div className="course-includes">
-              <h3>Bu kursa dahil:</h3>
-              <ul>
-                <li>
-                  <i className="fas fa-video"></i>
-                  <span>12 saat video içeriği</span>
-                </li>
-                <li>
-                  <i className="fas fa-file-alt"></i>
-                  <span>25 makale</span>
-                </li>
-                <li>
-                  <i className="fas fa-download"></i>
-                  <span>İndirilebilir kaynaklar</span>
-                </li>
-                <li>
-                  <i className="fas fa-infinity"></i>
-                  <span>Ömür boyu erişim</span>
-                </li>
-                <li>
-                  <i className="fas fa-mobile-alt"></i>
-                  <span>Mobil ve TV erişimi</span>
-                </li>
-                <li>
-                  <i className="fas fa-certificate"></i>
-                  <span>Bitirme sertifikası</span>
-                </li>
-              </ul>
+          <div className="course-card">
+            <img 
+              src={course.imageUrl || DEFAULT_IMAGE} 
+              alt={course.title}
+              className="course-preview-image"
+            />
+            <div className="course-card-content">
+              <div className="course-price">${course.price}</div>
+              <button className="add-to-cart-btn" onClick={handleAddToCart}>
+                <i className="fas fa-shopping-cart"></i>
+                Add to cart
+              </button>
+              <div className="course-features">
+                <ul>
+                  <li>
+                    <i className="fas fa-infinity"></i>
+                    Full lifetime access
+                  </li>
+                  <li>
+                    <i className="fas fa-mobile-alt"></i>
+                    Access on mobile and TV
+                  </li>
+                  <li>
+                    <i className="fas fa-certificate"></i>
+                    Certificate of completion
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      {showLoginModal && (
-        <div className="login-modal">
-          <div className="login-modal-content">
-            <h2>Giriş Yapmanız Gerekiyor</h2>
-            <p>Bu kursu satın almak için lütfen giriş yapın veya kayıt olun.</p>
-            <div className="login-modal-buttons">
-              <button onClick={handleLoginRedirect} className="login-btn">
-                Giriş Yap
-              </button>
-              <button onClick={() => setShowLoginModal(false)} className="cancel-btn">
-                İptal
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

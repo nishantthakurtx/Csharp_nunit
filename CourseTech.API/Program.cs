@@ -1,4 +1,3 @@
-using AutoMapper;
 using CourseTech.Core.Models;
 using CourseTech.Core.Repositories;
 using CourseTech.Core.Services;
@@ -13,9 +12,11 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
-using System.Reflection;
+using Stripe;
 using System.Text.Json.Serialization;
 
 namespace CourseTech.API
@@ -25,7 +26,6 @@ namespace CourseTech.API
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddOpenApi();
 
             // Add services to the container.
             builder.Services.AddControllers()
@@ -34,8 +34,47 @@ namespace CourseTech.API
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
 
-            // hatali
-            builder.Services.AddValidatorsFromAssembly(typeof(AbstractValidator<>).Assembly);
+            builder.Services.AddEndpointsApiExplorer();
+
+            builder.Services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.WithOrigins("http://localhost:3000")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+                });
+
+            });
+
+            builder.Services.AddSwaggerGen(opt =>
+            {
+                opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    BearerFormat = "JWT",
+                    Description = "JWT Authorization header using the Bearer scheme.",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "Bearer"
+                });
+                opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Id = "Bearer",
+                            Type = ReferenceType.SecurityScheme
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
+            });
+
 
             #region DbContext Configuration
             builder.Services.AddDbContext<AppDbContext>(options =>
@@ -50,10 +89,19 @@ namespace CourseTech.API
             builder.Services.AddScoped<IBasketService, BasketService>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<IIdentityTokenService, IdentityTokenService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+            builder.Services.AddScoped<IPaymentService,PaymentService>();
+            builder.Services.AddScoped<IStripeService, StripeService>();
+            builder.Services.AddScoped<TokenService>();
+            builder.Services.AddScoped<CustomerService>();
+            builder.Services.AddScoped<ChargeService>();
+
+            builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+            builder.Services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<StripeSettings>>().Value);
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             #endregion
             #region Identity Configuration
             builder.Services.AddIdentity<AppUser, AppRole>(opt =>
@@ -63,7 +111,7 @@ namespace CourseTech.API
                 opt.Password.RequiredLength = 6;
 
             }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
- 
+
             builder.Services.Configure<TokenOption>(builder.Configuration.GetSection("TokenOption"));
 
             builder.Services.AddAuthentication(opt =>
@@ -89,6 +137,7 @@ namespace CourseTech.API
 
             var app = builder.Build();
 
+            app.UseCors("CorsPolicy");
             #region Seed Data
             using (var scope = app.Services.CreateScope())
             {
@@ -103,9 +152,15 @@ namespace CourseTech.API
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+                app.UseSwagger(opt =>
+                {
+                    opt.RouteTemplate = "openapi/{documentName}.json";
+                });
                 app.MapOpenApi();
                 app.MapScalarApiReference(opt =>
                 {
+                    opt.Title = "CourseTech Platform API";
+                    opt.Theme = ScalarTheme.Mars;
                     opt.WithSidebar(false);
                     opt.WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
                 });

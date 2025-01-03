@@ -43,7 +43,7 @@ namespace CourseTech.Repository.Repositories
             return await _entities
                 .Include(c => c.Category)
                 .Include(c => c.Instructor)
-                .Where(c => c.CategoryId == categoryId && !c.IsDeleted)
+                .Where(c => c.CategoryId == categoryId && !c.IsDeleted && c.IsPublished) 
                 .AsNoTracking()
                 .ToListAsync();
         }

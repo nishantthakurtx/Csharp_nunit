@@ -13,6 +13,8 @@ namespace CourseTech.Repository
         public IEnrollmentRepository Enrollment { get; private set; }
         public IBasketRepository Basket { get; private set; }
         public IAppUserRefreshTokenRepository AppUserRefreshToken { get; private set; }
+        public IPaymentRepository Payment { get; private set; }
+        public IOrderRepository Order { get; private set; }
 
         public UnitOfWork(AppDbContext context)
         {
@@ -22,6 +24,8 @@ namespace CourseTech.Repository
             Enrollment = new EnrollmentRepository(context);
             Basket = new BasketRepository(context);
             AppUserRefreshToken = new AppUserRefreshTokenRepository(context);
+            Payment = new PaymentRepository(context);
+            Order = new OrderRepository(context);
         }
 
         public async Task SaveChangesAsync()
