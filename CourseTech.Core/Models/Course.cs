@@ -6,7 +6,7 @@ namespace CourseTech.Core.Models
     {
         // Properties
         public string Title { get; set; } = default!;
-        public string Description { get; set; }
+        public string Description { get; set; } = default!;
         public string ImageUrl { get; set; } = default!;
         public string VideoUrl { get; set; } = default!;
         public CourseLevel Level { get; set; }
@@ -18,10 +18,26 @@ namespace CourseTech.Core.Models
 
         // Relationships
         public Guid InstructorId { get; set; } = default!;
-        public AppUser Instructor { get; set; } = null!;
+        public AppUser? Instructor { get; set; }
 
         public Guid CategoryId { get; set; } = default!;
-        public Category Category { get; set; } = null!;
+        public Category? Category { get; set; }
+
+        private Course() { }
+
+        public Course(string title, string description, string imageUrl, string videoUrl, CourseLevel level, CourseLanguage language, decimal price, TimeSpan duration, Guid instructorId, Guid categoryId)
+        {
+            Title = title;
+            Description = description;
+            ImageUrl = imageUrl;
+            VideoUrl = videoUrl;
+            Level = level;
+            Language = language;
+            Price = price;
+            Duration = duration;
+            InstructorId = instructorId;
+            CategoryId = categoryId;
+        }
 
         public void Publish()
         {

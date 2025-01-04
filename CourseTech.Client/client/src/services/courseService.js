@@ -4,10 +4,19 @@ export const courseService = {
   // Get all courses (admin için)
   getAllCourses: async () => {
     try {
+      console.log('Fetching all courses...');
       const response = await api.get('/api/Courses');
+      console.log('Courses response:', response.data);
       return response.data;
     } catch (error) {
       console.error('Error fetching all courses:', error);
+      console.error('Error details:', {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        url: error.config?.url,
+        message: error.message
+      });
       throw error;
     }
   },
@@ -84,6 +93,7 @@ export const courseService = {
       const response = await api.post('/api/Courses', courseData);
       return response.data;
     } catch (error) {
+      console.error('Error creating course:', error);
       throw error;
     }
   },

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaSearch, FaShoppingCart, FaUser, FaBook, FaCog, FaSignOutAlt, FaPlus, FaChalkboardTeacher } from 'react-icons/fa';
+import { FaSearch, FaShoppingCart, FaUser, FaBook, FaCog, FaSignOutAlt, FaPlus, FaChalkboardTeacher, FaList } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext';
 import { basketService } from '../services/basketService';
 import { categoryService } from '../services/categoryService';
@@ -16,6 +16,8 @@ const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const dropdownRef = useRef(null);
   const exploreRef = useRef(null);
+  const [showCourseManagement, setShowCourseManagement] = useState(false);
+  const courseManagementRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -24,6 +26,9 @@ const Navbar = () => {
       }
       if (exploreRef.current && !exploreRef.current.contains(event.target)) {
         setShowExplore(false);
+      }
+      if (courseManagementRef.current && !courseManagementRef.current.contains(event.target)) {
+        setShowCourseManagement(false);
       }
     };
 
@@ -125,9 +130,24 @@ const Navbar = () => {
         {isAuthenticated ? (
           <>
             {isInstructor && (
-              <Link to="/courses/create" className="add-course-btn">
-                <FaPlus /> Add Course
-              </Link>
+              <div className="course-management" ref={courseManagementRef}>
+                <button 
+                  className="course-management-btn"
+                  onClick={() => setShowCourseManagement(!showCourseManagement)}
+                >
+                  <FaChalkboardTeacher /> Course Management
+                </button>
+                {showCourseManagement && (
+                  <div className="course-management-dropdown">
+                    <Link to="/courses/create" className="course-management-item" onClick={() => setShowCourseManagement(false)}>
+                      <FaPlus /> Add New Course
+                    </Link>
+                    <Link to="/courses/my-courses" className="course-management-item" onClick={() => setShowCourseManagement(false)}>
+                      <FaList /> My Course List
+                    </Link>
+                  </div>
+                )}
+              </div>
             )}
             <Link to="/my-courses" className="nav-link">
               <FaBook /> My Courses

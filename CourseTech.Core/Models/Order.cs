@@ -5,7 +5,7 @@ namespace CourseTech.Core.Models
     public class Order : BaseEntity
     {
         public Guid UserId { get; private set; }
-        public AppUser AppUser { get; private set; } = null!;
+        public AppUser AppUser { get; private set; }
 
         private readonly List<OrderItem> _orderItems = new();
         public IReadOnlyCollection<OrderItem> OrderItems => _orderItems.AsReadOnly();

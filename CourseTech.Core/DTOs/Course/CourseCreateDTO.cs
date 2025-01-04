@@ -4,11 +4,13 @@
     (
         string Title, 
         string? Description, 
-        string ImageUrl, 
+        string ImageUrl,
+        string VideoUrl,
         string Level, 
         string Language, 
         decimal Price, 
         TimeSpan Duration, 
         Guid InstructorId, 
-        Guid CategoryId);
+        Guid CategoryId
+    );
 }

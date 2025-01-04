@@ -6,10 +6,10 @@ namespace CourseTech.Core.Models
     {
         public Guid Id { get; private set; } = Guid.NewGuid();
         public Guid UserId { get; private set; }
-        public AppUser AppUser { get; private set; } = null!;
+        public AppUser AppUser { get; private set; } 
 
         public Guid OrderId { get; private set; }
-        public Order Order { get; private set; } = null!;
+        public Order Order { get; private set; }
 
         public decimal TotalAmount { get; private set; }
         public string PaymentProvider { get; private set; }

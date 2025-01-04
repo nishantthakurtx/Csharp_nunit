@@ -5,12 +5,14 @@
         Guid Id, 
         string Title, 
         string? Description, 
-        string ImageUrl, 
+        string ImageUrl,
+        string VideoUrl,
         string Level, 
         string Language, 
         decimal Price, 
         TimeSpan Duration, 
         DateTime? PublishedAt, 
         string InstructorName, 
-        string CategoryName);
+        string CategoryName
+    );
 }

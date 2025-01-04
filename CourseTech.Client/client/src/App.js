@@ -12,6 +12,9 @@ import CategoryDetail from './pages/CategoryDetail';
 import InstructorDetail from './pages/InstructorDetail';
 import Categories from './pages/Categories';
 import Courses from './pages/Courses';
+import CreateCourse from './pages/CreateCourse';
+import UpdateCourse from './pages/UpdateCourse';
+import MyCourses from './pages/MyCourses';
 import './App.css';
 
 function App() {
@@ -31,6 +34,10 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/category/:slug" element={<CategoryDetail />} />
               <Route path="/instructor/:slug" element={<InstructorDetail />} />
+              <Route path="/courses/create" element={<CreateCourse />} />
+              <Route path="/courses/update/:id" element={<UpdateCourse />} />
+              <Route path="/courses/edit/:id" element={<UpdateCourse />} />
+              <Route path="/courses/my-courses" element={<MyCourses />} />
             </Routes>
           </div>
           <Footer />

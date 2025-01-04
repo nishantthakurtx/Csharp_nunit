@@ -13,7 +13,7 @@ namespace CourseTech.Core.Services
 
         Task<ServiceResult<IEnumerable<CourseSummaryDTO>>> GetAllCoursesSummariesForCardAsync();
         Task<ServiceResult<IEnumerable<CourseDTO>>> GetPublishedCoursesAsync();
-        Task<ServiceResult<IEnumerable<CourseSummaryDTO>>> GetCoursesByInstructorAsync(Guid instructorId);
+        Task<ServiceResult<IEnumerable<CourseListDTO>>> GetCoursesByInstructorAsync(Guid instructorId);
         Task<ServiceResult<IEnumerable<CourseSummaryDTO>>> GetCoursesByCategoryAsync(Guid categoryId);
         Task<ServiceResult<CourseDTO>> GetCourseWithDetailsAsync(Guid courseId);
 

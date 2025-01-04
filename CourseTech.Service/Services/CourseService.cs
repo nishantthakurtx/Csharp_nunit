@@ -51,12 +51,12 @@ namespace CourseTech.Service.Services
             return ServiceResult<IEnumerable<CourseSummaryDTO>>.Success(courseDtos);
         }
 
-        public async Task<ServiceResult<IEnumerable<CourseSummaryDTO>>> GetCoursesByInstructorAsync(Guid instructorId)
+        public async Task<ServiceResult<IEnumerable<CourseListDTO>>> GetCoursesByInstructorAsync(Guid instructorId)
         {
             var entities = await unitOfWork.Course.GetCoursesByInstructorAsync(instructorId);
-            var courseDtos = mapper.Map<IEnumerable<CourseSummaryDTO>>(entities);
+            var courseDtos = mapper.Map<IEnumerable<CourseListDTO>>(entities);
 
-            return ServiceResult<IEnumerable<CourseSummaryDTO>>.Success(courseDtos);
+            return ServiceResult<IEnumerable<CourseListDTO>>.Success(courseDtos);
         }
 
         public async Task<ServiceResult<CourseDTO>> GetCourseWithDetailsAsync(Guid courseId)
@@ -84,7 +84,7 @@ namespace CourseTech.Service.Services
 
         public async Task<ServiceResult<CourseDTO>> UpdateAsync(CourseUpdateDTO courseDto)
         {
-            var existingEntity = await unitOfWork.Course.GetByIdAsync(courseDto.Id);
+            var existingEntity = await unitOfWork.Course.GetCourseWithDetailsAsync(courseDto.Id);
             if (existingEntity == null)
                 return ServiceResult<CourseDTO>.Fail($"Course ({courseDto.Id}) not found.");
 

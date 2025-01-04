@@ -443,3 +443,57 @@
 }
 
 /* Remove teach button styles */ 
+
+.course-management {
+  position: relative;
+  margin-right: 1rem;
+}
+
+.course-management-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.course-management-btn:hover {
+  background-color: #34495e;
+}
+
+.course-management-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  min-width: 200px;
+  z-index: 1000;
+  margin-top: 0.5rem;
+}
+
+.course-management-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.course-management-item:hover {
+  background-color: #f5f5f5;
+}
+
+.course-management-item svg {
+  font-size: 1rem;
+  color: #2c3e50;
+} 

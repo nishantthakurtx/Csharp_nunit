@@ -3,10 +3,10 @@
     public class BasketItem
     {
         public Guid BasketId { get; set; }
-        public Basket Basket { get; set; } = null!;
+        public Basket Basket { get; set; }
 
         public Guid CourseId { get; private set; }
-        public Course Course { get; private set; } = null!;
+        public Course Course { get; private set; }
 
         public decimal Price => Course.Price;
         

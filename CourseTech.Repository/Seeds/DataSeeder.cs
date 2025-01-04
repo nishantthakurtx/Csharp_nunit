@@ -107,149 +107,128 @@ namespace CourseTech.Repository.Seeds
                 }
 
                 var courses = new List<Course>
-               {
-                   new Course
-                   {
-                       Id = Guid.NewGuid(),
-                       Title = "C# Fundamentals",
-                       Description = "Learn the basics of C# programming language",
-                       ImageUrl = "https://via.placeholder.com/150",
-                       VideoUrl = "https://www.youtube.com/watch?v=0pZVjJ7v4w8", 
-                       CategoryId = programmingCategory.Id,
-                       Level = CourseLevel.Beginner,
-                       Language = CourseLanguage.English,
-                       Price = 50,
-                       Duration = TimeSpan.FromHours(5),
-                       InstructorId = instructor1!.Id
-                   },
-                   new Course
-                   {
-                       Id = Guid.NewGuid(),
-                       Title = "Advanced Stock Trading",
-                       Description = "Master the art of stock market trading",
-                       ImageUrl = "https://via.placeholder.com/150",
-                       VideoUrl = "https://www.youtube.com/watch?v=example2",
-                       CategoryId = financeCategory.Id,
-                       Level = CourseLevel.Advanced,
-                       Language = CourseLanguage.English,
-                       Price = 199,
-                       Duration = TimeSpan.FromHours(12),
-                       InstructorId = instructor1.Id
-                   },
-                   new Course
-                   {
-                       Id = Guid.NewGuid(),
-                       Title = "Digital Marketing Essentials",
-                       Description = "Learn the fundamentals of digital marketing",
-                       ImageUrl = "https://via.placeholder.com/150",
-                       VideoUrl = "https://www.youtube.com/watch?v=example3",
-                       CategoryId = marketingCategory.Id,
-                       Level = CourseLevel.Beginner,
-                       Language = CourseLanguage.English,
-                       Price = 79,
-                       Duration = TimeSpan.FromHours(6),
-                       InstructorId = instructor1.Id
-                   },
-                   new Course
-                   {
-                       Id = Guid.NewGuid(),
-                       Title = "Python for Data Analysis",
-                       Description = "Learn Python programming for financial analysis",
-                       ImageUrl = "https://via.placeholder.com/150",
-                       VideoUrl = "https://www.youtube.com/watch?v=example4",
-                       CategoryId = programmingCategory.Id,
-                       Level = CourseLevel.Intermediate,
-                       Language = CourseLanguage.English,
-                       Price = 149,
-                       Duration = TimeSpan.FromHours(8),
-                       InstructorId = instructor2!.Id
-                   },
-                   new Course
-                   {
-                       Id = Guid.NewGuid(),
-                       Title = "Investment Banking Fundamentals",
-                       Description = "Introduction to investment banking concepts",
-                       ImageUrl = "https://via.placeholder.com/150",
-                       VideoUrl = "https://www.youtube.com/watch?v=example5",
-                       CategoryId = financeCategory.Id,
-                       Level = CourseLevel.Beginner,
-                       Language = CourseLanguage.English,
-                       Price = 129,
-                       Duration = TimeSpan.FromHours(10),
-                       InstructorId = instructor2.Id
-                   },
-                   new Course
-                   {
-                       Id = Guid.NewGuid(),
-                       Title = "Social Media Marketing",
-                       Description = "Master social media marketing strategies",
-                       ImageUrl = "https://via.placeholder.com/150",
-                       VideoUrl = "https://www.youtube.com/watch?v=example6",
-                       CategoryId = marketingCategory.Id,
-                       Level = CourseLevel.Intermediate,
-                       Language = CourseLanguage.English,
-                       Price = 89,
-                       Duration = TimeSpan.FromHours(7),
-                       InstructorId = instructor2.Id
-                   },
-                   new Course
-                   {
-                       Id = Guid.NewGuid(),
-                       Title = "JavaScript Advanced",
-                       Description = "Advanced concepts in JavaScript development",
-                       ImageUrl = "https://via.placeholder.com/150",
-                       VideoUrl = "https://www.youtube.com/watch?v=example7",
-                       CategoryId = programmingCategory.Id,
-                       Level = CourseLevel.Advanced,
-                       Language = CourseLanguage.English,
-                       Price = 179,
-                       Duration = TimeSpan.FromHours(15),
-                       InstructorId = instructor2.Id
-                   },
-                   new Course
-                   {
-                       Id = Guid.NewGuid(),
-                       Title = "Cryptocurrency Trading",
-                       Description = "Learn to trade cryptocurrencies effectively",
-                       ImageUrl = "https://via.placeholder.com/150",
-                       VideoUrl = "https://www.youtube.com/watch?v=example8",
-                       CategoryId = financeCategory.Id,
-                       Level = CourseLevel.Intermediate,
-                       Language = CourseLanguage.English,
-                       Price = 159,
-                       Duration = TimeSpan.FromHours(9),
-                       InstructorId = instructor1.Id
-                   },
-                   new Course
-                   {
-                       Id = Guid.NewGuid(),
-                       Title = "Email Marketing Mastery",
-                       Description = "Master email marketing campaigns",
-                       ImageUrl = "https://via.placeholder.com/150",
-                       VideoUrl = "https://www.youtube.com/watch?v=example9",
-                       CategoryId = marketingCategory.Id,
-                       Level = CourseLevel.Advanced,
-                       Language = CourseLanguage.English,
-                       Price = 139,
-                       Duration = TimeSpan.FromHours(8),
-                       InstructorId = instructor2.Id
-                   },
-                   new Course
-                   {
-                       Id = Guid.NewGuid(),
-                       Title = "React.js Fundamentals",
-                       Description = "Learn the basics of React.js framework",
-                       ImageUrl = "https://via.placeholder.com/150",
-                       VideoUrl = "https://www.youtube.com/watch?v=example10",
-                       CategoryId = programmingCategory.Id,
-                       Level = CourseLevel.Beginner,
-                       Language = CourseLanguage.English,
-                       Price = 99,
-                       Duration = TimeSpan.FromHours(6),
-                       InstructorId = instructor2.Id
-                   }
-               };
-
+                {
+                    new Course(
+                        title: "C# Fundamentals",
+                        description: "Learn the basics of C# programming language",
+                        imageUrl: "https://via.placeholder.com/150",
+                        videoUrl: "https://www.youtube.com/watch?v=0pZVjJ7v4w8",
+                        level: CourseLevel.Beginner,
+                        language: CourseLanguage.English,
+                        price: 50,
+                        duration: TimeSpan.FromHours(5),
+                        instructorId: instructor1!.Id,
+                        categoryId: programmingCategory.Id
+                    ),
+                    new Course(
+                        title: "Advanced Stock Trading",
+                        description: "Master the art of stock market trading",
+                        imageUrl: "https://via.placeholder.com/150",
+                        videoUrl: "https://www.youtube.com/watch?v=example2",
+                        level: CourseLevel.Advanced,
+                        language: CourseLanguage.English,
+                        price: 199,
+                        duration: TimeSpan.FromHours(12),
+                        instructorId: instructor1.Id,
+                        categoryId: financeCategory.Id
+                    ),
+                    new Course(
+                        title: "Digital Marketing Essentials",
+                        description: "Learn the fundamentals of digital marketing",
+                        imageUrl: "https://via.placeholder.com/150",
+                        videoUrl: "https://www.youtube.com/watch?v=example3",
+                        level: CourseLevel.Beginner,
+                        language: CourseLanguage.English,
+                        price: 79,
+                        duration: TimeSpan.FromHours(6),
+                        instructorId: instructor1.Id,
+                        categoryId: marketingCategory.Id
+                    ),
+                    new Course(
+                        title: "Python for Data Analysis",
+                        description: "Learn Python programming for financial analysis",
+                        imageUrl: "https://via.placeholder.com/150",
+                        videoUrl: "https://www.youtube.com/watch?v=example4",
+                        level: CourseLevel.Intermediate,
+                        language: CourseLanguage.English,
+                        price: 149,
+                        duration: TimeSpan.FromHours(8),
+                        instructorId: instructor2!.Id,
+                        categoryId: programmingCategory.Id
+                    ),
+                    new Course(
+                        title: "Investment Banking Fundamentals",
+                        description: "Introduction to investment banking concepts",
+                        imageUrl: "https://via.placeholder.com/150",
+                        videoUrl: "https://www.youtube.com/watch?v=example5",
+                        level: CourseLevel.Beginner,
+                        language: CourseLanguage.English,
+                        price: 129,
+                        duration: TimeSpan.FromHours(10),
+                        instructorId: instructor2.Id,
+                        categoryId: financeCategory.Id
+                    ),
+                    new Course(
+                        title: "Social Media Marketing",
+                        description: "Master social media marketing strategies",
+                        imageUrl: "https://via.placeholder.com/150",
+                        videoUrl: "https://www.youtube.com/watch?v=example6",
+                        level: CourseLevel.Intermediate,
+                        language: CourseLanguage.English,
+                        price: 89,
+                        duration: TimeSpan.FromHours(7),
+                        instructorId: instructor2.Id,
+                        categoryId: marketingCategory.Id
+                    ),
+                    new Course(
+                        title: "JavaScript Advanced",
+                        description: "Advanced concepts in JavaScript development",
+                        imageUrl: "https://via.placeholder.com/150",
+                        videoUrl: "https://www.youtube.com/watch?v=example7",
+                        level: CourseLevel.Advanced,
+                        language: CourseLanguage.English,
+                        price: 179,
+                        duration: TimeSpan.FromHours(15),
+                        instructorId: instructor2.Id,
+                        categoryId: programmingCategory.Id
+                    ),
+                    new Course(
+                        title: "Cryptocurrency Trading",
+                        description: "Learn to trade cryptocurrencies effectively",
+                        imageUrl: "https://via.placeholder.com/150",
+                        videoUrl: "https://www.youtube.com/watch?v=example8",
+                        level: CourseLevel.Intermediate,
+                        language: CourseLanguage.English,
+                        price: 159,
+                        duration: TimeSpan.FromHours(9),
+                        instructorId: instructor1.Id,
+                        categoryId: financeCategory.Id
+                    ),
+                    new Course(
+                        title: "Email Marketing Mastery",
+                        description: "Master email marketing campaigns",
+                        imageUrl: "https://via.placeholder.com/150",
+                        videoUrl: "https://www.youtube.com/watch?v=example9",
+                        level: CourseLevel.Advanced,
+                        language: CourseLanguage.English,
+                        price: 139,
+                        duration: TimeSpan.FromHours(8),
+                        instructorId: instructor2.Id,
+                        categoryId: marketingCategory.Id
+                    ),
+                    new Course(
+                        title: "React.js Fundamentals",
+                        description: "Learn the basics of React.js framework",
+                        imageUrl: "https://via.placeholder.com/150",
+                        videoUrl: "https://www.youtube.com/watch?v=example10",
+                        level: CourseLevel.Beginner,
+                        language: CourseLanguage.English,
+                        price: 99,
+                        duration: TimeSpan.FromHours(6),
+                        instructorId: instructor2.Id,
+                        categoryId: programmingCategory.Id
+                    )
+                };
                 await _context.Courses.AddRangeAsync(courses);
                 await _context.SaveChangesAsync();
             }
