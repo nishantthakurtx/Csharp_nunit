@@ -113,7 +113,7 @@ const App = () => {
                             <Route
                               path="/basket"
                               element={
-                                <PrivateRoute allowedRoles={['Student', 'Instructor']}>
+                                <PrivateRoute allowedRoles={['Student', 'Instructor','Admin']}>
                                   <Basket />
                                 </PrivateRoute>
                               }
@@ -121,7 +121,7 @@ const App = () => {
                             <Route
                               path="/order"
                               element={
-                                <PrivateRoute allowedRoles={['Student', 'Instructor']}>
+                                <PrivateRoute allowedRoles={['Student', 'Instructor','Admin']}>
                                   <Order />
                                 </PrivateRoute>
                               }
@@ -129,7 +129,7 @@ const App = () => {
                             <Route
                               path="/payment"
                               element={
-                                <PrivateRoute allowedRoles={['Student', 'Instructor']}>
+                                <PrivateRoute allowedRoles={['Student', 'Instructor','Admin']}>
                                   <Payment />
                                 </PrivateRoute>
                               }
@@ -137,7 +137,7 @@ const App = () => {
                             <Route
                               path="/my-learning"
                               element={
-                                <PrivateRoute allowedRoles={['Student', 'Instructor']}>
+                                <PrivateRoute allowedRoles={['Student', 'Instructor','Admin']}>
                                   <EnrolledCourses />
                                 </PrivateRoute>
                               }
@@ -145,7 +145,7 @@ const App = () => {
                             <Route
                               path="/settings/*"
                               element={
-                                <PrivateRoute allowedRoles={['Student', 'Instructor']}>
+                                <PrivateRoute allowedRoles={['Student', 'Instructor','Admin']}>
                                   <Settings />
                                 </PrivateRoute>
                               }
