@@ -229,6 +229,12 @@ namespace CourseTech.Repository.Seeds
                         categoryId: programmingCategory.Id
                     )
                 };
+
+                foreach (var course in courses)
+                {
+                    course.Publish();
+                }
+                
                 await _context.Courses.AddRangeAsync(courses);
                 await _context.SaveChangesAsync();
             }
