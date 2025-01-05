@@ -63,6 +63,7 @@ const App = () => {
                             <Route path="/courses" element={<Courses />} />
                             <Route path="/category/:categoryId" element={<CategoryDetails />} />
                             <Route path="/access-denied" element={<AccessDenied />} />
+                            <Route path="/courses/:id" element={<CourseDetail />} />
 
                             {/* Auth Routes - Giriş yapmış kullanıcıyı yönlendir */}
                             <Route 
@@ -108,15 +109,7 @@ const App = () => {
                               }
                             />
 
-                            {/* Protected Routes - Giriş yapmış kullanıcılar */}
-                            <Route
-                              path="/courses/:id"
-                              element={
-                                <PrivateRoute allowedRoles={['Student', 'Instructor']}>
-                                  <CourseDetail />
-                                </PrivateRoute>
-                              }
-                            />
+                            {/* Protected Routes - Giriş yapmış kullanıcılar */} 
                             <Route
                               path="/basket"
                               element={

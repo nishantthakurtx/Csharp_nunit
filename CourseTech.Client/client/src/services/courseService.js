@@ -10,6 +10,11 @@ const getCourseById = async (id) => {
   return response.data;
 };
 
+const getCourseWithDetails = async (id) => {
+  const response = await api.get(`/api/Courses/details/${id}`);
+  return response.data;
+};
+
 const getCoursesByCategory = async (categoryId) => {
   const response = await api.get(`/api/Courses/by-category/${categoryId}`);
   return response.data;
@@ -78,6 +83,7 @@ const getCourseSummaries = async () => {
 export {
   getAllCourses,
   getCourseById,
+  getCourseWithDetails,
   getCoursesByCategory,
   getCoursesByInstructor,
   createCourse,
@@ -94,6 +100,7 @@ export {
 export default {
   getAllCourses,
   getCourseById,
+  getCourseWithDetails,
   getCoursesByCategory,
   getCoursesByInstructor,
   createCourse,

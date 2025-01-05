@@ -71,7 +71,6 @@ namespace CourseTech.Service.Services
             return ServiceResult<CourseDTO>.Success(courseDto);
         }
 
-
         public async Task<ServiceResult<CourseDTO>> CreateAsync(CourseCreateDTO courseDto)
         {
             var entity = mapper.Map<Course>(courseDto);

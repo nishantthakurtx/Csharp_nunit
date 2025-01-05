@@ -11,7 +11,7 @@ import styles from '../styles/CourseDetail.module.css';
 const CourseDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { getCourseDetails } = useCourse();
+  const { getCourseWithDetails } = useCourse();
   const { isAuthenticated } = useAuth();
   const { addCourse } = useBasket();
   const { isEnrolled, loadEnrolledCourses } = useEnrollment();
@@ -24,7 +24,8 @@ const CourseDetail = () => {
     const loadCourse = async () => {
       try {
         setIsLoading(true);
-        const response = await getCourseDetails(id);
+        const response = await getCourseWithDetails(id);
+        console.log('Course details response:', response);
         if (response?.data) {
           setCourse(response.data);
         }
@@ -37,7 +38,7 @@ const CourseDetail = () => {
     };
 
     loadCourse();
-  }, [id, getCourseDetails]);
+  }, [id, getCourseWithDetails]);
 
   useEffect(() => {
     if (isAuthenticated && course?.id) {

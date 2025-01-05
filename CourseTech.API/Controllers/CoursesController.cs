@@ -5,10 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CourseTech.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CoursesController(ICourseService service) : CustomBaseController
     {
+        [AllowAnonymous]
         [HttpGet("{id:Guid}")]
         public async Task<IActionResult> GetById(Guid id)
         {
@@ -23,6 +25,7 @@ namespace CourseTech.API.Controllers
             return CreateActionResult(result);
         }
 
+        [AllowAnonymous]
         [HttpGet("published")]
         public async Task<IActionResult> GetPublishedCourses()
         {
@@ -30,6 +33,7 @@ namespace CourseTech.API.Controllers
             return CreateActionResult(result);
         }
 
+        [AllowAnonymous]
         [HttpGet("by-category/{categoryId:Guid}")]
         public async Task<IActionResult> GetCoursesByCategory(Guid categoryId)
         {
@@ -44,6 +48,7 @@ namespace CourseTech.API.Controllers
             return CreateActionResult(result);
         }
 
+        [AllowAnonymous]
         [HttpGet("details/{id:Guid}")]
         public async Task<IActionResult> GetCourseWithDetails(Guid id)
         {
@@ -51,6 +56,7 @@ namespace CourseTech.API.Controllers
             return CreateActionResult(result);
         }
 
+        [AllowAnonymous]
         [HttpGet("summaries")]
         public async Task<IActionResult> GetAllCoursesSummariesForCard()
         {

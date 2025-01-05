@@ -234,6 +234,17 @@ export const CourseProvider = ({ children }) => {
     }
   };
 
+  const getCourseWithDetails = async (courseId) => {
+    try {
+      const response = await courseService.getCourseWithDetails(courseId);
+      console.log('Course details response:', response);
+      return response;
+    } catch (error) {
+      console.error('Error getting course details:', error);
+      throw error;
+    }
+  };
+
   const value = {
     courses,
     publishedCourses,
@@ -243,7 +254,7 @@ export const CourseProvider = ({ children }) => {
     loadAllCourses,
     loadPublishedCourses,
     loadCourseSummaries,
-    getCourseDetails,
+    getCourseWithDetails,
     getCoursesByCategory,
     getCoursesByInstructor,
     createCourse,
