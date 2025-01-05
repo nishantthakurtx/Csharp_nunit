@@ -11,7 +11,6 @@ using CourseTech.Shared.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
@@ -91,7 +90,8 @@ namespace CourseTech.API
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            builder.Services.AddScoped<IPaymentService, PaymentService>(); 
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
+            builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             #endregion
             #region Identity Configuration
@@ -124,7 +124,7 @@ namespace CourseTech.API
                     ValidateLifetime = true,
                 };
             });
-            #endregion
+            #endregion)
 
             var app = builder.Build();
 
@@ -152,7 +152,7 @@ namespace CourseTech.API
                 {
                     opt.Title = "CourseTech Platform API";
                     opt.Theme = ScalarTheme.Mars;
-                    opt.WithSidebar(false);
+                    opt.WithSidebar(true);
                     opt.WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
                 });
             }

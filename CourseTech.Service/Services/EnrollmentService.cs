@@ -16,7 +16,23 @@ namespace CourseTech.Service.Services
             if (existingEnrollment != null)
                 return ServiceResult.Fail("User already enrolled in this course.");
 
-            var enrollment = new Enrollment { AppUserId = userId, CourseId = courseId };
+            var orders =  await unitOfWork.Order.GetOrdersByUserIdAsync(userId);
+            if (!orders.Any())
+                return ServiceResult.Fail("User has no completed orders.");
+
+            var hasPurchasedCourse = orders.
+                Any(order => order.OrderItems.
+                Any(item => item.CourseId == courseId));
+
+            if (!hasPurchasedCourse)
+                return ServiceResult.Fail("User has not purchased this course."); 
+                        
+            var enrollment = new Enrollment
+                {
+                    AppUserId = userId,
+                    CourseId = courseId
+                };
+
             await unitOfWork.Enrollment.InsertAsync(enrollment);
             await unitOfWork.SaveChangesAsync();
 
@@ -26,6 +42,9 @@ namespace CourseTech.Service.Services
         public async Task<ServiceResult<IEnumerable<CourseDTO>>> GetEnrolledCoursesByUserAsync(Guid userId)
         {
             var enrollments = await unitOfWork.Enrollment.GetEnrollmentsByUserAsync(userId);
+            if (!enrollments.Any())
+                return ServiceResult<IEnumerable<CourseDTO>>.Fail("Enrollments not found.");
+
             var courses = mapper.Map<IEnumerable<CourseDTO>>(enrollments.Select(e => e.Course));
 
             return ServiceResult<IEnumerable<CourseDTO>>.Success(courses);

@@ -1,9 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { FiMenu, FiX, FiShoppingCart, FiLogOut, FiSettings, FiClock, FiCreditCard, FiTrash2 } from 'react-icons/fi';
-import { deleteUser } from '../services/userService';
-import { toast } from 'react-toastify';
+import { FiMenu, FiX, FiShoppingCart, FiLogOut, FiSettings, FiClock, FiCreditCard, FiTrash2, FiBook, FiBookOpen } from 'react-icons/fi';
 import styles from '../styles/Navbar.module.css';
 
 const ProfileDropdown = ({ user, handleLogout }) => {
@@ -36,11 +34,36 @@ const ProfileDropdown = ({ user, handleLogout }) => {
 };
 
 const Navbar = () => {
-  const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const { isAuthenticated, user, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const profileRef = useRef(null);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const menuRef = useRef();
+  const profileRef = useRef();
+
+  const isInstructor = user?.roles?.includes('Instructor');
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsMenuOpen(false);
+      }
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setShowProfileDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
 
   const getInitials = (name) => {
     if (!name) return '?';
@@ -52,84 +75,54 @@ const Navbar = () => {
       .slice(0, 2);
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (profileRef.current && !profileRef.current.contains(event.target)) {
-        setIsProfileOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-      navigate('/');
-    } catch (error) {
-      console.error('Error logging out:', error);
-    }
-  };
-
-  const handleNavigation = (path) => {
-    navigate(path);
-    setIsProfileOpen(false);
-    setIsMenuOpen(false);
-  };
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const toggleProfile = () => {
-    setIsProfileOpen(!isProfileOpen);
-  };
-
   return (
     <nav className={styles.navbar}>
-      <div className={styles.navContainer}>
-        <Link to="/" className={styles.logo}>
-          CourseTech
-        </Link>
+      <div className={styles.navContent}>
+        <div className={styles.leftSection}>
+          <Link to="/" className={styles.logo}>
+            CourseTech
+          </Link>
+          <Link to="/courses" className={styles.exploreLink}>
+            Explore
+          </Link>
+        </div>
 
-        <button className={styles.menuButton} onClick={toggleMenu}>
+        <button className={styles.menuButton} onClick={() => setIsMenuOpen(!isMenuOpen)}>
           {isMenuOpen ? <FiX /> : <FiMenu />}
         </button>
 
-        <div className={`${styles.navLinks} ${isMenuOpen ? styles.active : ''}`}>
-          <Link to="/" className={styles.navLink} onClick={() => setIsMenuOpen(false)}>
-            Home
-          </Link>
-          <Link to="/courses" className={styles.navLink} onClick={() => setIsMenuOpen(false)}>
-            Courses
-          </Link>
-          
-          {user ? (
+        <div className={`${styles.navLinks} ${isMenuOpen ? styles.active : ''}`} ref={menuRef}>
+          {isAuthenticated ? (
             <>
-              <Link to="/basket" className={styles.navLink} onClick={() => setIsMenuOpen(false)}>
+              {isInstructor && (
+                <Link to="/instructor/courses" className={styles.navLink}>
+                  Course Management
+                </Link>
+              )}
+              <Link to="/my-learning" className={styles.navLink}>
+                My Learning
+              </Link>
+              <Link to="/basket" className={styles.navLink}>
                 <FiShoppingCart />
-                <span className={styles.navText}></span>
               </Link>
               <div className={styles.profileWrapper} ref={profileRef}>
-                <button onClick={toggleProfile} className={styles.profileButton}>
+                <button
+                  className={styles.profileButton}
+                  onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+                >
                   <div className={styles.initialsCircle}>
                     {getInitials(user.fullName)}
                   </div>
                 </button>
-                {isProfileOpen && (
+                {showProfileDropdown && (
                   <ProfileDropdown user={user} handleLogout={handleLogout} />
                 )}
               </div>
             </>
           ) : (
             <div className={styles.authButtons}>
-              <Link to="/login" className={styles.loginButton} onClick={() => setIsMenuOpen(false)}>
-                Sign In
-              </Link>
-              <Link to="/register" className={styles.registerButton} onClick={() => setIsMenuOpen(false)}>
-                Sign Up
-              </Link>
+              <Link to="/login" className={styles.loginButton}>Sign In</Link>
+              <Link to="/register" className={styles.registerButton}>Sign Up</Link>
             </div>
           )}
         </div>

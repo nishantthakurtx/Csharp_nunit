@@ -4,16 +4,18 @@ import { useBasket } from '../contexts/BasketContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useOrder } from '../contexts/OrderContext';
 import { usePayment } from '../contexts/PaymentContext';
+import { useEnrollment } from '../contexts/EnrollmentContext';
 import { FiCreditCard, FiLock, FiAlertCircle, FiShield } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import styles from '../styles/Payment.module.css';
 
 const Payment = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const { basket, refreshBasket, clearBasket } = useBasket();
   const { currentOrder } = useOrder();
   const { processPayment } = usePayment();
+  const { enrollInCourse } = useEnrollment();
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showVerificationModal, setShowVerificationModal] = useState(false);
@@ -223,14 +225,75 @@ const Payment = () => {
       await new Promise(resolve => setTimeout(resolve, 5000));
 
       const response = await processPayment(paymentRequest);
-      if (response) {
-        await clearBasket();
-        toast.success('Payment processed successfully!');
-        navigate('/courses');
+      
+      if (response.isSuccessful) {
+        try {
+          // Enroll user in all purchased courses one by one
+          let enrollmentSuccess = true;
+          for (const item of currentOrder.orderItems) {
+            try {
+              await enrollInCourse(item.courseId);
+              console.log(`Successfully enrolled in course: ${item.courseId}`);
+            } catch (enrollError) {
+              enrollmentSuccess = false;
+              console.error(`Failed to enroll in course ${item.courseId}:`, enrollError);
+              toast.error(`Failed to enroll in course. Please contact support.`, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true
+              });
+            }
+          }
+
+          await clearBasket();
+          
+          if (enrollmentSuccess) {
+            toast.success('Payment successful! You have been enrolled in the courses.', {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true
+            });
+          }
+          
+          navigate('/my-courses');
+        } catch (enrollmentError) {
+          console.error('Enrollment error:', enrollmentError);
+          toast.error('Payment was successful but enrollment failed. Please contact support.', {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true
+          });
+          navigate('/my-courses');
+        }
+      } else {
+        toast.error('Payment failed. Please try again.', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true
+        });
       }
     } catch (error) {
       console.error('Payment error:', error);
-      toast.error('Payment failed. Please try again.');
+      toast.error(error?.message || 'Payment failed. Please try again.', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+      });
     } finally {
       setIsProcessing(false);
       setShowVerificationModal(false);
@@ -384,15 +447,15 @@ const Payment = () => {
               Back to Order
             </button>
           </form>
-        </div>
-      </div>
+              </div>
+            </div>
 
       {showVerificationModal && (
         <div className={`${styles.modalOverlay} ${isProcessing ? styles.processing : ''}`}>
           <div className={styles.verificationModal}>
             <div className={styles.modalIcon}>
               <FiShield size={48} />
-            </div>
+        </div>
             <h2>Payment Verification</h2>
             <p>Please enter the 5-digit verification code shown in the notification.</p>
             <form onSubmit={handleVerificationSubmit}>
@@ -412,7 +475,7 @@ const Payment = () => {
                   disabled={isProcessing}
                   readOnly={isProcessing}
                 />
-              </div>
+        </div>
               <div className={styles.modalButtons}>
                 <button
                   type="button"
@@ -425,14 +488,14 @@ const Payment = () => {
                 >
                   Cancel
                 </button>
-                <button
+        <button
                   type="submit"
                   className={styles.confirmButton}
                   disabled={userInputCode.length !== 5 || isProcessing}
                 >
                   {isProcessing ? 'Processing...' : 'Verify Payment'}
-                </button>
-              </div>
+        </button>
+      </div>
             </form>
             {isProcessing && (
               <div className={styles.processingPayment}>

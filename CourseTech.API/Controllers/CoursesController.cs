@@ -78,14 +78,14 @@ namespace CourseTech.API.Controllers
             return CreateActionResult(result);
         }
 
-        [HttpPatch("publish/{id:Guid}")]
+        [HttpPatch("{id:Guid}/publish")]
         public async Task<IActionResult> PublishCourse(Guid id)
         {
             var result = await service.PublishCourseAsync(id);
             return CreateActionResult(result);
         }
 
-        [HttpPatch("unpublish/{id:Guid}")]
+        [HttpPatch("{id:Guid}/unpublish")]
         public async Task<IActionResult> UnpublishCourse(Guid id)
         {
             var result = await service.UnpublishCourseAsync(id);

@@ -20,6 +20,8 @@ namespace CourseTech.Repository.Repositories
         {
             return await _context.Enrollments
                 .Include(e => e.Course)
+                    .ThenInclude(c => c.Instructor)
+                .Include(e => e.Course.Category)
                 .Where(e => e.AppUserId == userId && !e.IsDeleted)
                 .ToListAsync();
         }

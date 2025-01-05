@@ -6,13 +6,19 @@
   z-index: 1000;
 }
 
-.navContainer {
+.navContent {
   max-width: 1200px;
   margin: 0 auto;
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.leftSection {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
 }
 
 .logo {
@@ -25,6 +31,21 @@
 
 .logo:hover {
   color: #3182ce;
+}
+
+.exploreLink {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #4b5563;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+}
+
+.exploreLink:hover {
+  color: #2563eb;
+  background-color: #f3f4f6;
 }
 
 .menuButton {
@@ -74,6 +95,8 @@
   padding: 0;
   cursor: pointer;
   transition: transform 0.2s ease;
+  display: flex;
+  align-items: center;
 }
 
 .profileButton:hover {
@@ -216,6 +239,10 @@
 }
 
 @media (max-width: 768px) {
+  .navContent {
+    padding: 1rem;
+  }
+
   .menuButton {
     display: block;
   }
@@ -271,5 +298,13 @@
   .loginButton, .registerButton {
     width: 100%;
     text-align: center;
+  }
+
+  .leftSection {
+    gap: 1rem;
+  }
+
+  .exploreLink {
+    padding: 0.25rem 0.5rem;
   }
 } 

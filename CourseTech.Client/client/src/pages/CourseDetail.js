@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useCourse } from '../contexts/CourseContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useBasket } from '../contexts/BasketContext';
+import { useEnrollment } from '../contexts/EnrollmentContext';
 import { FiUser, FiBarChart, FiClock, FiBook, FiGlobe, FiCalendar, FiVideo, FiCheck, FiShoppingCart } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import styles from '../styles/CourseDetail.module.css';
@@ -11,11 +12,13 @@ const CourseDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { getCourseDetails } = useCourse();
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated } = useAuth();
   const { addCourse } = useBasket();
+  const { isEnrolled, loadEnrolledCourses } = useEnrollment();
   const [course, setCourse] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [hasEnrolled, setHasEnrolled] = useState(false);
 
   useEffect(() => {
     const loadCourse = async () => {
@@ -36,10 +39,25 @@ const CourseDetail = () => {
     loadCourse();
   }, [id, getCourseDetails]);
 
+  useEffect(() => {
+    if (isAuthenticated && course?.id) {
+      loadEnrolledCourses().then(() => {
+        const enrolled = isEnrolled(course.id);
+        setHasEnrolled(enrolled);
+      });
+    }
+  }, [isAuthenticated, course?.id]);
+
   const handleEnrollClick = async () => {
     if (!isAuthenticated) {
       toast.info('Please login to enroll in this course');
       navigate('/login', { state: { from: `/courses/${id}` } });
+      return;
+    }
+
+    if (hasEnrolled) {
+      toast.info('You are already enrolled in this course');
+      navigate('/my-courses');
       return;
     }
 
@@ -131,10 +149,11 @@ const CourseDetail = () => {
 
           <div className={styles.actions}>
             <button 
-              className={styles.enrollButton}
+              className={`${styles.enrollButton} ${hasEnrolled ? styles.enrolled : ''}`}
               onClick={handleEnrollClick}
+              disabled={hasEnrolled}
             >
-              Enroll Now
+              {hasEnrolled ? 'Enrolled' : 'Enroll Now'}
             </button>
             {course.videoUrl && (
               <a href={course.videoUrl} target="_blank" rel="noopener noreferrer" className={styles.previewButton}>
@@ -155,19 +174,25 @@ const CourseDetail = () => {
         <div className={styles.section}>
           <h2>What You'll Learn</h2>
           <ul className={styles.learningPoints}>
-            <li>Understanding investment banking fundamentals</li>
-            <li>Financial modeling and valuation techniques</li>
-            <li>Mergers and acquisitions process</li>
-            <li>Market analysis and research methods</li>
+            <li>Get lifetime access to course content and future updates</li>
+            <li>Learn at your own pace with 24/7 on-demand video access</li>
+            <li>Access course materials from any device, anywhere</li>
+            <li>Download course resources and supplementary materials</li>
+            <li>Earn a certificate of completion after finishing the course</li>
+            <li>Join an active community of learners and professionals</li>
+            <li>Practice with real-world examples and exercises</li>
+            <li>Get direct support from instructors through Q&A</li>
           </ul>
         </div>
 
         <div className={styles.section}>
           <h2>Requirements</h2>
           <ul className={styles.requirements}>
-            <li>Basic understanding of finance concepts</li>
-            <li>Familiarity with Excel or spreadsheet software</li>
-            <li>No prior investment banking experience required</li>
+            <li>No prior experience required - suitable for all skill levels</li>
+            <li>A computer or mobile device with internet connection</li>
+            <li>Willingness to learn and practice the concepts</li>
+            <li>Basic English understanding as course content is in English</li>
+            <li>Dedication to complete the course materials</li>
           </ul>
         </div>
       </div>

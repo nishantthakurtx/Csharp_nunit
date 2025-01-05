@@ -25,7 +25,8 @@ namespace CourseTech.Service.Mapping
                   src.Duration,
                   src.PublishedAt,
                   $"{src.Instructor.FirstName} {src.Instructor.LastName}",
-                  src.Category.Name
+                  src.Category.Name,
+                  src.CreatedAt
               ));
 
 

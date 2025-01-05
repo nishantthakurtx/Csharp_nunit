@@ -24,15 +24,15 @@ body {
 }
 
 .app {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
 .main {
   flex: 1;
-  padding: 20px 0;
-  background-color: var(--background-light);
+  padding-bottom: 80px; /* Footer height + extra space */
+  position: relative;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -106,4 +106,39 @@ input:focus, textarea:focus, select:focus {
   .main {
     padding: 16px 0;
   }
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  border-top: 1px solid #e9ecef;
+  padding: 1rem 0;
+  z-index: 1000;
+  height: 60px; /* Fixed footer height */
+}
+
+/* Scrollbar'ı her zaman göster */
+html {
+  overflow-y: scroll;
+}
+
+/* Scrollbar stilleri */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
 } 

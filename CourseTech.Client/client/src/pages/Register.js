@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { FiUser, FiMail, FiLock } from 'react-icons/fi';
-import styles from '../styles/Auth.module.css';
 import { toast } from 'react-toastify';
+import styles from '../styles/Register.module.css';
 
 const Register = () => {
   const navigate = useNavigate();
   const { register } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -16,197 +14,236 @@ const Register = () => {
     password: '',
     confirmPassword: ''
   });
-
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   const [passwordValidation, setPasswordValidation] = useState({
     minLength: false,
-    hasNumber: false,
     hasUpperCase: false,
-    hasLowerCase: false,
-    hasSpecialChar: false
+    hasNumber: false,
+    hasSpecial: false
   });
 
   const validatePassword = (password) => {
     return {
-      minLength: password.length >= 6,
-      hasNumber: /\d/.test(password),
+      minLength: password.length >= 8,
       hasUpperCase: /[A-Z]/.test(password),
-      hasLowerCase: /[a-z]/.test(password),
-      hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+      hasNumber: /\d/.test(password),
+      hasSpecial: /[!@#$%^&*(),.?":{}|<>]/.test(password)
     };
   };
 
-  const handleInputChange = (e) => {
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validateField = (name, value) => {
+    switch (name) {
+      case 'firstName':
+        return value.length < 2 ? 'First name must be at least 2 characters' : '';
+      case 'lastName':
+        return value.length < 2 ? 'Last name must be at least 2 characters' : '';
+      case 'email':
+        return !validateEmail(value) ? 'Please enter a valid email address' : '';
+      case 'password':
+        const passwordChecks = validatePassword(value);
+        return !Object.values(passwordChecks).every(Boolean) ? 'Password does not meet requirements' : '';
+      case 'confirmPassword':
+        return value !== formData.password ? 'Passwords do not match' : '';
+      default:
+        return '';
+    }
+  };
+
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+
+    // Şifre değiştiğinde validation'ı güncelle
     if (name === 'password') {
       setPasswordValidation(validatePassword(value));
-      setFormData(prev => ({
-        ...prev,
-        [name]: value
-      }));
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: value
-      }));
+      
+      // Eğer confirm password girilmişse, onun validasyonunu da güncelle
+      if (formData.confirmPassword) {
+        const confirmError = formData.confirmPassword !== value ? 'Passwords do not match' : '';
+        setErrors(prev => ({
+          ...prev,
+          confirmPassword: confirmError
+        }));
+      }
     }
+
+    // Confirm password değiştiğinde password ile eşleşme kontrolü
+    if (name === 'confirmPassword') {
+      const confirmError = value !== formData.password ? 'Passwords do not match' : '';
+      setErrors(prev => ({
+        ...prev,
+        confirmPassword: confirmError
+      }));
+      return;
+    }
+
+    // Diğer alanlar için anlık validasyon
+    const error = validateField(name, value);
+    setErrors(prev => ({
+      ...prev,
+      [name]: error
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
+    
+    // Tüm alanları tekrar validate et
+    const newErrors = {};
+    Object.keys(formData).forEach(field => {
+      const error = validateField(field, formData[field]);
+      if (error) newErrors[field] = error;
+    });
 
-    // Validate all fields
-    if (!formData.firstName || !formData.lastName || !formData.email || !formData.password) {
-      toast.error('Please fill in all required fields');
-      setIsLoading(false);
-      return;
-    }
-
-    // Validate password requirements
-    const validation = validatePassword(formData.password);
-    if (!Object.values(validation).every(Boolean)) {
-      toast.error('Password does not meet all requirements');
-      setIsLoading(false);
-      return;
-    }
-
-    // Validate password match
-    if (formData.password !== formData.confirmPassword) {
-      toast.error('Passwords do not match');
-      setIsLoading(false);
+    // Hata varsa formu gönderme
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      toast.error('Please fix all errors before submitting');
       return;
     }
 
     try {
+      setLoading(true);
       await register(formData);
       toast.success('Registration successful!');
-      navigate('/');
+      navigate('/login');
     } catch (error) {
-      toast.error(error?.message || 'Failed to register');
       console.error('Registration error:', error);
+      toast.error(error.message || 'Failed to register');
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
+  // Submit butonunun disabled durumunu kontrol et
+  const isFormValid = () => {
+    // Tüm alanların dolu olduğunu kontrol et
+    const isAllFieldsFilled = Object.values(formData).every(value => value.length > 0);
+    
+    // Hata olup olmadığını kontrol et
+    const hasNoErrors = Object.values(errors).every(error => error === '');
+    
+    // Şifre gereksinimlerinin karşılandığını kontrol et
+    const isPasswordValid = Object.values(passwordValidation).every(Boolean);
+    
+    return isAllFieldsFilled && hasNoErrors && isPasswordValid;
+  };
+
   return (
-    <div className={styles.authContainer}>
-      <div className={styles.authForm}>
-        <h2>Create Account</h2>
-        <form onSubmit={handleSubmit}>
+    <div className={styles.container}>
+      <div className={styles.formContainer}>
+        <div className={styles.header}>
+          <h1>Create Account</h1>
+          <p>Join our community of learners today</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.formGroup}>
-            <label>
-              <FiUser className={styles.inputIcon} />
-              First Name
-            </label>
+            <label htmlFor="firstName">First Name</label>
             <input
               type="text"
+              id="firstName"
               name="firstName"
               value={formData.firstName}
-              onChange={handleInputChange}
-              placeholder="Enter your first name"
-              disabled={isLoading}
+              onChange={handleChange}
+              className={errors.firstName ? styles.inputError : ''}
+              required
             />
+            {errors.firstName && <span className={styles.error}>{errors.firstName}</span>}
           </div>
 
           <div className={styles.formGroup}>
-            <label>
-              <FiUser className={styles.inputIcon} />
-              Last Name
-            </label>
+            <label htmlFor="lastName">Last Name</label>
             <input
               type="text"
+              id="lastName"
               name="lastName"
               value={formData.lastName}
-              onChange={handleInputChange}
-              placeholder="Enter your last name"
-              disabled={isLoading}
+              onChange={handleChange}
+              className={errors.lastName ? styles.inputError : ''}
+              required
             />
+            {errors.lastName && <span className={styles.error}>{errors.lastName}</span>}
           </div>
 
           <div className={styles.formGroup}>
-            <label>
-              <FiMail className={styles.inputIcon} />
-              Email
-            </label>
+            <label htmlFor="email">Email</label>
             <input
               type="email"
+              id="email"
               name="email"
               value={formData.email}
-              onChange={handleInputChange}
-              placeholder="Enter your email"
-              disabled={isLoading}
+              onChange={handleChange}
+              className={errors.email ? styles.inputError : ''}
+              required
             />
+            {errors.email && <span className={styles.error}>{errors.email}</span>}
           </div>
 
           <div className={styles.formGroup}>
-            <label>
-              <FiLock className={styles.inputIcon} />
-              Password
-            </label>
+            <label htmlFor="password">Password</label>
             <input
               type="password"
+              id="password"
               name="password"
               value={formData.password}
-              onChange={handleInputChange}
-              placeholder="Enter your password"
-              disabled={isLoading}
+              onChange={handleChange}
+              className={errors.password ? styles.inputError : ''}
+              required
             />
-            {formData.password && (
-              <div className={styles.passwordRequirements}>
-                <p className={styles.requirementTitle}>Password must have:</p>
-                <ul>
-                  <li className={passwordValidation.minLength ? styles.valid : styles.invalid}>
-                    At least 6 characters
-                  </li>
-                  <li className={passwordValidation.hasNumber ? styles.valid : styles.invalid}>
-                    At least one number
-                  </li>
-                  <li className={passwordValidation.hasUpperCase ? styles.valid : styles.invalid}>
-                    At least one uppercase letter
-                  </li>
-                  <li className={passwordValidation.hasLowerCase ? styles.valid : styles.invalid}>
-                    At least one lowercase letter
-                  </li>
-                  <li className={passwordValidation.hasSpecialChar ? styles.valid : styles.invalid}>
-                    At least one special character (!@#$%^&*(),.?":{}|&lt;&gt;)
-                  </li>
-                </ul>
-              </div>
-            )}
+            <ul className={styles.passwordRequirements}>
+              <li className={passwordValidation.minLength ? styles.valid : ''}>
+                At least 8 characters long
+              </li>
+              <li className={passwordValidation.hasUpperCase ? styles.valid : ''}>
+                Contains at least one uppercase letter
+              </li>
+              <li className={passwordValidation.hasNumber ? styles.valid : ''}>
+                Contains at least one number
+              </li>
+              <li className={passwordValidation.hasSpecial ? styles.valid : ''}>
+                Contains at least one special character
+              </li>
+            </ul>
+            {errors.password && <span className={styles.error}>{errors.password}</span>}
           </div>
 
           <div className={styles.formGroup}>
-            <label>
-              <FiLock className={styles.inputIcon} />
-              Confirm Password
-            </label>
+            <label htmlFor="confirmPassword">Confirm Password</label>
             <input
               type="password"
+              id="confirmPassword"
               name="confirmPassword"
               value={formData.confirmPassword}
-              onChange={handleInputChange}
-              placeholder="Confirm your password"
-              disabled={isLoading}
+              onChange={handleChange}
+              className={errors.confirmPassword ? styles.inputError : ''}
+              required
             />
-            {formData.confirmPassword && formData.password !== formData.confirmPassword && (
-              <p className={styles.errorText}>Passwords do not match</p>
-            )}
+            {errors.confirmPassword && <span className={styles.error}>{errors.confirmPassword}</span>}
           </div>
 
           <button 
             type="submit" 
             className={styles.submitButton}
-            disabled={
-              isLoading || 
-              !Object.values(passwordValidation).every(Boolean) || 
-              formData.password !== formData.confirmPassword
-            }
+            disabled={loading || !isFormValid()}
           >
-            {isLoading ? 'Creating Account...' : 'Create Account'}
+            {loading ? 'Creating Account...' : 'Create Account'}
           </button>
         </form>
+
+        <div className={styles.loginLink}>
+          Already have an account?
+          <Link to="/login">Sign in</Link>
+        </div>
       </div>
     </div>
   );

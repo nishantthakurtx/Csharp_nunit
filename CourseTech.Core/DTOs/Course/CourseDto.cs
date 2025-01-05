@@ -13,6 +13,7 @@
         TimeSpan Duration, 
         DateTime? PublishedAt, 
         string InstructorName, 
-        string CategoryName
+        string CategoryName,
+        DateTime CreatedAt
     );
 }

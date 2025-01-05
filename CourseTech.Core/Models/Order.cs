@@ -34,16 +34,19 @@ namespace CourseTech.Core.Models
         public void MarkAsCompleted()
         {
             Status = OrderStatus.Completed;
+            UpdatedAt = DateTime.UtcNow;
         }
 
         public void MarkAsPending()
         {
             Status = OrderStatus.Pending;
+            UpdatedAt = DateTime.UtcNow;
         }
 
         public void MarkAsCanceled()
         {
             Status = OrderStatus.Canceled;
+            UpdatedAt = DateTime.UtcNow;
         }
 
         private void RecalculateTotalPrice()

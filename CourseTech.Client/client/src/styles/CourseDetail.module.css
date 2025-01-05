@@ -89,24 +89,46 @@
 .actions {
   display: flex;
   gap: 1rem;
+  margin-top: 2rem;
 }
 
 .enrollButton {
   flex: 2;
-  padding: 1rem;
-  background-color: #4299e1;
+  background-color: #2563eb;
   color: white;
+  padding: 1rem 2rem;
   border: none;
   border-radius: 8px;
   font-size: 1.1rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 200px;
 }
 
-.enrollButton:hover {
-  background-color: #3182ce;
-  transform: translateY(-2px);
+.enrollButton:hover:not(:disabled) {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.enrollButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.enrolled {
+  background-color: #16a34a !important;
+  cursor: default !important;
+  opacity: 1 !important;
+}
+
+.enrolled:hover {
+  background-color: #16a34a !important;
+  transform: none !important;
 }
 
 .previewButton {
@@ -124,6 +146,8 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
+  text-decoration: none;
+  min-width: 150px;
 }
 
 .previewButton:hover {

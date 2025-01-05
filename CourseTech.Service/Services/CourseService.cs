@@ -4,10 +4,11 @@ using CourseTech.Core.Models;
 using CourseTech.Core.Services;
 using CourseTech.Core.UnitOfWorks;
 using CourseTech.Shared;
+using Microsoft.AspNetCore.Identity;
 
 namespace CourseTech.Service.Services
 {
-    public class CourseService(IUnitOfWork unitOfWork, IMapper mapper) : ICourseService
+    public class CourseService(IUnitOfWork unitOfWork,UserManager<AppUser> userManager, IMapper mapper) : ICourseService
     {
         public async Task<ServiceResult<CourseDTO>> GetByIdAsync(Guid courseId)
         {
@@ -74,6 +75,12 @@ namespace CourseTech.Service.Services
         public async Task<ServiceResult<CourseDTO>> CreateAsync(CourseCreateDTO courseDto)
         {
             var entity = mapper.Map<Course>(courseDto);
+
+            var instructor = await userManager.FindByIdAsync(courseDto.InstructorId.ToString());
+            var category = await unitOfWork.Category.GetByIdAsync(courseDto.CategoryId);
+
+            entity.Instructor = instructor;
+            entity.Category = category;
 
             await unitOfWork.Course.InsertAsync(entity);
             await unitOfWork.SaveChangesAsync();
