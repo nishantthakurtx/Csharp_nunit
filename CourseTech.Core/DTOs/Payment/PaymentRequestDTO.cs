@@ -2,10 +2,13 @@
 {
     public record PaymentRequestDTO
     (
-        Guid UserId,
-        Guid BasketId,
+        Guid OrderId,
+        string CardHolderName,
+        string CardNumber,
+        string ExpiryMonth,
+        string ExpiryYear,
+        string Cvv,
         decimal TotalAmount,
-        string PaymentProvider,
-        string Currency
+        DateTime PaymentDate
     );
 }

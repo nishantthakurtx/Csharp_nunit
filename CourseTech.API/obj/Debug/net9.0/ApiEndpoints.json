@@ -555,56 +555,52 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "CourseTech.API.Controllers.StripesController",
-    "Method": "CreateCharge",
-    "RelativePath": "api/Stripes/charge",
+    "ContainingType": "CourseTech.API.Controllers.PaymentsController",
+    "Method": "ProcessPaymentAsync",
+    "RelativePath": "api/Payments",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "resource",
-        "Type": "CourseTech.Core.DTOs.Payment.Stripe.CreateChargeResource",
+        "Name": "paymentRequest",
+        "Type": "CourseTech.Core.DTOs.Payment.PaymentRequestDTO",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "CourseTech.Core.DTOs.Payment.Stripe.ChargeResource",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
-    "ContainingType": "CourseTech.API.Controllers.StripesController",
-    "Method": "CreateCustomer",
-    "RelativePath": "api/Stripes/customer",
-    "HttpMethod": "POST",
+    "ContainingType": "CourseTech.API.Controllers.PaymentsController",
+    "Method": "GetPaymentById",
+    "RelativePath": "api/Payments/{paymentId}",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "resource",
-        "Type": "CourseTech.Core.DTOs.Payment.Stripe.CreateCustomerResource",
+        "Name": "paymentId",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CourseTech.API.Controllers.PaymentsController",
+    "Method": "GetPaymentsByUserId",
+    "RelativePath": "api/Payments/{userId}/user",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
       {
-        "Type": "CourseTech.Core.DTOs.Payment.Stripe.CustomerResource",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": true
       }
-    ]
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "CourseTech.API.Controllers.UsersController",
@@ -690,6 +686,22 @@
       {
         "Name": "createUserDto",
         "Type": "CourseTech.Core.DTOs.AppUser.AppUserWithPasswordDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CourseTech.API.Controllers.UsersController",
+    "Method": "ResetPasswordAsync",
+    "RelativePath": "api/Users/reset-password",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "resetPasswordDTO",
+        "Type": "CourseTech.Core.DTOs.Authentication.ResetPasswordDTO",
         "IsRequired": true
       }
     ],

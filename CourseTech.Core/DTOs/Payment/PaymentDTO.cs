@@ -1,12 +1,17 @@
-﻿namespace CourseTech.Core.DTOs.Payment
+﻿using CourseTech.Shared.Enums;
+
+namespace CourseTech.Core.DTOs.Payment
 {
     public record PaymentDTO
     (
-        string CustomerId,
-        string PaymentId,
-        string ReceiptEmail,
-        string Description,
-        long Amount,
-        string Currency
+        Guid Id,
+        Guid UserId,
+        Guid OrderId,
+        string TransactionId,
+        decimal TotalAmount,
+        string PaymentProvider,
+        bool IsSuccessful,
+        DateTime PaymentDate,
+        PaymentStatus Status
     );
 }

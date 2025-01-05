@@ -13,7 +13,7 @@ namespace CourseTech.Core.Models
 
         public decimal TotalAmount { get; private set; }
         public string PaymentProvider { get; private set; }
-        public string TransactionId { get; private set; } = string.Empty; // Ödeme sağlayıcısından dönen benzersiz işlem numarası
+        public string TransactionId { get; private set; } = string.Empty;
         public bool IsSuccessful { get; private set; }
         public DateTime PaymentDate { get; private set; } = DateTime.UtcNow;
         public PaymentStatus Status { get; private set; } = PaymentStatus.Pending;

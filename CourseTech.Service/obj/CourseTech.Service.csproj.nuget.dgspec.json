@@ -217,10 +217,6 @@
             "AutoMapper": {
               "target": "Package",
               "version": "[13.0.1, )"
-            },
-            "Stripe.net": {
-              "target": "Package",
-              "version": "[47.2.0, )"
             }
           },
           "imports": [

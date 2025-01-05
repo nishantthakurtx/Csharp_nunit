@@ -15,5 +15,6 @@ namespace CourseTech.Core.Services
         Task<ServiceResult> SoftDeleteAsync(Guid id);
 
         Task<ServiceResult> AssignRoleAsync(Guid id, string roleName);
+        Task<ServiceResult> ResetPasswordAsync(string email, string newPassword);
     }
 }

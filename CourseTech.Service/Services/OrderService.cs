@@ -4,24 +4,18 @@ using CourseTech.Core.Models;
 using CourseTech.Core.Services;
 using CourseTech.Core.UnitOfWorks;
 using CourseTech.Shared;
-using CourseTech.Shared.Enums;
 using Microsoft.Extensions.Logging;
 
 namespace CourseTech.Service.Services
 {
     public class OrderService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<OrderService> logger) : IOrderService
     {
+        // eğer basket controllerda basket complete succces dönerse order service çağrılır ve order oluşturulur
         public async Task<ServiceResult<OrderDTO>> CreateOrderFromBasketAsync(Guid basketId)
         {
-            var basket = await unitOfWork.Basket.GetByIdAsync(basketId);
+            var basket = await unitOfWork.Basket.GetBasketWithItemsAsync(basketId);
             if (basket == null)
                 return ServiceResult<OrderDTO>.Fail("Basket not found.");
-
-            if (basket.Status != BasketStatus.Passive)
-                return ServiceResult<OrderDTO>.Fail("Basket is not passive.");
-
-            if (!basket.BasketItems.Any())
-                return ServiceResult<OrderDTO>.Fail("Basket is empty.");
 
             var order = new Order(basket.UserId, basket.AppUser);
 
@@ -32,6 +26,7 @@ namespace CourseTech.Service.Services
 
             await unitOfWork.Order.InsertAsync(order);
             unitOfWork.Basket.SoftDelete(basket);
+            order.MarkAsPending();
             await unitOfWork.SaveChangesAsync();
 
             var orderDTO = mapper.Map<OrderDTO>(order);
@@ -50,11 +45,11 @@ namespace CourseTech.Service.Services
             return ServiceResult<OrderDTO>.Success(orderDTO);
         }
 
-        public async Task<ServiceResult<List<OrderSummaryDTO>>> GetOrdersByUserIdAsync(Guid userId)
+        public async Task<ServiceResult<List<OrderDTO>>> GetOrdersByUserIdAsync(Guid userId)
         {
             var orders = await unitOfWork.Order.GetOrdersByUserIdAsync(userId);
-            var orderDTOs = mapper.Map<List<OrderSummaryDTO>>(orders);
-            return ServiceResult<List<OrderSummaryDTO>>.Success(orderDTOs);
+            var orderDTOs = mapper.Map<List<OrderDTO>>(orders);
+            return ServiceResult<List<OrderDTO>>.Success(orderDTOs);
         }
     }
 }

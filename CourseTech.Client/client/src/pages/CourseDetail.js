@@ -1,223 +1,203 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import slugify from 'react-slugify';
-import { courseService } from '../services/courseService';
-import { basketService } from '../services/basketService';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useCourse } from '../contexts/CourseContext';
 import { useAuth } from '../contexts/AuthContext';
-import alertify from 'alertifyjs';
-import 'alertifyjs/build/css/alertify.css';
-import './CourseDetail.css';
-
-const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80';
+import { useBasket } from '../contexts/BasketContext';
+import { FiUser, FiBarChart, FiClock, FiBook, FiGlobe, FiCalendar, FiVideo, FiCheck, FiShoppingCart } from 'react-icons/fi';
+import { toast } from 'react-toastify';
+import styles from '../styles/CourseDetail.module.css';
 
 const CourseDetail = () => {
-  const { slug } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
-  const { user, isAuthenticated } = useAuth();
+  const { getCourseDetails } = useCourse();
+  const { isAuthenticated, user } = useAuth();
+  const { addCourse } = useBasket();
   const [course, setCourse] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    const fetchCourse = async () => {
+    const loadCourse = async () => {
       try {
-        setLoading(true);
-        const response = await courseService.getAllCourses();
+        setIsLoading(true);
+        const response = await getCourseDetails(id);
         if (response?.data) {
-          const foundCourse = response.data.find(
-            course => slugify(course.title) === slug
-          );
-          
-          if (foundCourse) {
-            const detailsResponse = await courseService.getCourseWithDetails(foundCourse.id);
-            if (detailsResponse?.data) {
-              setCourse(detailsResponse.data);
-            } else {
-              setError('Course details not found.');
-            }
-          } else {
-            setError('Course not found.');
-          }
-        } else {
-          setError('Failed to load courses.');
+          setCourse(response.data);
         }
-      } catch (err) {
-        setError('Failed to load course details.');
-        console.error('Error fetching course:', err);
+      } catch (error) {
+        console.error('Error loading course:', error);
+        toast.error('Failed to load course details');
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
-    if (slug) {
-      fetchCourse();
-    } else {
-      setError('Invalid course URL.');
-      setLoading(false);
-    }
-  }, [slug]);
+    loadCourse();
+  }, [id, getCourseDetails]);
 
-  const handleAddToCart = async () => {
-    if (!isAuthenticated || !user?.id) {
-      navigate('/login');
+  const handleEnrollClick = async () => {
+    if (!isAuthenticated) {
+      toast.info('Please login to enroll in this course');
+      navigate('/login', { state: { from: `/courses/${id}` } });
       return;
     }
 
     try {
-      await basketService.addCourseToBasket(user.id, course.id);
-      window.dispatchEvent(new Event('basketUpdated'));
-      
-      alertify.confirm('Course Added to Basket', 
-        'Course has been added to your basket successfully!',
-        function() {
-          navigate('/basket');
-        },
-        function() {
-          // Alışverişe devam et
-        }
-      ).set({
-        'labels': {ok: 'Go to Basket', cancel: 'Continue Shopping'},
-        'defaultFocus': 'cancel',
-        'movable': false,
-        'closable': false
-      });
+      const success = await addCourse(course.id);
+      if (success) {
+        setShowModal(true);
+        toast.success('Course added to basket successfully');
+      }
     } catch (error) {
       console.error('Error adding course to basket:', error);
-      if (error.message === 'This course is already in your basket') {
-        alertify.error("You have already added this course to your basket.");
+      if (error.response?.data?.message === 'This course is already in your basket') {
+        toast.warning('This course is already in your basket');
       } else {
-        alertify.error("Failed to add course to basket. Please try again.");
+        toast.error('Failed to add course to basket. Please try again.');
       }
     }
   };
 
-  if (loading) {
-    return (
-      <div className="loading-container">
-        <div className="loader"></div>
-        <p>Loading course details...</p>
-      </div>
-    );
-  }
+  const handleModalAction = (action) => {
+    setShowModal(false);
+    if (action === 'basket') {
+      navigate('/basket');
+    } else if (action === 'continue') {
+      navigate('/courses');
+    }
+    toast.success(action === 'basket' ? 'Redirecting to basket...' : 'Continuing to courses...');
+  };
 
-  if (error) {
-    return (
-      <div className="error-container">
-        <p>{error}</p>
-        <button onClick={() => window.location.reload()} className="btn-primary">
-          Try Again
-        </button>
-      </div>
-    );
+  if (isLoading) {
+    return <div className={styles.loading}>Loading course details...</div>;
   }
 
   if (!course) {
-    return (
-      <div className="error-container">
-        <p>Course not found.</p>
-        <Link to="/" className="btn-primary">
-          Return to Home
-        </Link>
-      </div>
-    );
+    return <div className={styles.error}>Course not found</div>;
   }
 
-  // Format duration to hours and minutes
   const formatDuration = (duration) => {
     if (!duration) return "0h 0m";
-    
-    // TimeSpan string format: "00:00:00"
     const [hours, minutes] = duration.split(':');
     return `${parseInt(hours)}h ${parseInt(minutes)}m`;
   };
 
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
   return (
-    <div className="course-detail">
-      <div className="course-header">
-        <div className="course-header-content">
-          <div className="course-breadcrumb">
-            <span>Home</span>
-            <i className="fas fa-chevron-right"></i>
-            <span>Categories</span>
-            <i className="fas fa-chevron-right"></i>
-            <span>{course.categoryName}</span>
-          </div>
-          
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <div className={styles.imageContainer}>
+          <img src={course.imageUrl || 'https://via.placeholder.com/800x400'} alt={course.title} />
+        </div>
+        
+        <div className={styles.headerContent}>
+          <div className={styles.category}>{course.categoryName}</div>
           <h1>{course.title}</h1>
-          <p className="course-description">{course.description}</p>
           
-          <div className="course-rating">
-            <span className="students">
-              <i className="fas fa-user-graduate"></i>
-              {course.studentCount} students
-            </span>
+          <div className={styles.meta}>
+            <div className={styles.instructor}>
+              <FiUser />
+              <span>{course.instructorName}</span>
+            </div>
+            <div className={styles.level}>
+              <FiBarChart />
+              <span>{course.level}</span>
+            </div>
+            <div className={styles.duration}>
+              <FiClock />
+              <span>{formatDuration(course.duration)}</span>
+            </div>
+            <div className={styles.language}>
+              <FiGlobe />
+              <span>{course.language}</span>
+            </div>
+            <div className={styles.publishDate}>
+              <FiCalendar />
+              <span>Published on {formatDate(course.publishedAt)}</span>
+            </div>
           </div>
 
-          <div className="course-creator">
-            <span>Instructor:</span>
-            <Link to={`/instructor/${slugify(course.instructorName)}`}>
-              {course.instructorName}
-            </Link>
+          <div className={styles.price}>
+            ${course.price.toFixed(2)}
           </div>
 
-          <div className="course-tags">
-            <span>
-              <i className="fas fa-signal"></i>
-              {course.level}
-            </span>
-            <span>
-              <i className="fas fa-globe"></i>
-              {course.language}
-            </span>
-            <span>
-              <i className="fas fa-calendar-alt"></i>
-              {new Date(course.publishedAt).toLocaleDateString()}
-            </span>
+          <div className={styles.actions}>
+            <button 
+              className={styles.enrollButton}
+              onClick={handleEnrollClick}
+            >
+              Enroll Now
+            </button>
+            {course.videoUrl && (
+              <a href={course.videoUrl} target="_blank" rel="noopener noreferrer" className={styles.previewButton}>
+                <FiVideo />
+                Watch Preview
+              </a>
+            )}
           </div>
         </div>
       </div>
 
-      <div className="course-content">
-        <div className="course-main">
-          <div className="course-section">
-            <h2>About this course</h2>
-            <p>{course.description}</p>
-          </div>
+      <div className={styles.content}>
+        <div className={styles.section}>
+          <h2>Course Description</h2>
+          <p>{course.description}</p>
         </div>
 
-        <div className="course-sidebar">
-          <div className="course-card">
-            <img 
-              src={course.imageUrl || DEFAULT_IMAGE} 
-              alt={course.title}
-              className="course-preview-image"
-            />
-            <div className="course-card-content">
-              <div className="course-price">${course.price}</div>
-              <button className="add-to-cart-btn" onClick={handleAddToCart}>
-                <i className="fas fa-shopping-cart"></i>
-                Add to cart
+        <div className={styles.section}>
+          <h2>What You'll Learn</h2>
+          <ul className={styles.learningPoints}>
+            <li>Understanding investment banking fundamentals</li>
+            <li>Financial modeling and valuation techniques</li>
+            <li>Mergers and acquisitions process</li>
+            <li>Market analysis and research methods</li>
+          </ul>
+        </div>
+
+        <div className={styles.section}>
+          <h2>Requirements</h2>
+          <ul className={styles.requirements}>
+            <li>Basic understanding of finance concepts</li>
+            <li>Familiarity with Excel or spreadsheet software</li>
+            <li>No prior investment banking experience required</li>
+          </ul>
+        </div>
+      </div>
+
+      {showModal && (
+        <div className={styles.modalOverlay} onClick={() => setShowModal(false)}>
+          <div className={styles.modal} onClick={e => e.stopPropagation()}>
+            <div className={styles.modalIcon}>
+              <FiCheck size={48} />
+            </div>
+            <h2>Course Added to Basket!</h2>
+            <p>What would you like to do next?</p>
+            <div className={styles.modalButtons}>
+              <button 
+                className={styles.goToBasket}
+                onClick={() => handleModalAction('basket')}
+              >
+                <FiShoppingCart />
+                Go to Basket
               </button>
-              <div className="course-features">
-                <ul>
-                  <li>
-                    <i className="fas fa-infinity"></i>
-                    Full lifetime access
-                  </li>
-                  <li>
-                    <i className="fas fa-mobile-alt"></i>
-                    Access on mobile and TV
-                  </li>
-                  <li>
-                    <i className="fas fa-certificate"></i>
-                    Certificate of completion
-                  </li>
-                </ul>
-              </div>
+              <button 
+                className={styles.continueShopping}
+                onClick={() => handleModalAction('continue')}
+              >
+                Continue Shopping
+              </button>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

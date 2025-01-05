@@ -8,7 +8,6 @@ using CourseTech.Repository.Seeds;
 using CourseTech.Service.Services;
 using CourseTech.Shared.Configuration;
 using CourseTech.Shared.Services;
-using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +15,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
-using Stripe;
 using System.Text.Json.Serialization;
 
 namespace CourseTech.API
@@ -93,14 +91,7 @@ namespace CourseTech.API
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            builder.Services.AddScoped<IPaymentService,PaymentService>();
-            builder.Services.AddScoped<IStripeService, StripeService>();
-            builder.Services.AddScoped<TokenService>();
-            builder.Services.AddScoped<CustomerService>();
-            builder.Services.AddScoped<ChargeService>();
-
-            builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
-            builder.Services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<StripeSettings>>().Value);
+            builder.Services.AddScoped<IPaymentService, PaymentService>(); 
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             #endregion
             #region Identity Configuration

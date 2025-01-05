@@ -1,261 +1,240 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { basketService } from '../services/basketService';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useBasket } from '../contexts/BasketContext';
 import { useAuth } from '../contexts/AuthContext';
-import PageLayout from '../components/PageLayout';
-import alertify from 'alertifyjs';
-import 'alertifyjs/build/css/alertify.css';
-import 'alertifyjs/build/css/themes/default.css';
-import './Basket.css';
+import { FiTrash2, FiShoppingCart, FiAlertCircle } from 'react-icons/fi';
+import { toast } from 'react-toastify';
+import styles from '../styles/Basket.module.css';
 
 const Basket = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
-  const [basket, setBasket] = useState({ courses: [], totalPrice: 0 });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { basket, refreshBasket, removeCourse, clearBasket } = useBasket();
+  const [isLoading, setIsLoading] = useState(true);
+  const [showRemoveModal, setShowRemoveModal] = useState(false);
+  const [showClearModal, setShowClearModal] = useState(false);
+  const [itemToRemove, setItemToRemove] = useState(null);
 
   useEffect(() => {
-    const fetchBasket = async () => {
-      if (!isAuthenticated || !user?.id) {
-        setLoading(false);
-        return;
-      }
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+    loadBasket();
+  }, [isAuthenticated, user]);
 
-      try {
-        setLoading(true);
-        const response = await basketService.getActiveBasket(user.id);
-        
-        if (!response?.data) {
-          setBasket(null);
-        } else {
-          setBasket({
-            id: response.data.id,
-            courses: response.data.courses,
-            totalPrice: response.data.totalPrice,
-            status: response.data.status
-          });
-        }
-      } catch (error) {
-        console.error('Error fetching basket:', error);
-        setError('Failed to load basket. Please try again.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBasket();
-  }, [isAuthenticated, user?.id]);
-
-  const handleRemoveFromBasket = async (courseId, courseTitle) => {
-    if (!user?.id || !basket?.id) return;
-
-    alertify.confirm('Remove Course', 
-      `Are you sure you want to remove "${courseTitle}" from your basket?`,
-      async function() {
-        try {
-          await basketService.removeCourseFromBasket(user.id, courseId);
-          const response = await basketService.getActiveBasket(user.id);
-          if (!response?.data) {
-            setBasket(null);
-          } else {
-            setBasket({
-              id: response.data.id,
-              courses: response.data.courses,
-              totalPrice: response.data.totalPrice,
-              status: response.data.status
-            });
-          }
-          window.dispatchEvent(new Event('basketUpdated'));
-          alertify.success('Course removed successfully');
-        } catch (error) {
-          console.error('Error removing course from basket:', error);
-          alertify.error('Failed to remove course from basket');
-        }
-      },
-      function() {
-        alertify.error('Operation cancelled');
-      }
-    ).set({
-      'labels': {ok: 'Yes', cancel: 'No'},
-      'defaultFocus': 'cancel'
-    });
-  };
-
-  const handleCheckout = async () => {
-    if (!user?.id) return;
-
+  const loadBasket = async () => {
     try {
-      await basketService.completeBasket(user.id);
-      setBasket({ courses: [], totalPrice: 0 });
-      // TODO: Başarılı mesajı göster ve/veya ödeme sayfasına yönlendir
+      setIsLoading(true);
+      await refreshBasket();
     } catch (error) {
-      console.error('Error completing checkout:', error);
-      setError('Failed to complete checkout. Please try again.');
+      console.error('Error loading basket:', error);
+      toast.error('Failed to load basket items');
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  if (!isAuthenticated) {
-    return (
-      <PageLayout>
-        <div className="basket-container">
-          <div className="empty-basket">
-            <i className="fas fa-lock"></i>
-            <h2>Please sign in to view your basket</h2>
-            <p>Sign in to access your basket and continue shopping</p>
-            <Link to="/login" className="btn-primary">Sign In</Link>
-          </div>
-        </div>
-      </PageLayout>
-    );
+  const handleRemoveClick = (item) => {
+    setItemToRemove(item);
+    setShowRemoveModal(true);
+  };
+
+  const handleRemoveConfirm = async () => {
+    try {
+      await removeCourse(itemToRemove.courseId);
+      toast.success('Course removed from basket');
+      setShowRemoveModal(false);
+      setItemToRemove(null);
+      await loadBasket();
+    } catch (error) {
+      console.error('Error removing course from basket:', error);
+      toast.error('Failed to remove course from basket');
+    }
+  };
+
+  const handleRemoveCancel = () => {
+    setShowRemoveModal(false);
+    setItemToRemove(null);
+  };
+
+  const handleClearClick = () => {
+    setShowClearModal(true);
+  };
+
+  const handleClearConfirm = async () => {
+    try {
+      await clearBasket();
+      toast.success('Basket cleared successfully');
+      setShowClearModal(false);
+      await loadBasket();
+    } catch (error) {
+      console.error('Error clearing basket:', error);
+      toast.error('Failed to clear basket');
+    }
+  };
+
+  const handleClearCancel = () => {
+    setShowClearModal(false);
+  };
+
+  const handleCheckout = () => {
+    navigate('/order');
+  };
+
+  if (isLoading) {
+    return <div className={styles.loading}>Loading basket...</div>;
   }
 
-  if (loading) {
+  if (!basket?.items?.length) {
     return (
-      <PageLayout>
-        <div className="basket-container">
-          <div className="loading">
-            <div className="loader"></div>
-            <p>Loading your basket...</p>
-          </div>
-        </div>
-      </PageLayout>
-    );
-  }
-
-  if (error) {
-    return (
-      <PageLayout>
-        <div className="basket-container">
-          <div className="error-message">
-            <i className="fas fa-exclamation-circle"></i>
-            <h2>{error}</h2>
-            <button onClick={() => window.location.reload()} className="btn-primary">
-              Try Again
-            </button>
-          </div>
-        </div>
-      </PageLayout>
-    );
-  }
-
-  if (!basket) {
-    return (
-      <PageLayout>
-        <div className="basket-container">
-          <div className="empty-basket">
-            <i className="fas fa-shopping-cart"></i>
-            <h2>Your basket is empty</h2>
-            <p>Discover amazing courses and start learning today!</p>
-            <Link to="/" className="btn-primary">Browse Courses</Link>
-          </div>
-        </div>
-      </PageLayout>
+      <div className={styles.empty}>
+        <FiShoppingCart size={48} />
+        <h2>Your basket is empty</h2>
+        <p>Browse our courses and add some to your basket!</p>
+        <button onClick={() => navigate('/courses')} className={styles.browseCourses}>
+          Browse Courses
+        </button>
+      </div>
     );
   }
 
   return (
-    <PageLayout>
-      <div className="basket-container">
-        <div className="basket-content">
-          <div className="basket-header">
-            <h1>Shopping Basket</h1>
-            <p>{basket.courses.length} courses in basket</p>
+    <div className={styles.container}>
+      <h1>Shopping Basket</h1>
+      
+      <div className={styles.content}>
+        <div className={styles.items}>
+          <div className={styles.itemsHeader}>
+            <h2>Your Items</h2>
+            <button 
+              className={styles.clearButton}
+              onClick={handleClearClick}
+              aria-label="Clear basket"
+            >
+              Clear Basket
+            </button>
           </div>
-
-          <div className="basket-main">
-            <div className="basket-items">
-              {basket.courses.map(course => (
-                <div key={course.courseId} className="basket-item">
-                  <div className="course-image-container">
-                    {course.imageUrl && (
-                      <img 
-                        src={course.imageUrl} 
-                        alt={course.title}
-                      />
-                    )}
-                  </div>
-                  <div className="course-info">
-                    <h3>{course.title}</h3>
-                    <div className="instructor">By {course.instructorName}</div>
-                    <div className="course-meta">
-                      <span key="level"><i className="fas fa-signal"></i>{course.level}</span>
-                      <span key="duration"><i className="fas fa-clock"></i>{course.duration}</span>
-                    </div>
-                    <div className="price-info">
-                      <span className="current-price">${(course.price || 0).toFixed(2)}</span>
-                    </div>
-                  </div>
-                  <button 
-                    className="remove-btn"
-                    onClick={() => handleRemoveFromBasket(course.courseId, course.title)}
-                  >
-                    <i className="fas fa-trash"></i>
-                  </button>
-                </div>
-              ))}
+          {basket.items.map((item) => (
+            <div key={item.courseId} className={styles.item}>
+              <div className={styles.imageContainer}>
+                <img src={item.imageUrl || 'https://via.placeholder.com/120x80'} alt={item.courseTitle} />
+              </div>
               
-              {basket.courses.length > 0 && (
-                <div className="basket-actions">
-                  <button 
-                    className="clear-basket-btn"
-                    onClick={() => {
-                      alertify.confirm('Clear Basket', 
-                        'Are you sure you want to clear your basket?',
-                        function() {
-                          basketService.clearBasket(user.id).then(() => {
-                            setBasket({ courses: [], totalPrice: 0 });
-                            window.dispatchEvent(new Event('basketUpdated'));
-                            alertify.success('Basket cleared successfully');
-                          });
-                        },
-                        function() {
-                          alertify.error('Operation cancelled');
-                        }
-                      ).set({
-                        'labels': {ok: 'Yes', cancel: 'No'},
-                        'defaultFocus': 'cancel',
-                        'movable': false,
-                        'closable': false
-                      });
-                    }}
-                  >
-                    <i className="fas fa-trash-alt"></i>
-                    Clear Basket
-                  </button>
-                </div>
-              )}
+              <div className={styles.details}>
+                <h3>{item.courseTitle}</h3>
+                <p className={styles.instructor}>by {item.instructorName}</p>
+              </div>
+              
+              <div className={styles.price}>
+                ${item.price.toFixed(2)}
+              </div>
+              
+              <button 
+                className={styles.removeButton}
+                onClick={() => handleRemoveClick(item)}
+                aria-label="Remove from basket"
+              >
+                <FiTrash2 />
+              </button>
             </div>
+          ))}
+        </div>
 
-            <div className="basket-summary">
-              <div className="summary-header">
-                <h2>Total</h2>
+        <div className={styles.summary}>
+          <h2>Order Summary</h2>
+          <div className={styles.summaryDetails}>
+            <div className={styles.summaryRow}>
+              <span>Items ({basket.items.length})</span>
+              <span>${basket.totalPrice.toFixed(2)}</span>
+            </div>
+            <div className={styles.summaryTotal}>
+              <span>Total:</span>
+              <span>${basket.totalPrice.toFixed(2)}</span>
+            </div>
+          </div>
+          <button 
+            className={styles.checkoutButton}
+            onClick={handleCheckout}
+          >
+            Proceed to Checkout
+          </button>
+        </div>
+      </div>
+
+      {showRemoveModal && itemToRemove && (
+        <div className={styles.modalOverlay} onClick={handleRemoveCancel}>
+          <div className={styles.modal} onClick={e => e.stopPropagation()}>
+            <div className={styles.modalIcon}>
+              <FiAlertCircle size={48} />
+            </div>
+            <h2>Remove Course from Basket?</h2>
+            <div className={styles.modalContent}>
+              <p>Are you sure you want to remove this course from your basket?</p>
+              <div className={styles.courseInfo}>
+                <h3>{itemToRemove.courseTitle}</h3>
+                <p>Instructor: {itemToRemove.instructorName}</p>
+                <p>Price: ${itemToRemove.price.toFixed(2)}</p>
               </div>
-              <div className="summary-details">
-                <div className="summary-row">
-                  <span>Subtotal:</span>
-                  <span>${(basket.totalPrice || 0).toFixed(2)}</span>
-                </div>
-                <div className="summary-row total">
-                  <span>Total:</span>
-                  <span>${(basket.totalPrice || 0).toFixed(2)}</span>
-                </div>
-                <button 
-                  className="checkout-btn"
-                  onClick={handleCheckout}
-                >
-                  Proceed to Checkout
-                </button>
-                <div className="secure-checkout">
-                  <i className="fas fa-lock"></i>
-                  <span>Secure Checkout</span>
-                </div>
-              </div>
+            </div>
+            <div className={styles.modalButtons}>
+              <button 
+                className={styles.cancelButton}
+                onClick={handleRemoveCancel}
+              >
+                Cancel
+              </button>
+              <button 
+                className={styles.confirmButton}
+                onClick={handleRemoveConfirm}
+              >
+                Remove Course
+              </button>
             </div>
           </div>
         </div>
-      </div>
-    </PageLayout>
+      )}
+
+      {showClearModal && (
+        <div className={styles.modalOverlay} onClick={handleClearCancel}>
+          <div className={styles.modal} onClick={e => e.stopPropagation()}>
+            <div className={styles.modalIcon}>
+              <FiAlertCircle size={48} />
+            </div>
+            <h2>Clear Entire Basket?</h2>
+            <div className={styles.modalContent}>
+              <p>Are you sure you want to remove all courses from your basket?</p>
+              <div className={styles.courseInfo}>
+                <p>Total Items: {basket.items.length}</p>
+                <p>Total Price: ${basket.totalPrice.toFixed(2)}</p>
+                <div className={styles.courseList}>
+                  {basket.items.map(item => (
+                    <div key={item.courseId} className={styles.courseListItem}>
+                      <span>{item.courseTitle}</span>
+                      <span>by {item.instructorName}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className={styles.modalButtons}>
+              <button 
+                className={styles.cancelButton}
+                onClick={handleClearCancel}
+              >
+                Cancel
+              </button>
+              <button 
+                className={styles.confirmButton}
+                onClick={handleClearConfirm}
+              >
+                Clear All
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

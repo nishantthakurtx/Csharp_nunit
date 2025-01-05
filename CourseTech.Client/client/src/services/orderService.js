@@ -1,60 +1,56 @@
 import api from './api';
 
-export const orderService = {
-  // Create order from basket
-  createOrderFromBasket: async (basketId) => {
-    try {
-      const response = await api.post(`/api/Orders/from-basket/${basketId}`);
-      console.log('Order creation response:', response.data);
-      return response.data;
-    } catch (error) {
-      console.error('Error creating order from basket:', error);
-      console.error('Error details:', {
-        status: error.response?.status,
-        statusText: error.response?.statusText,
-        data: error.response?.data,
-        url: error.config?.url,
-        message: error.message
-      });
-      throw new Error('Unable to create order from basket.');
-    }
-  },
+// Order API endpoints
+const ORDER_ENDPOINTS = {
+  CREATE_FROM_BASKET: (basketId) => `/api/Orders/from-basket/${basketId}`,
+  GET_ORDER: (orderId) => `/api/Orders/${orderId}`,
+  GET_USER_ORDERS: (userId) => `/api/Orders/user/${userId}`,
+};
 
-  // Get order by ID
-  getOrderById: async (orderId) => {
-    try {
-      const response = await api.get(`/api/Orders/${orderId}`);
-      console.log('Order details response:', response.data);
-      return response.data;
-    } catch (error) {
-      console.error(`Error fetching order with ID ${orderId}:`, error);
-      console.error('Error details:', {
-        status: error.response?.status,
-        statusText: error.response?.statusText,
-        data: error.response?.data,
-        url: error.config?.url,
-        message: error.message
-      });
-      throw new Error('Unable to fetch order details.');
-    }
-  },
-
-  // Get orders by user ID
-  getOrdersByUserId: async (userId) => {
-    try {
-      const response = await api.get(`/api/Orders/user/${userId}`);
-      console.log('User orders response:', response.data);
-      return response.data;
-    } catch (error) {
-      console.error(`Error fetching orders for user ${userId}:`, error);
-      console.error('Error details:', {
-        status: error.response?.status,
-        statusText: error.response?.statusText,
-        data: error.response?.data,
-        url: error.config?.url,
-        message: error.message
-      });
-      throw new Error('Unable to fetch user orders.');
-    }
+/**
+ * Create an order from basket
+ * @param {string} basketId - Basket ID
+ * @returns {Promise} Response with order data
+ */
+export const createOrderFromBasket = async (basketId) => {
+  try {
+    const response = await api.post(ORDER_ENDPOINTS.CREATE_FROM_BASKET(basketId));
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
   }
+};
+
+/**
+ * Get order by ID
+ * @param {string} orderId - Order ID
+ * @returns {Promise} Response with order details
+ */
+export const getOrderById = async (orderId) => {
+  try {
+    const response = await api.get(ORDER_ENDPOINTS.GET_ORDER(orderId));
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+/**
+ * Get orders by user ID
+ * @param {string} userId - User ID
+ * @returns {Promise} Response with user's orders
+ */
+export const getUserOrders = async (userId) => {
+  try {
+    const response = await api.get(ORDER_ENDPOINTS.GET_USER_ORDERS(userId));
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+export default {
+  createOrderFromBasket,
+  getOrderById,
+  getUserOrders,
 }; 

@@ -23,7 +23,9 @@ namespace CourseTech.Repository.Repositories
         {
             return await _context.Orders
                 .Include(o => o.OrderItems)
-                .Where(o => o.UserId == userId)
+                    .ThenInclude(oi => oi.Course)
+                .Include(o => o.AppUser)
+                .Where(o => o.UserId == userId && o.Status == Shared.Enums.OrderStatus.Completed)
                 .ToListAsync(cancellationToken);
         }
     }

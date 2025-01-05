@@ -1,6 +1,4 @@
-﻿using CourseTech.Shared.Enums;
-
-namespace CourseTech.Core.DTOs.Order
+﻿namespace CourseTech.Core.DTOs.Order
 {
     public record OrderDTO
     (

@@ -1,50 +1,83 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
+import { BasketProvider } from './contexts/BasketContext';
+import { CategoryProvider } from './contexts/CategoryContext';
+import { CourseProvider } from './contexts/CourseContext';
+import { UserProvider } from './contexts/UserContext';
+import { PaymentProvider } from './contexts/PaymentContext';
+import { OrderProvider } from './contexts/OrderContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
+import Login from './pages/Login';
+import Settings from './pages/Settings';
+import Register from './pages/Register';
+import Courses from './pages/Courses';
+import PrivateRoute from './components/PrivateRoute';
+import './styles/App.css';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import CourseDetail from './pages/CourseDetail';
 import Basket from './pages/Basket';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import CategoryDetail from './pages/CategoryDetail';
-import InstructorDetail from './pages/InstructorDetail';
-import Categories from './pages/Categories';
-import Courses from './pages/Courses';
-import CreateCourse from './pages/CreateCourse';
-import UpdateCourse from './pages/UpdateCourse';
-import MyCourses from './pages/MyCourses';
-import './App.css';
+import Order from './pages/Order';
+import Payment from './pages/Payment';
 
-function App() {
+const App = () => {
   return (
     <AuthProvider>
-      <Router>
-        <div className="app">
-          <Navbar />
-          <div className="main-content">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/courses" element={<Courses />} />
-              <Route path="/categories" element={<Categories />} />
-              <Route path="/course/:slug" element={<CourseDetail />} />
-              <Route path="/basket" element={<Basket />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/category/:slug" element={<CategoryDetail />} />
-              <Route path="/instructor/:slug" element={<InstructorDetail />} />
-              <Route path="/courses/create" element={<CreateCourse />} />
-              <Route path="/courses/update/:id" element={<UpdateCourse />} />
-              <Route path="/courses/edit/:id" element={<UpdateCourse />} />
-              <Route path="/courses/my-courses" element={<MyCourses />} />
-            </Routes>
-          </div>
-          <Footer />
-        </div>
-      </Router>
+      <UserProvider>
+        <CategoryProvider>
+          <CourseProvider>
+            <PaymentProvider>
+              <OrderProvider>
+                <BasketProvider>
+                  <Router>
+                    <div className="app">
+                      <ToastContainer
+                        position="bottom-right"
+                        autoClose={3000}
+                        hideProgressBar={false}
+                        newestOnTop
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                        theme="light"
+                      />
+                      <Navbar />
+                      <main className="main">
+                        <Routes>
+                          <Route path="/" element={<Home />} />
+                          <Route path="/login" element={<Login />} />
+                          <Route path="/register" element={<Register />} />
+                          <Route path="/courses" element={<Courses />} />
+                          <Route
+                            path="/settings/*"
+                            element={
+                              <PrivateRoute>
+                                <Settings />
+                              </PrivateRoute>
+                            }
+                          />
+                          <Route path="/courses/:id" element={<CourseDetail />} />
+                          <Route path="/basket" element={<Basket />} />
+                          <Route path="/order" element={<Order />} />
+                          <Route path="/payment" element={<Payment />} />
+                        </Routes>
+                      </main>
+                      <Footer />
+                    </div>
+                  </Router>
+                </BasketProvider>
+              </OrderProvider>
+            </PaymentProvider>
+          </CourseProvider>
+        </CategoryProvider>
+      </UserProvider>
     </AuthProvider>
   );
-}
+};
 
 export default App;

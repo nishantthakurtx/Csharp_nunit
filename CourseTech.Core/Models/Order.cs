@@ -36,6 +36,11 @@ namespace CourseTech.Core.Models
             Status = OrderStatus.Completed;
         }
 
+        public void MarkAsPending()
+        {
+            Status = OrderStatus.Pending;
+        }
+
         public void MarkAsCanceled()
         {
             Status = OrderStatus.Canceled;

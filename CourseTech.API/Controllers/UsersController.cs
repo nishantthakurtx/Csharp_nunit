@@ -1,5 +1,8 @@
 ﻿using CourseTech.Core.DTOs.AppUser;
+using CourseTech.Core.DTOs.Authentication;
 using CourseTech.Core.Services;
+using CourseTech.Service.Services;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CourseTech.API.Controllers
@@ -43,7 +46,13 @@ namespace CourseTech.API.Controllers
             return CreateActionResult(result);
         }
 
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPasswordAsync(ResetPasswordDTO resetPasswordDTO)
+        {
+            var result = await userService.ResetPasswordAsync(resetPasswordDTO.Email, resetPasswordDTO.NewPassword);
 
+            return CreateActionResult(result);
+        }
 
         [HttpPut("{id:Guid}")]
         public async Task<IActionResult> Update(AppUserDTO updateUserDto)

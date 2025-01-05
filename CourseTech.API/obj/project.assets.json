@@ -2370,23 +2370,6 @@
           "Microsoft.AspNetCore.App"
         ]
       },
-      "Stripe.net/47.2.0": {
-        "type": "package",
-        "dependencies": {
-          "Newtonsoft.Json": "13.0.3",
-          "System.Configuration.ConfigurationManager": "8.0.0"
-        },
-        "compile": {
-          "lib/net8.0/Stripe.net.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net8.0/Stripe.net.dll": {
-            "related": ".xml"
-          }
-        }
-      },
       "Swashbuckle.AspNetCore.Swagger/7.2.0": {
         "type": "package",
         "dependencies": {
@@ -3046,8 +3029,7 @@
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
           "AutoMapper": "13.0.1",
-          "CourseTech.Repository": "1.0.0",
-          "Stripe.net": "47.2.0"
+          "CourseTech.Repository": "1.0.0"
         },
         "compile": {
           "bin/placeholder/CourseTech.Service.dll": {}
@@ -6790,34 +6772,6 @@
         "lib/net9.0/Scalar.AspNetCore.xml",
         "scalar.aspnetcore.1.2.72.nupkg.sha512",
         "scalar.aspnetcore.nuspec"
-      ]
-    },
-    "Stripe.net/47.2.0": {
-      "sha512": "e1FR3JTUbSWYDxE78APyml5V2SV3wS6z/eIQN2OAdtrRSoahOCAK4OcWiHn4582HPf2mJmS1AvyDZO+OqAHOfw==",
-      "type": "package",
-      "path": "stripe.net/47.2.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "LICENSE",
-        "README.md",
-        "icon.png",
-        "lib/net461/Stripe.net.dll",
-        "lib/net461/Stripe.net.xml",
-        "lib/net5.0/Stripe.net.dll",
-        "lib/net5.0/Stripe.net.xml",
-        "lib/net6.0/Stripe.net.dll",
-        "lib/net6.0/Stripe.net.xml",
-        "lib/net7.0/Stripe.net.dll",
-        "lib/net7.0/Stripe.net.xml",
-        "lib/net8.0/Stripe.net.dll",
-        "lib/net8.0/Stripe.net.xml",
-        "lib/netcoreapp3.1/Stripe.net.dll",
-        "lib/netcoreapp3.1/Stripe.net.xml",
-        "lib/netstandard2.0/Stripe.net.dll",
-        "lib/netstandard2.0/Stripe.net.xml",
-        "stripe.net.47.2.0.nupkg.sha512",
-        "stripe.net.nuspec"
       ]
     },
     "Swashbuckle.AspNetCore.Swagger/7.2.0": {

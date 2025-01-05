@@ -14,6 +14,7 @@ namespace CourseTech.Repository.Repositories
             return await _entities
                 .Include(b => b.BasketItems)
                 .ThenInclude(bi => bi.Course)
+                .ThenInclude(c => c.Instructor)
                 .FirstOrDefaultAsync(b => b.UserId == userId && b.Status == BasketStatus.Active);
         }
 

@@ -1,144 +1,197 @@
 import api from './api';
 
-export const courseService = {
-  // Get all courses (admin için)
-  getAllCourses: async () => {
-    try {
-      console.log('Fetching all courses...');
-      const response = await api.get('/api/Courses');
-      console.log('Courses response:', response.data);
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching all courses:', error);
-      console.error('Error details:', {
-        status: error.response?.status,
-        statusText: error.response?.statusText,
-        data: error.response?.data,
-        url: error.config?.url,
-        message: error.message
-      });
-      throw error;
-    }
-  },
+// Course API endpoints
+const COURSE_ENDPOINTS = {
+  GET_BY_ID: (id) => `/api/Courses/${id}`,
+  GET_ALL: '/api/Courses',
+  GET_PUBLISHED: '/api/Courses/published',
+  GET_BY_CATEGORY: (categoryId) => `/api/Courses/by-category/${categoryId}`,
+  GET_BY_INSTRUCTOR: (instructorId) => `/api/Courses/by-instructor/${instructorId}`,
+  GET_DETAILS: (id) => `/api/Courses/details/${id}`,
+  GET_SUMMARIES: '/api/Courses/summaries',
+  CREATE: '/api/Courses',
+  UPDATE: '/api/Courses',
+  DELETE: (id) => `/api/Courses/${id}`,
+  PUBLISH: (id) => `/api/Courses/publish/${id}`,
+  UNPUBLISH: (id) => `/api/Courses/unpublish/${id}`
+};
 
-  // Get published courses (ana sayfa ve browse için)
-  getPublishedCourses: async () => {
-    try {
-      const response = await api.get('/api/Courses/published');
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching published courses:', error);
-      throw error;
-    }
-  },
-
-  // Get course summaries for cards (ana sayfa için)
-  getAllCourseSummaries: async () => {
-    try {
-      const response = await api.get('/api/Courses/summaries');
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching course summaries:', error);
-      throw error;
-    }
-  },
-
-  // Get single course by ID
-  getCourseById: async (id) => {
-    try {
-      const response = await api.get(`/api/Courses/${id}`);
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching course:', error);
-      throw error;
-    }
-  },
-
-  // Get course with details
-  getCourseWithDetails: async (id) => {
-    try {
-      const response = await api.get(`/api/Courses/details/${id}`);
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching course details:', error);
-      throw error;
-    }
-  },
-
-  // Get courses by category
-  getCoursesByCategory: async (categoryId) => {
-    try {
-      const response = await api.get(`/api/Courses/by-category/${categoryId}`);
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching courses by category:', error);
-      throw error;
-    }
-  },
-
-  // Get courses by instructor
-  getCoursesByInstructor: async (instructorId) => {
-    try {
-      const response = await api.get(`/api/Courses/by-instructor/${instructorId}`);
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching courses by instructor:', error);
-      throw error;
-    }
-  },
-
-  // Create new course
-  createCourse: async (courseData) => {
-    try {
-      const response = await api.post('/api/Courses', courseData);
-      return response.data;
-    } catch (error) {
-      console.error('Error creating course:', error);
-      throw error;
-    }
-  },
-
-  // Update course
-  updateCourse: async (courseData) => {
-    try {
-      const response = await api.put('/api/Courses', courseData);
-      return response.data;
-    } catch (error) {
-      console.error('Error updating course:', error);
-      throw error;
-    }
-  },
-
-  // Soft delete course
-  deleteCourse: async (id) => {
-    try {
-      const response = await api.delete(`/api/Courses/${id}`);
-      return response.data;
-    } catch (error) {
-      console.error('Error deleting course:', error);
-      throw error;
-    }
-  },
-
-  // Publish course
-  publishCourse: async (id) => {
-    try {
-      const response = await api.patch(`/api/Courses/publish/${id}`);
-      return response.data;
-    } catch (error) {
-      console.error('Error publishing course:', error);
-      throw error;
-    }
-  },
-
-  // Unpublish course
-  unpublishCourse: async (id) => {
-    try {
-      const response = await api.patch(`/api/Courses/unpublish/${id}`);
-      return response.data;
-    } catch (error) {
-      console.error('Error unpublishing course:', error);
-      throw error;
-    }
+/**
+ * Get a course by ID
+ * @param {string} id - Course ID
+ * @returns {Promise} Response with course data
+ */
+export const getCourse = async (id) => {
+  try {
+    const response = await api.get(COURSE_ENDPOINTS.GET_BY_ID(id));
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
   }
+};
+
+/**
+ * Get all courses
+ * @returns {Promise} Response with all courses
+ */
+export const getAllCourses = async () => {
+  try {
+    const response = await api.get(COURSE_ENDPOINTS.GET_ALL);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+/**
+ * Get published courses
+ * @returns {Promise} Response with published courses
+ */
+export const getPublishedCourses = async () => {
+  try {
+    const response = await api.get(COURSE_ENDPOINTS.GET_PUBLISHED);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+/**
+ * Get courses by category
+ * @param {string} categoryId - Category ID
+ * @returns {Promise} Response with courses in category
+ */
+export const getCoursesByCategory = async (categoryId) => {
+  try {
+    const response = await api.get(COURSE_ENDPOINTS.GET_BY_CATEGORY(categoryId));
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+/**
+ * Get courses by instructor
+ * @param {string} instructorId - Instructor ID
+ * @returns {Promise} Response with instructor's courses
+ */
+export const getCoursesByInstructor = async (instructorId) => {
+  try {
+    const response = await api.get(COURSE_ENDPOINTS.GET_BY_INSTRUCTOR(instructorId));
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+/**
+ * Get course details
+ * @param {string} id - Course ID
+ * @returns {Promise} Response with detailed course information
+ */
+export const getCourseDetails = async (id) => {
+  try {
+    const response = await api.get(COURSE_ENDPOINTS.GET_DETAILS(id));
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+/**
+ * Get course summaries for cards
+ * @returns {Promise} Response with course summaries
+ */
+export const getCourseSummaries = async () => {
+  try {
+    const response = await api.get(COURSE_ENDPOINTS.GET_SUMMARIES);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+/**
+ * Create a new course
+ * @param {Object} courseDto - Course data
+ * @returns {Promise} Response with created course
+ */
+export const createCourse = async (courseDto) => {
+  try {
+    const response = await api.post(COURSE_ENDPOINTS.CREATE, courseDto);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+/**
+ * Update an existing course
+ * @param {Object} courseDto - Course data with ID
+ * @returns {Promise} Response with updated course
+ */
+export const updateCourse = async (courseDto) => {
+  try {
+    const response = await api.put(COURSE_ENDPOINTS.UPDATE, courseDto);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+/**
+ * Delete a course
+ * @param {string} id - Course ID
+ * @returns {Promise} Response indicating success
+ */
+export const deleteCourse = async (id) => {
+  try {
+    const response = await api.delete(COURSE_ENDPOINTS.DELETE(id));
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+/**
+ * Publish a course
+ * @param {string} id - Course ID
+ * @returns {Promise} Response with published course
+ */
+export const publishCourse = async (id) => {
+  try {
+    const response = await api.patch(COURSE_ENDPOINTS.PUBLISH(id));
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+/**
+ * Unpublish a course
+ * @param {string} id - Course ID
+ * @returns {Promise} Response with unpublished course
+ */
+export const unpublishCourse = async (id) => {
+  try {
+    const response = await api.patch(COURSE_ENDPOINTS.UNPUBLISH(id));
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+export default {
+  getCourse,
+  getAllCourses,
+  getPublishedCourses,
+  getCoursesByCategory,
+  getCoursesByInstructor,
+  getCourseDetails,
+  getCourseSummaries,
+  createCourse,
+  updateCourse,
+  deleteCourse,
+  publishCourse,
+  unpublishCourse
 }; 

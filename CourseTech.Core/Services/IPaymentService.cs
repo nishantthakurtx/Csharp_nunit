@@ -1,12 +1,12 @@
 ﻿using CourseTech.Core.DTOs.Payment;
+using CourseTech.Shared;
 
 namespace CourseTech.Core.Services
 {
     public interface IPaymentService
     {
-        /*
-        Task<PaymentResponseDTO> ProcessPaymentAsync(PaymentRequestDTO paymentRequest);
-        Task<PaymentResponseDTO> ValidatePaymentAsync(string transactionId);
-        */
+        Task<ServiceResult<PaymentDTO>> ProcessPaymentAsync(PaymentRequestDTO paymentRequest);
+        Task<ServiceResult<List<PaymentDTO>>> GetPaymentsByUserAsync(Guid userId);
+        Task<ServiceResult<PaymentDTO>> GetPaymentByIdAsync(Guid paymentId);
     }
 }

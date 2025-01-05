@@ -1,130 +1,62 @@
-import { jwtDecode } from 'jwt-decode';
 import api from './api';
 
-const TOKEN_KEY = 'token';
-const REFRESH_TOKEN_KEY = 'refreshToken';
+// Auth API endpoints
+const AUTH_ENDPOINTS = {
+  LOGIN: '/api/Authentications/login',
+  REFRESH_TOKEN: '/api/Authentications/create-token-by-refresh-token',
+  REVOKE_TOKEN: '/api/Authentications/revoke-refresh-token'
+};
 
-const getToken = () => localStorage.getItem(TOKEN_KEY);
-const setToken = (token) => localStorage.setItem(TOKEN_KEY, token);
-const removeToken = () => localStorage.removeItem(TOKEN_KEY);
-
-const getRefreshToken = () => localStorage.getItem(REFRESH_TOKEN_KEY);
-const setRefreshToken = (token) => localStorage.setItem(REFRESH_TOKEN_KEY, token);
-const removeRefreshToken = () => localStorage.removeItem(REFRESH_TOKEN_KEY);
-
-const authService = {
-  getToken,
-  setToken,
-  removeToken,
-
-  async login(credentials) {
-    try {
-      const response = await api.post('/api/Authentications/login', credentials);
-      const { accessToken, refreshToken } = response.data.data;
-      
-      if (!accessToken || !refreshToken) {
-        throw new Error('Token not received');
-      }
-
-      setToken(accessToken);
-      setRefreshToken(refreshToken);
-      return response.data;
-    } catch (error) {
-      if (error.response?.status === 400) {
-        throw new Error('Invalid email or password');
-      }
-      if (error.response?.status === 404) {
-        throw new Error('User not found');
-      }
-      throw new Error('Login failed. Please try again.');
-    }
-  },
-
-  async refreshToken() {
-    try {
-      const refreshToken = getRefreshToken();
-      if (!refreshToken) {
-        throw new Error('No refresh token found');
-      }
-
-      const response = await api.post('/api/Authentications/create-token-by-refresh-token', {
-        token: refreshToken
-      });
-
-      const { accessToken, newRefreshToken } = response.data.data;
-      
-      if (!accessToken || !newRefreshToken) {
-        throw new Error('Token not received');
-      }
-
-      setToken(accessToken);
-      setRefreshToken(newRefreshToken);
-      return response.data;
-    } catch (error) {
-      this.logout();
-      throw new Error('Session expired. Please login again.');
-    }
-  },
-
-  async logout() {
-    try {
-      const refreshToken = getRefreshToken();
-      if (refreshToken) {
-        await api.post('/api/Authentications/revoke-refresh-token', {
-          token: refreshToken
-        });
-      }
-    } catch (error) {
-      console.error('Error revoking refresh token:', error);
-    } finally {
-      removeToken();
-      removeRefreshToken();
-    }
-  },
-
-  isAuthenticated() {
-    const token = getToken();
-    if (!token) return false;
-
-    try {
-      const decoded = jwtDecode(token);
-      const currentTime = Date.now() / 1000;
-      
-      // Token süresi dolmak üzereyse yenile
-      if (decoded.exp - currentTime < 300) { // 5 dakika kaldıysa
-        this.refreshToken().catch(() => {
-          // Yenileme başarısız olursa sessiz kal
-        });
-      }
-      
-      return decoded.exp > currentTime;
-    } catch {
-      return false;
-    }
-  },
-
-  isInstructor: () => {
-    const token = getToken();
-    if (!token) return false;
-    
-    try {
-      const decoded = jwtDecode(token);
-      return decoded.Roles?.includes('Instructor');
-    } catch {
-      return false;
-    }
-  },
-
-  getCurrentUser() {
-    const token = getToken();
-    if (!token) return null;
-
-    try {
-      return jwtDecode(token);
-    } catch {
-      return null;
-    }
+/**
+ * Login with email and password
+ * @param {Object} loginDto - Login credentials
+ * @param {string} loginDto.email - User's email
+ * @param {string} loginDto.password - User's password
+ * @returns {Promise} Response with tokens and user data
+ */
+export const login = async (loginDto) => {
+  try {
+    const response = await api.post(AUTH_ENDPOINTS.LOGIN, loginDto);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
   }
 };
 
-export { authService }; 
+/**
+ * Get new access token using refresh token
+ * @param {string} refreshToken - Refresh token
+ * @returns {Promise} Response with new tokens
+ */
+export const refreshToken = async (refreshToken) => {
+  try {
+    const response = await api.post(AUTH_ENDPOINTS.REFRESH_TOKEN, {
+      token: refreshToken
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+/**
+ * Revoke refresh token
+ * @param {string} refreshToken - Refresh token to revoke
+ * @returns {Promise} Response indicating success
+ */
+export const revokeToken = async (refreshToken) => {
+  try {
+    const response = await api.post(AUTH_ENDPOINTS.REVOKE_TOKEN, {
+      token: refreshToken
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+export default {
+  login,
+  refreshToken,
+  revokeToken
+};

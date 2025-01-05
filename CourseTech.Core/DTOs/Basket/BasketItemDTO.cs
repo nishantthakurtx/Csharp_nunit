@@ -4,6 +4,8 @@
         Guid BasketId,
         Guid CourseId,
         string CourseTitle,
+        string InstructorName,
+        string ImageUrl,
         decimal Price
     );
 }

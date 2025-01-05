@@ -1,34 +1,61 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaSearch, FaShoppingCart, FaUser, FaBook, FaCog, FaSignOutAlt, FaPlus, FaChalkboardTeacher, FaList } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext';
-import { basketService } from '../services/basketService';
-import { categoryService } from '../services/categoryService';
-import './Navbar.css';
+import { FiMenu, FiX, FiShoppingCart, FiLogOut, FiSettings, FiClock, FiCreditCard, FiTrash2 } from 'react-icons/fi';
+import { deleteUser } from '../services/userService';
+import { toast } from 'react-toastify';
+import styles from '../styles/Navbar.module.css';
+
+const ProfileDropdown = ({ user, handleLogout }) => {
+  return (
+    <div className={styles.profileDropdown}>
+      <div className={styles.profileInfo}>
+        <span className={styles.userName}>{user.fullName}</span>
+        <span className={styles.userEmail}>{user.email}</span>
+      </div>
+      <div className={styles.dropdownDivider} />
+      <Link to="/settings/profile" className={styles.dropdownItem}>
+        <FiSettings className={styles.dropdownIcon} />
+        Settings
+      </Link>
+      <Link to="/settings/orders" className={styles.dropdownItem}>
+        <FiClock className={styles.dropdownIcon} />
+        Order History
+      </Link>
+      <Link to="/settings/payments" className={styles.dropdownItem}>
+        <FiCreditCard className={styles.dropdownIcon} />
+        Payment History
+      </Link>
+      <div className={styles.dropdownDivider} />
+      <button onClick={handleLogout} className={styles.dropdownItem}>
+        <FiLogOut className={styles.dropdownIcon} />
+        Logout
+      </button>
+    </div>
+  );
+};
 
 const Navbar = () => {
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const { user, isAuthenticated, logout } = useAuth();
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [showExplore, setShowExplore] = useState(false);
-  const [categories, setCategories] = useState([]);
-  const [basketItemCount, setBasketItemCount] = useState(0);
-  const [searchTerm, setSearchTerm] = useState('');
-  const dropdownRef = useRef(null);
-  const exploreRef = useRef(null);
-  const [showCourseManagement, setShowCourseManagement] = useState(false);
-  const courseManagementRef = useRef(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const profileRef = useRef(null);
+
+  const getInitials = (name) => {
+    if (!name) return '?';
+    return name
+      .split(' ')
+      .map(word => word[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setShowDropdown(false);
-      }
-      if (exploreRef.current && !exploreRef.current.contains(event.target)) {
-        setShowExplore(false);
-      }
-      if (courseManagementRef.current && !courseManagementRef.current.contains(event.target)) {
-        setShowCourseManagement(false);
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setIsProfileOpen(false);
       }
     };
 
@@ -36,181 +63,76 @@ const Navbar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await categoryService.getAll();
-        setCategories(response.data);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      }
-    };
-
-    fetchCategories();
-  }, []);
-
-  useEffect(() => {
-    const fetchBasketCount = async () => {
-      try {
-        const basket = await basketService.getActiveBasket();
-        setBasketItemCount(basket?.items?.length || 0);
-      } catch (error) {
-        console.error('Error fetching basket:', error);
-      }
-    };
-
-    if (isAuthenticated) {
-      fetchBasketCount();
-    }
-  }, [isAuthenticated]);
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchTerm.trim()) {
-      navigate(`/courses?search=${encodeURIComponent(searchTerm.trim())}`);
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/');
+    } catch (error) {
+      console.error('Error logging out:', error);
     }
   };
 
-  const getInitials = () => {
-    if (!user?.given_name) return 'U';
-    const names = user.given_name.split(' ');
-    if (names.length >= 2) {
-      return `${names[0][0]}${names[1][0]}`.toUpperCase();
-    }
-    return names[0][0].toUpperCase();
+  const handleNavigation = (path) => {
+    navigate(path);
+    setIsProfileOpen(false);
+    setIsMenuOpen(false);
   };
 
-  const isInstructor = user?.roles === "Instructor";
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const toggleProfile = () => {
+    setIsProfileOpen(!isProfileOpen);
+  };
 
   return (
-    <nav className="navbar">
-      <div className="navbar-left">
-        <Link to="/" className="logo">
+    <nav className={styles.navbar}>
+      <div className={styles.navContainer}>
+        <Link to="/" className={styles.logo}>
           CourseTech
         </Link>
-        <div className="explore-menu" ref={exploreRef}>
-          <button 
-            className="explore-btn"
-            onClick={() => setShowExplore(!showExplore)}
-          >
-            Explore
-          </button>
-          {showExplore && (
-            <div className="explore-dropdown">
-              {categories.map(category => (
-                <Link
-                  key={category.id}
-                  to={`/category/${category.id}`}
-                  className="explore-item"
-                  onClick={() => setShowExplore(false)}
-                >
-                  {category.name}
-                </Link>
-              ))}
+
+        <button className={styles.menuButton} onClick={toggleMenu}>
+          {isMenuOpen ? <FiX /> : <FiMenu />}
+        </button>
+
+        <div className={`${styles.navLinks} ${isMenuOpen ? styles.active : ''}`}>
+          <Link to="/" className={styles.navLink} onClick={() => setIsMenuOpen(false)}>
+            Home
+          </Link>
+          <Link to="/courses" className={styles.navLink} onClick={() => setIsMenuOpen(false)}>
+            Courses
+          </Link>
+          
+          {user ? (
+            <>
+              <Link to="/basket" className={styles.navLink} onClick={() => setIsMenuOpen(false)}>
+                <FiShoppingCart />
+                <span className={styles.navText}></span>
+              </Link>
+              <div className={styles.profileWrapper} ref={profileRef}>
+                <button onClick={toggleProfile} className={styles.profileButton}>
+                  <div className={styles.initialsCircle}>
+                    {getInitials(user.fullName)}
+                  </div>
+                </button>
+                {isProfileOpen && (
+                  <ProfileDropdown user={user} handleLogout={handleLogout} />
+                )}
+              </div>
+            </>
+          ) : (
+            <div className={styles.authButtons}>
+              <Link to="/login" className={styles.loginButton} onClick={() => setIsMenuOpen(false)}>
+                Sign In
+              </Link>
+              <Link to="/register" className={styles.registerButton} onClick={() => setIsMenuOpen(false)}>
+                Sign Up
+              </Link>
             </div>
           )}
         </div>
-      </div>
-
-      <div className="navbar-center">
-        <form onSubmit={handleSearch} className="search-form">
-          <input
-            type="text"
-            placeholder="Search for courses..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <button type="submit">
-            <FaSearch />
-          </button>
-        </form>
-      </div>
-
-      <div className="navbar-right">
-        {isAuthenticated ? (
-          <>
-            {isInstructor && (
-              <div className="course-management" ref={courseManagementRef}>
-                <button 
-                  className="course-management-btn"
-                  onClick={() => setShowCourseManagement(!showCourseManagement)}
-                >
-                  <FaChalkboardTeacher /> Course Management
-                </button>
-                {showCourseManagement && (
-                  <div className="course-management-dropdown">
-                    <Link to="/courses/create" className="course-management-item" onClick={() => setShowCourseManagement(false)}>
-                      <FaPlus /> Add New Course
-                    </Link>
-                    <Link to="/courses/my-courses" className="course-management-item" onClick={() => setShowCourseManagement(false)}>
-                      <FaList /> My Course List
-                    </Link>
-                  </div>
-                )}
-              </div>
-            )}
-            <Link to="/my-courses" className="nav-link">
-              <FaBook /> My Courses
-            </Link>
-            <Link to="/basket" className="basket-icon">
-              <FaShoppingCart />
-              {basketItemCount > 0 && (
-                <span className="basket-count">{basketItemCount}</span>
-              )}
-            </Link>
-            <div className="user-profile" ref={dropdownRef}>
-              <button
-                className="profile-button"
-                onClick={() => setShowDropdown(!showDropdown)}
-              >
-                <div className="profile-initials">{getInitials()}</div>
-              </button>
-              {showDropdown && (
-                <div className="profile-dropdown">
-                  <div className="profile-header">
-                    <div className="profile-name">{user.given_name}</div>
-                    <div className="profile-email">{user.email}</div>
-                  </div>
-                  <div className="profile-menu">
-                    <Link to="/profile" className="profile-menu-item" onClick={() => setShowDropdown(false)}>
-                      <FaUser />
-                      Profile
-                    </Link>
-                    <Link to="/my-courses" className="profile-menu-item" onClick={() => setShowDropdown(false)}>
-                      <FaBook />
-                      My Courses
-                    </Link>
-                    <Link to="/settings" className="profile-menu-item" onClick={() => setShowDropdown(false)}>
-                      <FaCog />
-                      Settings
-                    </Link>
-                    <div className="profile-divider"></div>
-                    <button
-                      className="logout-button"
-                      onClick={() => {
-                        logout();
-                        setShowDropdown(false);
-                        navigate('/');
-                      }}
-                    >
-                      <FaSignOutAlt />
-                      Logout
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </>
-        ) : (
-          <div className="auth-buttons">
-            <Link to="/login" className="login-btn">
-              Log in
-            </Link>
-            <Link to="/register" className="signup-btn">
-              Sign up
-            </Link>
-          </div>
-        )}
       </div>
     </nav>
   );

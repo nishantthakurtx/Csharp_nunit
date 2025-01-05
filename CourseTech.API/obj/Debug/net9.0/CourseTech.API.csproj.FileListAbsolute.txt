@@ -278,4 +278,3 @@ D:\websites\backend\CourseTechPlatform\CourseTech.API\obj\Debug\net9.0\CourseTec
 D:\websites\backend\CourseTechPlatform\CourseTech.API\obj\Debug\net9.0\ref\CourseTech.API.dll
 D:\websites\backend\CourseTechPlatform\CourseTech.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
 D:\websites\backend\CourseTechPlatform\CourseTech.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
-D:\websites\backend\CourseTechPlatform\CourseTech.API\bin\Debug\net9.0\Stripe.net.dll

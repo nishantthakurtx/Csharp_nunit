@@ -83,6 +83,20 @@ namespace CourseTech.Service.Services
             return ServiceResult.Success();
         }
 
+        public async Task<ServiceResult> ResetPasswordAsync(string email, string newPassord)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+            if (user == null)
+                return ServiceResult.Fail($"User ({email}) not found.");
+            var token = await userManager.GeneratePasswordResetTokenAsync(user);
+
+            var result = await userManager.ResetPasswordAsync(user, token, newPassord);
+            if (!result.Succeeded)
+                return ServiceResult.Fail(result.Errors.Select(e => e.Description).ToList());
+
+            return ServiceResult.Success();
+        }
+
         public async Task<ServiceResult> UpdateAsync(AppUserDTO updateUserDto)
         {
             var user = await userManager.FindByIdAsync(updateUserDto.Id.ToString());
@@ -90,6 +104,7 @@ namespace CourseTech.Service.Services
                 return ServiceResult.Fail($"User ({updateUserDto.Id}) not found.");
 
             mapper.Map(updateUserDto, user);
+            user.Update();
             var result = await userManager.UpdateAsync(user);
 
             if (!result.Succeeded)

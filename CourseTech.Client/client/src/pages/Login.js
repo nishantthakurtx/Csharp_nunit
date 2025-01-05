@@ -1,147 +1,170 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FiMail, FiLock } from 'react-icons/fi';
 import { useAuth } from '../contexts/AuthContext';
-import './Login.css';
-
-const schema = yup.object().shape({
-  email: yup
-    .string()
-    .email('Please enter a valid email address')
-    .required('Email is required')
-    .matches(
-      /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-      'Please enter a valid email address'
-    ),
-  password: yup
-    .string()
-    .min(6, 'Password must be at least 6 characters')
-    .matches(
-      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{6,}$/,
-      'Password must contain at least one letter and one number'
-    )
-    .required('Password is required'),
-});
+import styles from '../styles/Login.module.css';
 
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [showPassword, setShowPassword] = useState(false);
-  const [submitError, setSubmitError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, dirtyFields, isValid },
-    watch,
-  } = useForm({
-    resolver: yupResolver(schema),
-    mode: 'onChange',
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
   });
+  const [validations, setValidations] = useState({
+    email: '',
+    password: ''
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const watchedFields = watch();
-
-  const getInputStatus = (fieldName) => {
-    if (!dirtyFields[fieldName]) return '';
-    return errors[fieldName] ? 'error' : 'success';
+  const validateEmail = (email) => {
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    if (!email) {
+      return 'Email is required';
+    } else if (!emailRegex.test(email)) {
+      return 'Invalid email format';
+    }
+    return '';
   };
 
-  const onSubmit = async (data) => {
-    if (!isValid) return;
-    
+  const validatePassword = (password) => {
+    if (!password) {
+      return 'Password is required';
+    } else if (password.length < 6) {
+      return 'Password must be at least 6 characters';
+    }
+    return '';
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+
+    // Validate on change
+    if (name === 'email') {
+      setValidations(prev => ({
+        ...prev,
+        email: validateEmail(value)
+      }));
+    } else if (name === 'password') {
+      setValidations(prev => ({
+        ...prev,
+        password: validatePassword(value)
+      }));
+    }
+
+    setError('');
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Validate all fields before submission
+    const emailError = validateEmail(formData.email);
+    const passwordError = validatePassword(formData.password);
+
+    setValidations({
+      email: emailError,
+      password: passwordError
+    });
+
+    if (emailError || passwordError) {
+      return;
+    }
+
     setIsLoading(true);
-    setSubmitError('');
+    setError('');
 
     try {
-      await login(data);
-      navigate('/');
-    } catch (error) {
-      if (error.message === 'User not found') {
-        setSubmitError('No account found with this email. Please check your email or register.');
-      } else if (error.message === 'Invalid email or password') {
-        setSubmitError('Invalid email or password combination. Please try again.');
-      } else {
-        setSubmitError(error.message || 'An unexpected error occurred. Please try again later.');
+      const success = await login(formData.email, formData.password);
+      if (success) {
+        navigate('/');
       }
+    } catch (err) {
+      setError(err.message || 'Failed to login. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
 
+  const getInputClassName = (fieldName) => {
+    const baseClass = styles.input;
+    if (!formData[fieldName]) return baseClass; // Empty field
+    return `${baseClass} ${validations[fieldName] ? styles.inputError : styles.inputSuccess}`;
+  };
+
   return (
-    <div className="login-container">
-      <div className="login-box">
-        <div className="login-left">
-          <div className="welcome-text">
-            <h2>Welcome Back!</h2>
-            <p>Please enter your details to sign in</p>
-          </div>
-          <form className="login-form" onSubmit={handleSubmit(onSubmit)} noValidate>
-            {submitError && (
-              <div className="submit-error">
-                {submitError}
-              </div>
+    <div className={styles.loginContainer}>
+      <div className={styles.loginCard}>
+        <div className={styles.loginHeader}>
+          <h1>Welcome Back</h1>
+          <p>Please sign in to continue</p>
+        </div>
+
+        {error && <div className={styles.errorMessage}>{error}</div>}
+
+        <form onSubmit={handleSubmit} className={styles.loginForm}>
+          <div className={styles.formGroup}>
+            <label>
+              <FiMail className={styles.inputIcon} />
+              Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              placeholder="Enter your email"
+              className={getInputClassName('email')}
+              disabled={isLoading}
+            />
+            {validations.email && (
+              <span className={styles.errorText}>{validations.email}</span>
             )}
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input
-                type="email"
-                id="email"
-                {...register('email')}
-                className={getInputStatus('email')}
-                placeholder="Enter your email"
-                autoComplete="email"
-              />
-              {errors.email && (
-                <div className="error-message">{errors.email.message}</div>
-              )}
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <div className="password-input">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  {...register('password')}
-                  className={getInputStatus('password')}
-                  placeholder="Enter your password"
-                  autoComplete="current-password"
-                />
-                <button
-                  type="button"
-                  className="show-password"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
-                </button>
-              </div>
-              {errors.password && (
-                <div className="error-message">{errors.password.message}</div>
-              )}
-            </div>
-            <button
-              type="submit"
-              className="login-btn"
-              disabled={isLoading || !isValid}
-            >
-              {isLoading ? 'Signing in...' : 'Sign in'}
-            </button>
-          </form>
-        </div>
-        <div className="login-right">
-          <h3>New to CourseTech?</h3>
-          <p>Join our community of learners and start your educational journey today!</p>
-          <Link to="/register" className="register-btn">
-            Create Account
-          </Link>
-        </div>
+          </div>
+
+          <div className={styles.formGroup}>
+            <label>
+              <FiLock className={styles.inputIcon} />
+              Password
+            </label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              placeholder="Enter your password"
+              className={getInputClassName('password')}
+              disabled={isLoading}
+            />
+            {validations.password && (
+              <span className={styles.errorText}>{validations.password}</span>
+            )}
+          </div>
+
+          <div className={styles.forgotPassword}>
+            <Link to="/forgot-password">Forgot Password?</Link>
+          </div>
+
+          <button 
+            type="submit" 
+            className={styles.loginButton}
+            disabled={isLoading || validations.email || validations.password}
+          >
+            {isLoading ? 'Signing in...' : 'Sign In'}
+          </button>
+
+          <div className={styles.registerLink}>
+            Don't have an account? <Link to="/register">Sign Up</Link>
+          </div>
+        </form>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default Login; 

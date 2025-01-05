@@ -16,8 +16,6 @@ namespace CourseTech.Core.Models
         public ICollection<Basket> Baskets { get; set; } = new List<Basket>();
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
-        public string? StripeCustomerId { get; private set; } 
-
         public void MarkAsDeleted()
         {
             IsDeleted = true;
@@ -27,12 +25,6 @@ namespace CourseTech.Core.Models
         public void Update()
         {
             UpdatedAt = DateTime.UtcNow;
-        }
-
-        public void SetStripeCustomerId(string stripeCustomerId)
-        {
-            StripeCustomerId = stripeCustomerId;
-            Update();
         }
     }
 }

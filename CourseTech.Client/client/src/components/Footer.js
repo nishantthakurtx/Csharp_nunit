@@ -1,78 +1,66 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { categoryService } from '../services/categoryService';
-import slugify from 'react-slugify';
-import './Footer.css';
+import { FiGlobe } from 'react-icons/fi';
+import '../styles/Footer.css';
 
 const Footer = () => {
-  const [categories, setCategories] = useState([]);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await categoryService.getAll();
-        if (response?.data) {
-          // Take only first 5 categories
-          setCategories(response.data.slice(0, 5));
-        }
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      }
-    };
-
-    fetchCategories();
-  }, []);
+  const currentYear = new Date().getFullYear();
 
   return (
     <footer className="footer">
-      <div className="footer-content">
-        <div className="footer-section">
-          <h3>CourseTech</h3>
-          <p>Next generation online learning platform</p>
-          <div className="social-links">
-            <a href="#" aria-label="Facebook"><i className="fab fa-facebook-f"></i></a>
-            <a href="#" aria-label="Twitter"><i className="fab fa-twitter"></i></a>
-            <a href="#" aria-label="Instagram"><i className="fab fa-instagram"></i></a>
-            <a href="#" aria-label="LinkedIn"><i className="fab fa-linkedin-in"></i></a>
+      <div className="footerTop">
+        <div className="footerContent">
+          <div className="footerColumns">
+            <div className="footerColumn">
+              <h4>CourseTech Business</h4>
+              <ul>
+                <li><Link to="/business">Teach on CourseTech</Link></li>
+                <li><Link to="/business/teams">Get the app</Link></li>
+                <li><Link to="/business/enterprise">About us</Link></li>
+                <li><Link to="/business/contact">Contact us</Link></li>
+              </ul>
+            </div>
+
+            <div className="footerColumn">
+              <h4>Careers</h4>
+              <ul>
+                <li><Link to="/careers">Careers</Link></li>
+                <li><Link to="/blog">Blog</Link></li>
+                <li><Link to="/help">Help and Support</Link></li>
+                <li><Link to="/affiliate">Affiliate</Link></li>
+                <li><Link to="/investors">Investors</Link></li>
+              </ul>
+            </div>
+
+            <div className="footerColumn">
+              <h4>Terms</h4>
+              <ul>
+                <li><Link to="/terms">Terms</Link></li>
+                <li><Link to="/privacy">Privacy policy</Link></li>
+                <li><Link to="/cookie-policy">Cookie settings</Link></li>
+                <li><Link to="/sitemap">Sitemap</Link></li>
+                <li><Link to="/accessibility">Accessibility statement</Link></li>
+              </ul>
+            </div>
           </div>
         </div>
-
-        <div className="footer-section">
-          <h4>Categories</h4>
-          <ul>
-            {categories.map(category => (
-              <li key={category.id}>
-                <Link to={`/category/${slugify(category.name)}`}>
-                  {category.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="footer-section">
-          <h4>Quick Links</h4>
-          <ul>
-            <li>About Us</li>
-            <li>Contact</li>
-            <li>FAQ</li>
-            <li>Privacy Policy</li>
-            <li>Terms of Use</li>
-          </ul>
-        </div>
-
-        <div className="footer-section">
-          <h4>Contact</h4>
-          <ul className="contact-info">
-            <li><i className="fas fa-map-marker-alt"></i> Istanbul, Turkey</li>
-            <li><i className="fas fa-phone"></i> +90 (212) 123 45 67</li>
-            <li><i className="fas fa-envelope"></i> info@coursetech.com</li>
-          </ul>
-        </div>
       </div>
-      
-      <div className="footer-bottom">
-        <p>&copy; {new Date().getFullYear()} CourseTech. All rights reserved.</p>
+
+      <div className="footerBottom">
+        <div className="footerBottomContent">
+          <div className="footerLogo">
+            <Link to="/">CourseTech</Link>
+          </div>
+          <div className="footerCopyright">
+            <p>&copy; {currentYear} CourseTech, Inc.</p>
+          </div>
+          <div className="footerLanguage">
+            <button className="languageButton">
+              <FiGlobe />
+              <span>English</span>
+            </button>
+          </div>
+        </div>
       </div>
     </footer>
   );

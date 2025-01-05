@@ -7,6 +7,6 @@ namespace CourseTech.Core.Services
     {
         Task<ServiceResult<OrderDTO>> CreateOrderFromBasketAsync(Guid basketId);
         Task<ServiceResult<OrderDTO>> GetOrderByIdAsync(Guid orderId);
-        Task<ServiceResult<List<OrderSummaryDTO>>> GetOrdersByUserIdAsync(Guid userId);
+        Task<ServiceResult<List<OrderDTO>>> GetOrdersByUserIdAsync(Guid userId);
     }
 }
