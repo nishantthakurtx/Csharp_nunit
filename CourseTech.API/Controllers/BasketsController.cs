@@ -1,8 +1,10 @@
 ﻿using CourseTech.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CourseTech.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class BasketsController(IBasketService service) : CustomBaseController

@@ -31,8 +31,7 @@ body {
 
 .main {
   flex: 1;
-  padding-bottom: 80px; /* Footer height + extra space */
-  position: relative;
+  padding-bottom: 2rem;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -109,15 +108,11 @@ input:focus, textarea:focus, select:focus {
 }
 
 footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  width: 100%;
   background-color: #fff;
   border-top: 1px solid #e9ecef;
   padding: 1rem 0;
-  z-index: 1000;
-  height: 60px; /* Fixed footer height */
+  margin-top: auto;
 }
 
 /* Scrollbar'ı her zaman göster */

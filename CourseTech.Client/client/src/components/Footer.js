@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FiGlobe } from 'react-icons/fi';
+import { FiMail, FiPhone, FiMapPin } from 'react-icons/fi';
 import '../styles/Footer.css';
 
 const Footer = () => {
@@ -12,34 +12,27 @@ const Footer = () => {
         <div className="footerContent">
           <div className="footerColumns">
             <div className="footerColumn">
-              <h4>CourseTech Business</h4>
-              <ul>
-                <li><Link to="/business">Teach on CourseTech</Link></li>
-                <li><Link to="/business/teams">Get the app</Link></li>
-                <li><Link to="/business/enterprise">About us</Link></li>
-                <li><Link to="/business/contact">Contact us</Link></li>
-              </ul>
+              <h4>CourseTech</h4>
+              <p>Empowering the world through education. Learn anytime, anywhere!</p>
             </div>
 
             <div className="footerColumn">
-              <h4>Careers</h4>
+              <h4>Quick Links</h4>
               <ul>
-                <li><Link to="/careers">Careers</Link></li>
+                <li><Link to="/about">About Us</Link></li>
+                <li><Link to="/contact">Contact</Link></li>
                 <li><Link to="/blog">Blog</Link></li>
-                <li><Link to="/help">Help and Support</Link></li>
-                <li><Link to="/affiliate">Affiliate</Link></li>
-                <li><Link to="/investors">Investors</Link></li>
+                <li><Link to="/faq">FAQs</Link></li>
+                <li><Link to="/careers">Careers</Link></li>
               </ul>
             </div>
 
             <div className="footerColumn">
-              <h4>Terms</h4>
-              <ul>
-                <li><Link to="/terms">Terms</Link></li>
-                <li><Link to="/privacy">Privacy policy</Link></li>
-                <li><Link to="/cookie-policy">Cookie settings</Link></li>
-                <li><Link to="/sitemap">Sitemap</Link></li>
-                <li><Link to="/accessibility">Accessibility statement</Link></li>
+              <h4>Contact Us</h4>
+              <ul className="contactInfo">
+                <li><FiPhone /> +1 234 567 890</li>
+                <li><FiMail /> support@coursetech.com</li>
+                <li><FiMapPin /> 123 Education St., San Francisco, CA</li>
               </ul>
             </div>
           </div>
@@ -52,13 +45,7 @@ const Footer = () => {
             <Link to="/">CourseTech</Link>
           </div>
           <div className="footerCopyright">
-            <p>&copy; {currentYear} CourseTech, Inc.</p>
-          </div>
-          <div className="footerLanguage">
-            <button className="languageButton">
-              <FiGlobe />
-              <span>English</span>
-            </button>
+            <p>&copy; {currentYear} CourseTech, Inc. All Rights Reserved.</p>
           </div>
         </div>
       </div>
@@ -66,4 +53,4 @@ const Footer = () => {
   );
 };
 
-export default Footer; 
+export default Footer;

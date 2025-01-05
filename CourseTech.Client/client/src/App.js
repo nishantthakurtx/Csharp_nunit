@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
 import { BasketProvider } from './contexts/BasketContext';
 import { CategoryProvider } from './contexts/CategoryContext';
 import { CourseProvider } from './contexts/CourseContext';
@@ -10,37 +10,26 @@ import { OrderProvider } from './contexts/OrderContext';
 import { EnrollmentProvider } from './contexts/EnrollmentContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import PrivateRoute from './components/PrivateRoute';
+import RedirectRoute from './components/RedirectRoute';
+import AccessDenied from './pages/AccessDenied';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import Settings from './pages/Settings';
 import Register from './pages/Register';
 import Courses from './pages/Courses';
-import PrivateRoute from './components/PrivateRoute';
-import './styles/App.css';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import CourseDetail from './pages/CourseDetail';
 import Basket from './pages/Basket';
 import Order from './pages/Order';
 import Payment from './pages/Payment';
 import EnrolledCourses from './pages/EnrolledCourses';
+import Settings from './pages/Settings';
 import CategoryDetails from './pages/CategoryDetails';
 import InstructorCourses from './pages/instructor/InstructorCourses';
 import CreateCourse from './pages/instructor/CreateCourse';
 import EditCourse from './pages/instructor/EditCourse';
-
-const InstructorRoute = ({ children }) => {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!user?.roles?.includes('Instructor')) {
-      navigate('/');
-    }
-  }, [user, navigate]);
-
-  return user?.roles?.includes('Instructor') ? children : null;
-};
+import './styles/App.css';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   return (
@@ -69,55 +58,107 @@ const App = () => {
                         <Navbar />
                         <main className="main">
                           <Routes>
+                            {/* Public Routes - Herkes erişebilir */}
                             <Route path="/" element={<Home />} />
-                            <Route path="/login" element={<Login />} />
-                            <Route path="/register" element={<Register />} />
                             <Route path="/courses" element={<Courses />} />
-                            <Route
-                              path="/settings/*"
-                              element={
-                                <PrivateRoute>
-                                  <Settings />
-                                </PrivateRoute>
-                              }
-                            />
-                            <Route path="/courses/:id" element={<CourseDetail />} />
-                            <Route path="/basket" element={<Basket />} />
-                            <Route path="/order" element={<Order />} />
-                            <Route path="/payment" element={<Payment />} />
-                            <Route
-                              path="/my-learning"
-                              element={
-                                <PrivateRoute>
-                                  <EnrolledCourses />
-                                </PrivateRoute>
-                              }
-                            />
                             <Route path="/category/:categoryId" element={<CategoryDetails />} />
+                            <Route path="/access-denied" element={<AccessDenied />} />
+
+                            {/* Auth Routes - Giriş yapmış kullanıcıyı yönlendir */}
+                            <Route 
+                              path="/login" 
+                              element={
+                                <RedirectRoute>
+                                  <Login />
+                                </RedirectRoute>
+                              } 
+                            />
+                            <Route 
+                              path="/register" 
+                              element={
+                                <RedirectRoute>
+                                  <Register />
+                                </RedirectRoute>
+                              } 
+                            />
+
+                            {/* Instructor Routes - Sadece eğitmenler */}
                             <Route
                               path="/instructor/courses"
                               element={
-                                <InstructorRoute>
+                                <PrivateRoute allowedRoles={['Instructor']}>
                                   <InstructorCourses />
-                                </InstructorRoute>
+                                </PrivateRoute>
                               }
                             />
                             <Route
                               path="/instructor/courses/create"
                               element={
-                                <InstructorRoute>
+                                <PrivateRoute allowedRoles={['Instructor']}>
                                   <CreateCourse />
-                                </InstructorRoute>
+                                </PrivateRoute>
                               }
                             />
                             <Route
                               path="/instructor/courses/edit/:id"
                               element={
-                                <InstructorRoute>
+                                <PrivateRoute allowedRoles={['Instructor']}>
                                   <EditCourse />
-                                </InstructorRoute>
+                                </PrivateRoute>
                               }
                             />
+
+                            {/* Protected Routes - Giriş yapmış kullanıcılar */}
+                            <Route
+                              path="/courses/:id"
+                              element={
+                                <PrivateRoute allowedRoles={['Student', 'Instructor']}>
+                                  <CourseDetail />
+                                </PrivateRoute>
+                              }
+                            />
+                            <Route
+                              path="/basket"
+                              element={
+                                <PrivateRoute allowedRoles={['Student', 'Instructor']}>
+                                  <Basket />
+                                </PrivateRoute>
+                              }
+                            />
+                            <Route
+                              path="/order"
+                              element={
+                                <PrivateRoute allowedRoles={['Student', 'Instructor']}>
+                                  <Order />
+                                </PrivateRoute>
+                              }
+                            />
+                            <Route
+                              path="/payment"
+                              element={
+                                <PrivateRoute allowedRoles={['Student', 'Instructor']}>
+                                  <Payment />
+                                </PrivateRoute>
+                              }
+                            />
+                            <Route
+                              path="/my-learning"
+                              element={
+                                <PrivateRoute allowedRoles={['Student', 'Instructor']}>
+                                  <EnrolledCourses />
+                                </PrivateRoute>
+                              }
+                            />
+                            <Route
+                              path="/settings/*"
+                              element={
+                                <PrivateRoute allowedRoles={['Student', 'Instructor']}>
+                                  <Settings />
+                                </PrivateRoute>
+                              }
+                            />
+                            {/* Catch all route - Bilinmeyen URL'leri yönlendir */}
+                            <Route path="*" element={<Navigate to="/access-denied" replace />} />
                           </Routes>
                         </main>
                         <Footer />

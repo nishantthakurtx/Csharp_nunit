@@ -11,7 +11,7 @@ const getCourseById = async (id) => {
 };
 
 const getCoursesByCategory = async (categoryId) => {
-  const response = await api.get(`/api/Courses/category/${categoryId}`);
+  const response = await api.get(`/api/Courses/by-category/${categoryId}`);
   return response.data;
 };
 
@@ -70,6 +70,11 @@ const unpublishCourse = async (courseId) => {
   return response.data;
 };
 
+const getCourseSummaries = async () => {
+  const response = await api.get('/api/Courses/summaries');
+  return response.data;
+};
+
 export {
   getAllCourses,
   getCourseById,
@@ -82,7 +87,8 @@ export {
   uploadCourseImage,
   getPublishedCourses,
   publishCourse,
-  unpublishCourse
+  unpublishCourse,
+  getCourseSummaries
 };
 
 export default {
@@ -97,5 +103,6 @@ export default {
   uploadCourseImage,
   getPublishedCourses,
   publishCourse,
-  unpublishCourse
+  unpublishCourse,
+  getCourseSummaries
 }; 

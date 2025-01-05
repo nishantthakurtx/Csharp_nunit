@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { FiMenu, FiX, FiShoppingCart, FiLogOut, FiSettings, FiClock, FiCreditCard, FiTrash2, FiBook, FiBookOpen } from 'react-icons/fi';
+import { FiMenu, FiX, FiShoppingCart, FiLogOut, FiSettings, FiClock, FiCreditCard } from 'react-icons/fi';
 import styles from '../styles/Navbar.module.css';
 
 const ProfileDropdown = ({ user, handleLogout }) => {

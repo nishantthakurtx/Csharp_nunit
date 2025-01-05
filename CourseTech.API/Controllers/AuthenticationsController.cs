@@ -1,5 +1,6 @@
 ﻿using CourseTech.Core.DTOs.Authentication;
 using CourseTech.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CourseTech.API.Controllers
@@ -25,6 +26,7 @@ namespace CourseTech.API.Controllers
             return CreateActionResult(result);
         }
 
+        [Authorize]
         [HttpPost("revoke-refresh-token")]
         public async Task<IActionResult> RevokeRefreshToken(AppUserRefreshTokenDTO refreshTokenDTO)
         {

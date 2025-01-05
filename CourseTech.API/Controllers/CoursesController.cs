@@ -1,5 +1,6 @@
 ﻿using CourseTech.Core.DTOs.Course;
 using CourseTech.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CourseTech.API.Controllers
@@ -57,13 +58,14 @@ namespace CourseTech.API.Controllers
             return CreateActionResult(result);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]CourseCreateDTO courseDto)
         {
             var result = await service.CreateAsync(courseDto);
             return CreateActionResult(result);
         }
-
+        [Authorize]
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] CourseUpdateDTO courseDto)
         {
@@ -71,6 +73,7 @@ namespace CourseTech.API.Controllers
             return CreateActionResult(result);
         }
 
+        [Authorize]
         [HttpDelete("{id:Guid}")]
         public async Task<IActionResult> SoftDelete(Guid id)
         {
@@ -78,6 +81,7 @@ namespace CourseTech.API.Controllers
             return CreateActionResult(result);
         }
 
+        [Authorize]
         [HttpPatch("{id:Guid}/publish")]
         public async Task<IActionResult> PublishCourse(Guid id)
         {
@@ -85,6 +89,7 @@ namespace CourseTech.API.Controllers
             return CreateActionResult(result);
         }
 
+        [Authorize]
         [HttpPatch("{id:Guid}/unpublish")]
         public async Task<IActionResult> UnpublishCourse(Guid id)
         {

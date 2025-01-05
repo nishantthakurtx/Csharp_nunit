@@ -1,12 +1,12 @@
 ﻿using CourseTech.Core.DTOs.AppUser;
 using CourseTech.Core.DTOs.Authentication;
 using CourseTech.Core.Services;
-using CourseTech.Service.Services;
-using Microsoft.AspNetCore.Identity.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CourseTech.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController(IUserService userService) : CustomBaseController

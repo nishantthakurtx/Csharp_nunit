@@ -334,6 +334,38 @@
   },
   {
     "ContainingType": "CourseTech.API.Controllers.CoursesController",
+    "Method": "PublishCourse",
+    "RelativePath": "api/Courses/{id}/publish",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CourseTech.API.Controllers.CoursesController",
+    "Method": "UnpublishCourse",
+    "RelativePath": "api/Courses/{id}/unpublish",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CourseTech.API.Controllers.CoursesController",
     "Method": "GetCoursesByCategory",
     "RelativePath": "api/Courses/by-category/{categoryId}",
     "HttpMethod": "GET",
@@ -382,22 +414,6 @@
   },
   {
     "ContainingType": "CourseTech.API.Controllers.CoursesController",
-    "Method": "PublishCourse",
-    "RelativePath": "api/Courses/publish/{id}",
-    "HttpMethod": "PATCH",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "CourseTech.API.Controllers.CoursesController",
     "Method": "GetPublishedCourses",
     "RelativePath": "api/Courses/published",
     "HttpMethod": "GET",
@@ -414,22 +430,6 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "CourseTech.API.Controllers.CoursesController",
-    "Method": "UnpublishCourse",
-    "RelativePath": "api/Courses/unpublish/{id}",
-    "HttpMethod": "PATCH",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
     "ReturnTypes": []
   },
   {

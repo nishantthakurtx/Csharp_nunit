@@ -99,21 +99,6 @@
   margin-top: 0.25rem;
 }
 
-.forgotPassword {
-  text-align: right;
-}
-
-.forgotPassword a {
-  color: #4299e1;
-  font-size: 0.9rem;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.forgotPassword a:hover {
-  color: #2b6cb0;
-}
-
 .loginButton {
   background: #4299e1;
   color: white;

@@ -1,9 +1,11 @@
 ﻿using CourseTech.Core.DTOs.Category;
 using CourseTech.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CourseTech.API.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class CategoriesController(ICategoryService service) : CustomBaseController
@@ -36,6 +38,7 @@ namespace CourseTech.API.Controllers
             return CreateActionResult(result);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CategoryCreateDTO categoryDto)
         {
@@ -43,6 +46,7 @@ namespace CourseTech.API.Controllers
             return CreateActionResult(result);
         }
 
+        [Authorize]
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Update([FromBody] CategoryUpdateDTO categoryDto)
         {
@@ -50,6 +54,7 @@ namespace CourseTech.API.Controllers
             return CreateActionResult(result);
         }
 
+        [Authorize]
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
