@@ -1,4 +1,28 @@
 # CourseTech - Mini Online Kurs Satış Platformu
+## İçindekiler
+1. [🚀 Proje Hakkında](#🚀-proje-hakkında)
+2. [📌 Ana Özellikler](#📌-ana-özellikler)
+   - [👥 Kullanıcı Rolleri ve Yetkileri](#👥-kullanıcı-rolleri-ve-yetkileri)
+   - [🏗️ Teknik Mimari](#🏗️-teknik-mimari)
+   - [📊 Veritabanı Yapısı](#📊-veritabanı-yapısı)
+3. [🔧 Backend Kurulumu](#🔧-backend-kurulumu)
+4. [🔧 Frontend Kurulumu](#🔧-frontend-kurulumu)
+5. [🛠️ Kullanılan Teknolojiler](#🛠️-kullanılan-teknolojiler)
+6. [👤 Varsayılan Kullanıcılar](#👤-varsayılan-kullanıcılar)
+7. [🔄 Kullanım Akışı](#🔄-kullanım-akışı)
+8. [📑 API Endpoints](#📑-api-endpoints)
+   - [🔑 Authentication](#🔑-authentication)
+   - [🛒 Basket](#🛒-basket)
+   - [📚 Courses](#📚-courses)
+   - [👤 Users](#👤-users)
+   - [💳 Payments](#💳-payments)
+   - [📦 Orders](#📦-orders)
+9. [🛡️ Güvenlik Yapılandırması](#🛡️-güvenlik-yapılandırması)
+10. [📦 Kullanılan Pattern'ler](#📦-kullanılan-patternler)
+11. [🔍 Önerilen Geliştirmeler](#🔍-önerilen-geliştirmeler)
+12. [📄 Lisans](#📄-lisans)
+
+---
 
 ## 🚀 Proje Hakkında
 
