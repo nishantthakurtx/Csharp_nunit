@@ -230,10 +230,11 @@ Kullanıcı kaydı oluşturan herkes **Student** rolü ile atanır.
 3.  
     - Checkout yapıldıktan sonra sepet **Passive** duruma geçer, 
     - Sipariş kaydı **Pending** olarak oluşturulur. 
-    - Ödeme **Pending** durumuna gelir.
-4. Ödeme yap butonuna tıklanır ve kart bilgileri doldurulur (Luhn algoritmasına göre doğrulanır).
-5. - Ödeme tamamlandıktan sonra sipariş **Completed** durumuna geçer, 
-   - Payment durumu **Completed** olur, 
+4. Ödeme yap butonuna tıklanır 
+- Ödeme **Pending** durumuna gelir.
+- Sipariş kaydı **Completed* olur.
+- Kart bilgileri doldurulur (Luhn algoritmasına göre doğrulanır).
+5. - Ödeme tamamlandıktan sonra Payment **Completed** durumuna geçer,  
    - Kullanıcı ile kurs arasında **Enrollment** ilişkisi kurulur. **Enrollment** kaydı oluşturulur.
 6. Profil sayfasında Ödeme Geçmişi, Sipariş Geçmişi, ve Kurslarım özet halinde gösterilir.
 
