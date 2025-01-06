@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }) => {
         lastName: userData.lastName,
         email: userData.email,
         password: userData.password,
-        phoneNumber: userData.phoneNumber || null // Telefon numarası opsiyonel
+        phoneNumber: userData.phoneNumber || ""
       };
 
       const response = await api.post('/api/Users/register', registerData);

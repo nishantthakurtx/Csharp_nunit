@@ -38,14 +38,14 @@ namespace CourseTech.API.Controllers
             var result = await userService.GetAllAsync();
             return CreateActionResult(result);
         }
-
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Create(AppUserWithPasswordDTO createUserDto)
         {
             var result = await userService.CreateAsync(createUserDto);
             return CreateActionResult(result);
         }
-
+        [AllowAnonymous]
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPasswordAsync(ResetPasswordDTO resetPasswordDTO)
         {

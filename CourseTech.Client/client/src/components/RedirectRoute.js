@@ -3,9 +3,10 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 const RedirectRoute = ({ children }) => {
-  const { user } = useAuth();
+  const { isAuthenticated } = useAuth();
 
-  if (user && user.isAuthenticated) {
+  if (isAuthenticated) {
+    console.log('User is authenticated, redirecting to home');
     return <Navigate to="/" replace />;
   }
 
