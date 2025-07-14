@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.API\\CourseTech.API.csproj": {}
+    "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.API\\CourseTech.API.csproj": {}
   },
   "projects": {
-    "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.API\\CourseTech.API.csproj": {
+    "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.API\\CourseTech.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.API\\CourseTech.API.csproj",
+        "projectUniqueName": "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.API\\CourseTech.API.csproj",
         "projectName": "CourseTech.API",
-        "projectPath": "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.API\\CourseTech.API.csproj",
-        "packagesPath": "C:\\Users\\aau33\\.nuget\\packages\\",
-        "outputPath": "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.API\\obj\\",
+        "projectPath": "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.API\\CourseTech.API.csproj",
+        "packagesPath": "C:\\Users\\Testing\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\aau33\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Testing\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -32,8 +32,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.Service\\CourseTech.Service.csproj": {
-                "projectPath": "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.Service\\CourseTech.Service.csproj"
+              "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.Service\\CourseTech.Service.csproj": {
+                "projectPath": "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.Service\\CourseTech.Service.csproj"
               }
             }
           }
@@ -46,9 +46,9 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
+          "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net9.0": {
@@ -118,24 +118,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.Core\\CourseTech.Core.csproj": {
+    "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.Core\\CourseTech.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.Core\\CourseTech.Core.csproj",
+        "projectUniqueName": "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.Core\\CourseTech.Core.csproj",
         "projectName": "CourseTech.Core",
-        "projectPath": "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.Core\\CourseTech.Core.csproj",
-        "packagesPath": "C:\\Users\\aau33\\.nuget\\packages\\",
-        "outputPath": "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.Core\\obj\\",
+        "projectPath": "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.Core\\CourseTech.Core.csproj",
+        "packagesPath": "C:\\Users\\Testing\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\aau33\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Testing\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -150,8 +150,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.Shared\\CourseTech.Shared.csproj": {
-                "projectPath": "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.Shared\\CourseTech.Shared.csproj"
+              "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.Shared\\CourseTech.Shared.csproj": {
+                "projectPath": "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.Shared\\CourseTech.Shared.csproj"
               }
             }
           }
@@ -164,9 +164,9 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
+          "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net9.0": {
@@ -193,24 +193,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.Repository\\CourseTech.Repository.csproj": {
+    "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.Repository\\CourseTech.Repository.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.Repository\\CourseTech.Repository.csproj",
+        "projectUniqueName": "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.Repository\\CourseTech.Repository.csproj",
         "projectName": "CourseTech.Repository",
-        "projectPath": "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.Repository\\CourseTech.Repository.csproj",
-        "packagesPath": "C:\\Users\\aau33\\.nuget\\packages\\",
-        "outputPath": "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.Repository\\obj\\",
+        "projectPath": "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.Repository\\CourseTech.Repository.csproj",
+        "packagesPath": "C:\\Users\\Testing\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.Repository\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\aau33\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Testing\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -225,8 +225,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.Core\\CourseTech.Core.csproj": {
-                "projectPath": "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.Core\\CourseTech.Core.csproj"
+              "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.Core\\CourseTech.Core.csproj": {
+                "projectPath": "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.Core\\CourseTech.Core.csproj"
               }
             }
           }
@@ -239,9 +239,9 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
+          "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net9.0": {
@@ -260,6 +260,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[9.0.0, )"
+            },
+            "NUnit": {
+              "target": "Package",
+              "version": "[3.14.0, )"
             }
           },
           "imports": [
@@ -278,24 +282,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.Service\\CourseTech.Service.csproj": {
+    "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.Service\\CourseTech.Service.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.Service\\CourseTech.Service.csproj",
+        "projectUniqueName": "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.Service\\CourseTech.Service.csproj",
         "projectName": "CourseTech.Service",
-        "projectPath": "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.Service\\CourseTech.Service.csproj",
-        "packagesPath": "C:\\Users\\aau33\\.nuget\\packages\\",
-        "outputPath": "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.Service\\obj\\",
+        "projectPath": "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.Service\\CourseTech.Service.csproj",
+        "packagesPath": "C:\\Users\\Testing\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.Service\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\aau33\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Testing\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -310,8 +314,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.Repository\\CourseTech.Repository.csproj": {
-                "projectPath": "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.Repository\\CourseTech.Repository.csproj"
+              "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.Repository\\CourseTech.Repository.csproj": {
+                "projectPath": "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.Repository\\CourseTech.Repository.csproj"
               }
             }
           }
@@ -324,9 +328,9 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
+          "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net9.0": {
@@ -353,24 +357,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.Shared\\CourseTech.Shared.csproj": {
+    "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.Shared\\CourseTech.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.Shared\\CourseTech.Shared.csproj",
+        "projectUniqueName": "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.Shared\\CourseTech.Shared.csproj",
         "projectName": "CourseTech.Shared",
-        "projectPath": "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.Shared\\CourseTech.Shared.csproj",
-        "packagesPath": "C:\\Users\\aau33\\.nuget\\packages\\",
-        "outputPath": "D:\\websites\\backend\\CourseTechPlatform\\CourseTech.Shared\\obj\\",
+        "projectPath": "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.Shared\\CourseTech.Shared.csproj",
+        "packagesPath": "C:\\Users\\Testing\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Testing\\Desktop\\Testing 1\\CourseTechPlatform\\CourseTech.Shared\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\aau33\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Testing\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -395,9 +399,9 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
+          "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net9.0": {
@@ -428,7 +432,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
