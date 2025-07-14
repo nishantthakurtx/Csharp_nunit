@@ -33,3 +33,15 @@ yarn-error.log*
 /package-lock.json
 /package.json
 /.vs
+
+# Ignore appsettings.json and .env secrets in all projects
+**/appsettings.json
+**/.env
+
+# Ignore all bin/ and obj/ folders from any sub-project
+**/bin/
+**/obj/
+
+# Optional: Ignore migrations (if generated and not required in Git)
+**/Migrations/
+
