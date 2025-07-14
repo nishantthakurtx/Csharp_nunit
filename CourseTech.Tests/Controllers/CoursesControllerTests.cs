@@ -98,25 +98,25 @@ namespace CourseTech.Tests.Controllers
             Assert.IsEmpty((IEnumerable<CourseDTO>)result.Data);
         }
 
-        //[Test]
-        //public async Task GetAll_ReturnsError_WhenServiceFails()
-        //{
-        //    //Arrange
-        //    var result = ServiceResult<IEnumerable<CourseDTO>>.Fail("Failed to retrieve", HttpStatusCode.BadRequest);
+        [Test]
+        public async Task GetAll_ReturnsError_WhenServiceFails()
+        {
+            //Arrange
+            var result = ServiceResult<IEnumerable<CourseDTO>>.Fail("Failed to retrieve", HttpStatusCode.BadRequest);
 
-        //    _courseServiceMock.Setup(s => s.GetAllAsync()).ReturnsAsync(result);
+            _courseServiceMock.Setup(s => s.GetAllAsync()).ReturnsAsync(result);
 
-        //    //Act 
+            //Act 
 
-        //    var response = await _controller.GetAll();
+            var response = await _controller.GetAll();
 
-        //    //Assert
+            //Assert
 
-        //    Assert.IsInstanceOf<ObjectResult>(response);
-        //    var objResult = response as ObjectResult;
-        //    Assert.AreEqual(400, objResult.StatusCode);
-        //    Assert.AreEqual(result, objResult.Value);
-        //}
+            Assert.IsInstanceOf<ObjectResult>(response);
+            var objResult = response as ObjectResult;
+            Assert.AreEqual(400, objResult.StatusCode);
+            Assert.AreEqual(result, objResult.Value);
+        }
         #endregion
 
         #region GetPublishedCourses
@@ -161,20 +161,20 @@ namespace CourseTech.Tests.Controllers
             Assert.IsEmpty((IEnumerable<CourseDTO>)result.Data);
         }
 
-        //[Test]
-        //public async Task GetPublishedCourses_ReturnsError_WhenServiceFails()
-        //{
-        //    var result = ServiceResult<IEnumerable<CourseDTO>>.Fail("Service error", HttpStatusCode.InternalServerError);
+        [Test]
+        public async Task GetPublishedCourses_ReturnsError_WhenServiceFails()
+        {
+            var result = ServiceResult<IEnumerable<CourseDTO>>.Fail("Service error", HttpStatusCode.InternalServerError);
 
-        //    _courseServiceMock.Setup(s => s.GetPublishedCoursesAsync()).ReturnsAsync(result);
+            _courseServiceMock.Setup(s => s.GetPublishedCoursesAsync()).ReturnsAsync(result);
 
-        //    var response = await _controller.GetPublishedCourses();
+            var response = await _controller.GetPublishedCourses();
 
-        //    Assert.IsInstanceOf<ObjectResult>(response);
-        //    var objResult = response as ObjectResult;
-        //    Assert.AreEqual(500, objResult.StatusCode);
-        //    Assert.AreEqual(result, objResult.Value);
-        //}
+            Assert.IsInstanceOf<ObjectResult>(response);
+            var objResult = response as ObjectResult;
+            Assert.AreEqual(500, objResult.StatusCode);
+            Assert.AreEqual(result, objResult.Value);
+        }
         #endregion
 
         #region GetCoursesByCategory
@@ -245,5 +245,129 @@ namespace CourseTech.Tests.Controllers
             Assert.AreEqual(serviceResult, objectResult.Value);
         }
         #endregion
+
+        #region GetCoursesByInstructor
+        [Test]
+        public async Task GetCoursesByInstructor_ReturnsOk_WhenCoursesExist()
+        {
+            // Arrange
+            var instructorId = Guid.NewGuid();
+            var data = new List<CourseListDTO>
+            {
+                new(Guid.NewGuid(), "C#", "Learn C#", 500, "img.jpg", "Programming", "John Doe", TimeSpan.FromHours(5), "Beginner", true)
+            };
+
+            var serviceResult = ServiceResult<IEnumerable<CourseListDTO>>.Success(data);
+
+            _courseServiceMock
+                .Setup(s => s.GetCoursesByInstructorAsync(instructorId))
+                .ReturnsAsync(serviceResult);
+
+            // Act
+            var result = await _controller.GetCoursesByInstructor(instructorId);
+
+            // Assert
+            var okResult = result as ObjectResult;
+            Assert.IsNotNull(okResult);
+            Assert.AreEqual((int)HttpStatusCode.OK, okResult!.StatusCode);
+            Assert.AreEqual(serviceResult, okResult.Value);
+        }
+
+        [Test]
+        public async Task GetCoursesByInstructor_ReturnsOk_WhenEmptyList()
+        {
+            // Arrange
+            var instructorId = Guid.NewGuid();
+            var serviceResult = ServiceResult<IEnumerable<CourseListDTO>>.Success(new List<CourseListDTO>());
+
+            _courseServiceMock
+                .Setup(s => s.GetCoursesByInstructorAsync(instructorId))
+                .ReturnsAsync(serviceResult);
+
+            // Act
+            var result = await _controller.GetCoursesByInstructor(instructorId);
+
+            // Assert
+            var okResult = result as ObjectResult;
+            Assert.IsNotNull(okResult);
+            Assert.AreEqual((int)HttpStatusCode.OK, okResult!.StatusCode);
+            Assert.AreEqual(serviceResult, okResult.Value);
+        }
+
+        [Test]
+        public async Task GetCoursesByInstructor_ReturnsBadRequest_WhenServiceFails()
+        {
+            // Arrange
+            var instructorId = Guid.NewGuid();
+            var serviceResult = ServiceResult<IEnumerable<CourseListDTO>>.Fail("Instructor not found", HttpStatusCode.BadRequest);
+
+            _courseServiceMock
+                .Setup(s => s.GetCoursesByInstructorAsync(instructorId))
+                .ReturnsAsync(serviceResult);
+
+            // Act
+            var result = await _controller.GetCoursesByInstructor(instructorId);
+
+            // Assert
+            var objectResult = result as ObjectResult;
+            Assert.IsNotNull(objectResult);
+            Assert.AreEqual((int)HttpStatusCode.BadRequest, objectResult!.StatusCode);
+            Assert.AreEqual(serviceResult, objectResult.Value);
+        }
+        #endregion
+
+        #region Create creation
+        [Test]
+        public async Task Create_ReturnsOk_WhenCourseIsCreated()
+        {
+            // Arrange
+            var dto = new CourseCreateDTO("C# Basics", "desc", "img", "vid", "Beginner", "English", 100, TimeSpan.FromHours(1), Guid.NewGuid(), Guid.NewGuid());
+            var createdDto = new CourseDTO(Guid.NewGuid(), dto.Title, dto.Description, dto.ImageUrl, dto.VideoUrl, dto.Level, dto.Language, dto.Price, dto.Duration, null, "Instructor", "Category", DateTime.UtcNow);
+            var result = ServiceResult<CourseDTO>.Success(createdDto);
+
+            _courseServiceMock.Setup(s => s.CreateAsync(dto)).ReturnsAsync(result);
+
+            // Act
+            var response = await _controller.Create(dto);
+
+            // Assert
+            var ok = response as ObjectResult;
+            Assert.IsInstanceOf<ObjectResult>(response);
+            Assert.AreEqual(200, ok!.StatusCode);
+            Assert.AreEqual(result, ok.Value);
+        }
+
+        [Test]
+        public async Task Create_ReturnsBadRequest_WhenServiceFails()
+        {
+            // Arrange
+            var dto = new CourseCreateDTO("Invalid", "", "", "", "", "", 0, TimeSpan.Zero, Guid.NewGuid(), Guid.NewGuid());
+            var errorResult = ServiceResult<CourseDTO>.Fail("Instructor not found");
+
+            _courseServiceMock.Setup(s => s.CreateAsync(dto)).ReturnsAsync(errorResult);
+
+            // Act
+            var response = await _controller.Create(dto);
+
+            // Assert
+            var bad = response as ObjectResult;
+            Assert.IsInstanceOf<ObjectResult>(response);
+            Assert.AreEqual(400, bad!.StatusCode);
+            Assert.AreEqual(errorResult, bad.Value);
+        }
+
+        [Test]
+        public void Create_ThrowsException_WhenServiceThrows()
+        {
+            // Arrange
+            var dto = new CourseCreateDTO("Crash", "", "", "", "", "", 0, TimeSpan.Zero, Guid.NewGuid(), Guid.NewGuid());
+
+            _courseServiceMock.Setup(s => s.CreateAsync(dto)).ThrowsAsync(new Exception("DB failure"));
+
+            // Act & Assert
+            Assert.ThrowsAsync<Exception>(() => _controller.Create(dto));
+        }
+        #endregion
     }
 }
+        

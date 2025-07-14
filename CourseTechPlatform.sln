@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseTech.Shared", "Course
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseTech.Tests", "CourseTech.Tests\CourseTech.Tests.csproj", "{6CD176E1-60E3-495A-A264-6788AA20035E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseTech.Tests.XUnit", "CourseTech.Tests.XUnit\CourseTech.Tests.XUnit.csproj", "{ED1B5E86-B9C5-43B7-8F46-4D49F34F45DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{6CD176E1-60E3-495A-A264-6788AA20035E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CD176E1-60E3-495A-A264-6788AA20035E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CD176E1-60E3-495A-A264-6788AA20035E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED1B5E86-B9C5-43B7-8F46-4D49F34F45DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED1B5E86-B9C5-43B7-8F46-4D49F34F45DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED1B5E86-B9C5-43B7-8F46-4D49F34F45DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED1B5E86-B9C5-43B7-8F46-4D49F34F45DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
