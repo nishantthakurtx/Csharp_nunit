@@ -28,5 +28,8 @@ namespace CourseTech.Tests.Helpers
 
         public const string ErrorMessageInstructorNotFound = "Instructor not found";
         public const string ErrorMessageCategoryNotFound = "Category not found";
+
+        public const string ErrorMessageGeneric = "Something went wrong";
+
     }
 }

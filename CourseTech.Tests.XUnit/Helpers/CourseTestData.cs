@@ -23,6 +23,25 @@ namespace CourseTech.Tests.Helpers
                 DateTime.UtcNow
             );
 
+        public static CourseUpdateDTO GetSampleUpdateDTO() => new CourseUpdateDTO(
+     TestConstants.SampleCourseId,
+     "Updated Title",
+     "Updated Description",
+     "updated-img.jpg",
+     "updated-vid.mp4",
+     "Intermediate",
+     "English",
+     199,
+     TimeSpan.FromHours(4),
+     true, 
+     DateTime.UtcNow, 
+     TestConstants.SampleInstructorId,
+     TestConstants.SampleCategoryId
+ );
+
+
+
+
         public static List<CourseDTO> GetCourseDTOList() =>
             new() { GetSampleCourseDTO() };
 
