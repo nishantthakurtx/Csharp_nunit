@@ -26,9 +26,8 @@ namespace CourseTech.Tests.Helpers
         public static readonly Guid SampleCategoryId = Guid.Parse("55555555-5555-5555-5555-555555555555");
 
 
-        public const string ErrorMessageInstructorNotFound = "Instructor not found";
         public const string ErrorMessageCategoryNotFound = "Category not found";
-
+        public const string ErrorMessageInstructorNotFound = "Instructor not found";
         public const string ErrorMessageGeneric = "Something went wrong";
 
     }

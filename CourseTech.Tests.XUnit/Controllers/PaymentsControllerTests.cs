@@ -67,13 +67,14 @@ namespace CourseTech.Tests.Controllers
         {
             var list = new List<PaymentDTO> { PaymentTestData.GetSampleDTO() };
 
-            _paymentServiceMock.Setup(s => s.GetPaymentsByUserAsync(TestConstants.SampleUserId))
-                .ReturnsAsync(ServiceResult<List<PaymentDTO>>.Success(list));
+            
+            PaymentServiceMockHelper.SetupGetPaymentsByUser(_paymentServiceMock, TestConstants.SampleUserId, list);
 
             var result = await _controller.GetPaymentsByUserId(TestConstants.SampleUserId);
             var objectResult = Assert.IsType<ObjectResult>(result);
             Assert.Equal((int)HttpStatusCode.OK, objectResult.StatusCode);
         }
+
 
         [Fact]
         public async Task GetPaymentsByUserId_ReturnsBadRequest_WhenNotFound()

@@ -350,6 +350,7 @@ C:\Users\Testing\Desktop\Testing 1\CourseTechPlatform\CourseTech.API\bin\Debug\n
 C:\Users\Testing\Desktop\Testing 1\CourseTechPlatform\CourseTech.API\bin\Debug\net9.0\NuGet.ProjectModel.dll
 C:\Users\Testing\Desktop\Testing 1\CourseTechPlatform\CourseTech.API\bin\Debug\net9.0\NuGet.Protocol.dll
 C:\Users\Testing\Desktop\Testing 1\CourseTechPlatform\CourseTech.API\bin\Debug\net9.0\NuGet.Versioning.dll
+C:\Users\Testing\Desktop\Testing 1\CourseTechPlatform\CourseTech.API\bin\Debug\net9.0\nunit.framework.dll
 C:\Users\Testing\Desktop\Testing 1\CourseTechPlatform\CourseTech.API\bin\Debug\net9.0\Scalar.AspNetCore.dll
 C:\Users\Testing\Desktop\Testing 1\CourseTechPlatform\CourseTech.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\Testing\Desktop\Testing 1\CourseTechPlatform\CourseTech.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll

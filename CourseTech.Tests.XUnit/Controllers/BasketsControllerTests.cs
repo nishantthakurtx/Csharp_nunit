@@ -32,8 +32,8 @@ namespace CourseTech.Tests.Controllers
             var basketDto = BasketTestData.GetSampleBasketDTO();
             var expected = ServiceResult<BasketDTO>.Success(basketDto);
 
-            _basketServiceMock.Setup(s => s.GetActiveBasketAsync(TestConstants.SampleUserId))
-                              .ReturnsAsync(expected);
+            BasketServiceMockHelper.SetupGetActiveBasketSuccess(_basketServiceMock, TestConstants.SampleUserId, basketDto);
+
 
             var result = await _controller.GetBasket(TestConstants.SampleUserId);
 
@@ -72,8 +72,7 @@ namespace CourseTech.Tests.Controllers
         {
             var expected = ServiceResult.Fail(TestConstants.ErrorMessageCourseNotFound);
 
-            _basketServiceMock.Setup(s => s.AddCourseToBasketAsync(TestConstants.SampleUserId, TestConstants.SampleCourseId))
-                              .ReturnsAsync(expected);
+            BasketServiceMockHelper.SetupAddCourseFail(_basketServiceMock, TestConstants.SampleUserId, TestConstants.SampleCourseId, TestConstants.ErrorMessageCourseNotFound);
 
             var result = await _controller.AddCourseToBasket(TestConstants.SampleUserId, TestConstants.SampleCourseId);
 
